@@ -1,0 +1,63 @@
+/* src/index.css */
+body {
+  background: #f0f2f5;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* 顶部导航自定义 */
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #0d6efd;
+}
+
+/* 轮播广告 */
+.carousel-item img {
+  height: 400px;
+  object-fit: cover;
+}
+
+/* 分类图标 */
+.category-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+/* 商品卡片 */
+.product-card {
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: none;
+}
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+.product-card .card-img-top {
+  height: 200px;
+  object-fit: contain;
+  padding: 1rem;
+  background: #fafafa;
+}
+
+/* 登录/注册卡片 */
+.auth-card {
+  border: none;
+  border-radius: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  background: #fff;
+}
+
+/* 登录/注册页面背景 */
+.auth-page {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 页脚 */
+.footer {
+  background: #2c3e50;
+  color: #ecf0f1;
+}

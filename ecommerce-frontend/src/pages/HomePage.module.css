@@ -1,0 +1,16 @@
+.home h3 {
+    color: #2f3542;
+    position: relative;
+    padding-left: 1rem;
+  }
+  .home h3::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 24px;
+    background-color: #ff4757;
+    border-radius: 2px;
+  }

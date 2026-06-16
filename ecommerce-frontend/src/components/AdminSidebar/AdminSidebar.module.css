@@ -1,0 +1,139 @@
+/* src/components/AdminSidebar/AdminSidebar.module.css */
+
+.sidebar {
+  width: 260px;
+  background: linear-gradient(180deg, #1e2a3a 0%, #0f1724 100%);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+/* Logo 区域 */
+.logoArea {
+  display: flex;
+  align-items: center;      /* 垂直居中 */
+  justify-content: center;  /* 水平居中 */
+  gap: 10px;
+  padding: 24px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 24px;
+}
+
+.logoIcon {
+  font-size: 28px;
+  color: #ff6b6b;
+}
+
+.logoText {
+  font-size: 18px;
+  font-weight: 600;
+  color: white;
+  letter-spacing: 1px;
+}
+
+/* 导航菜单 */
+.nav {
+  flex: 1;
+}
+
+.menuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuLink {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  margin: 4px 12px;
+  border-radius: 12px;
+  color: #cbd5e6;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.menuLink:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: white;
+}
+
+.active {
+  background: linear-gradient(135deg, #ff4757, #e84118);
+  color: white !important;
+  box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3);
+}
+
+.active .menuIcon {
+  color: white;
+}
+
+.menuIcon {
+  font-size: 1.25rem;
+  width: 24px;
+  text-align: center;
+}
+
+/* 底部管理员信息 */
+.userInfo {
+  margin: 20px 16px 24px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #ff4757, #ff8c8c);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 18px;
+  color: white;
+  text-transform: uppercase;
+}
+
+.userDetails {
+  flex: 1;
+  overflow: hidden;
+}
+
+.userName {
+  font-weight: 600;
+  color: white;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.userRole {
+  font-size: 11px;
+  color: #a0b3d9;
+  margin-top: 2px;
+}
+
+/* 滚动条定制（可选） */
+.sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar::-webkit-scrollbar-track {
+  background: #2d3e50;
+}
+.sidebar::-webkit-scrollbar-thumb {
+  background: #ff6b6b;
+  border-radius: 4px;
+}

@@ -1,0 +1,143 @@
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+    backdrop-filter: blur(4px);
+  }
+  
+  .modalContent {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 560px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.2s ease-out;
+  }
+  
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    background: #fafbfc;
+    border-radius: 16px 16px 0 0;
+  }
+  
+  .title {
+    margin: 0;
+    font-weight: 600;
+    color: #2f3542;
+  }
+  
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 28px;
+    line-height: 1;
+    cursor: pointer;
+    color: #747d8c;
+    transition: color 0.2s;
+  }
+  .closeBtn:hover {
+    color: #ff4757;
+  }
+  
+  .modalBody {
+    padding: 1.5rem;
+  }
+  
+  .detailContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .detailImage {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    background: #f8f9fa;
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .productName {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #2f3542;
+    margin: 0.5rem 0;
+  }
+  
+  .productDesc {
+    color: #57606f;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  
+  .infoRow {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    font-size: 1rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px dashed #f1f2f6;
+  }
+  .label {
+    font-weight: 500;
+    color: #747d8c;
+    min-width: 60px;
+  }
+  .price {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #ff4757;
+  }
+  .active {
+    color: #28a745;
+    font-weight: 500;
+  }
+  .inactive {
+    color: #dc3545;
+    font-weight: 500;
+  }
+  
+  .modalFooter {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e1e8ed;
+    text-align: right;
+    background: #fafbfc;
+    border-radius: 0 0 16px 16px;
+  }
+  
+  .closeFooterBtn {
+    background: #f1f2f6;
+    border: 1px solid #e1e8ed;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.2s;
+  }
+  .closeFooterBtn:hover {
+    background: #e1e8ed;
+  }

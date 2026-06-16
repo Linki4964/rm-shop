@@ -1,0 +1,17 @@
+.navbar {
+  background-color: #fff;
+  border-bottom: 2px solid #f1f2f6;
+}
+.nav-link {
+  color: #333;
+  font-weight: 500;
+  padding: 0.8rem 1rem;
+  transition: color 0.2s;
+}
+.nav-link:hover {
+  color: #ff4757;
+}
+.active {
+  color: #000000 !important;
+  border-bottom: 3px solid #000000;
+}

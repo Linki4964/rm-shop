@@ -1,0 +1,86 @@
+/* src/components/UserFormModal/UserFormModal.module.css */
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+  }
+  .modalContent {
+    background: white;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+  }
+  .title {
+    margin: 0;
+    font-size: 1.25rem;
+  }
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+  .modalBody {
+    padding: 1rem;
+  }
+  .modalFooter {
+    padding: 1rem;
+    border-top: 1px solid #dee2e6;
+    text-align: right;
+  }
+  .formGroup {
+    margin-bottom: 1rem;
+  }
+  .formLabel {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+  }
+  .inputControl {
+    width: 100%;
+    padding: 0.375rem 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+  }
+  .checkboxLabel {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+  .cancelBtn, .submitBtn {
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+  }
+  .cancelBtn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    margin-right: 0.5rem;
+  }
+  .submitBtn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+  }
+  .submitBtn:disabled {
+    opacity: 0.65;
+  }

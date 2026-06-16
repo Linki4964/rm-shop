@@ -1,0 +1,13 @@
+.header {
+    background-color: #2f3542;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .logo {
+    color: white;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+  }
+  .logo:hover {
+    color: #ff4757;
+  }

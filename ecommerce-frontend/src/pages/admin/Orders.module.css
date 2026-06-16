@@ -1,0 +1,65 @@
+/* src/pages/admin/Orders.module.css */
+.container {
+    background-color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+  
+  .modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1050;
+  }
+  .modalContent {
+    background: white;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  .modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e1e8ed;
+    background: #fafbfc;
+    border-radius: 16px 16px 0 0;
+  }
+  .closeBtn {
+    background: none;
+    border: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: #6c757d;
+  }
+  .closeBtn:hover {
+    color: #ff4757;
+  }
+  .modalBody {
+    padding: 1.5rem;
+  }
+  .modalFooter {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid #e1e8ed;
+    text-align: right;
+    background: #fafbfc;
+    border-radius: 0 0 16px 16px;
+  }
+  .closeFooterBtn {
+    background: #f1f2f6;
+    border: 1px solid #ddd;
+    padding: 0.4rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+  }

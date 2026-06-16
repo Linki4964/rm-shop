@@ -1,0 +1,114 @@
+/* src/components/ProductFormModal/ProductFormModal.module.css */
+
+.modalContent {
+    border-radius: 12px;
+    border: none;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  .modalHeader {
+    background: linear-gradient(135deg, #ff4757, #e84118);
+    color: white;
+    border-bottom: none;
+    border-radius: 12px 12px 0 0;
+    padding: 1rem 1.5rem;
+  }
+  
+  .modalHeader h5 {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+  }
+  
+  .closeBtn {
+    color: white;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  
+  .closeBtn:hover {
+    opacity: 1;
+  }
+  
+  .modalBody {
+    padding: 2rem 1.8rem;
+    background-color: #fff;
+  }
+  
+  .formGroup {
+    margin-bottom: 1.25rem;
+  }
+  
+  .formLabel {
+    font-weight: 500;
+    color: #2f3542;
+    margin-bottom: 0.5rem;
+    display: block;
+  }
+  
+  .required::after {
+    content: '*';
+    color: #ff4757;
+    margin-left: 4px;
+  }
+  
+  .inputControl {
+    border-radius: 8px;
+    border: 1px solid #e1e8ed;
+    padding: 0.6rem 1rem;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  
+  .inputControl:focus {
+    border-color: #ff4757;
+    box-shadow: 0 0 0 0.2rem rgba(255, 71, 87, 0.25);
+  }
+  
+  .textareaControl {
+    min-height: 100px;
+    resize: vertical;
+  }
+  
+  .modalFooter {
+    border-top: 1px solid #f1f2f6;
+    padding: 1rem 1.8rem;
+    background-color: #fafbfc;
+    border-radius: 0 0 12px 12px;
+  }
+  
+  .cancelBtn {
+    background-color: #f1f2f6;
+    border-color: #e1e8ed;
+    color: #2f3542;
+    border-radius: 8px;
+    padding: 0.5rem 1.2rem;
+  }
+  
+  .cancelBtn:hover {
+    background-color: #e1e8ed;
+    border-color: #ced6e0;
+  }
+  
+  .submitBtn {
+    background: linear-gradient(135deg, #ff4757, #e84118);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1.5rem;
+    color: white;
+    font-weight: 500;
+    transition: transform 0.1s, box-shadow 0.2s;
+  }
+  
+  .submitBtn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.4);
+  }
+  
+  /* 响应式调整 */
+  @media (max-width: 576px) {
+    .modalBody {
+      padding: 1.5rem;
+    }
+    .modalFooter {
+      padding: 1rem;
+    }
+  }
