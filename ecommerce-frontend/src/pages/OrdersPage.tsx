@@ -2,16 +2,24 @@
 import { useEffect, useState } from "react";
 import { useOrderStore } from "../store/orderStore";
 import { useNavigate } from "react-router-dom";
-import { paymentApi } from '../api/payment';
 import type { Order } from '../types/order';
 import { useToast, useConfirm } from '../components/Toast';
 import styles from "./OrdersPage.module.css";
 
 const DEFAULT_IMAGE = "https://via.placeholder.com/60?text=No+Image";
+const getPrice = (price: number | string) => Number(price) || 0;
+const buildPayUrl = (order: Order) => {
+  const params = new URLSearchParams({
+    orderId: String(order.id),
+    orderNumber: order.order_number,
+    totalAmount: String(order.total_amount)
+  });
+  return `/pay?${params.toString()}`;
+};
 
 const OrdersPage = () => {
   const navigate = useNavigate();
-  const { orders, total, isLoading, fetchOrders, cancelOrder } = useOrderStore();
+  const { orders, isLoading, fetchOrders, cancelOrder } = useOrderStore();
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const toast = useToast();
   const confirm = useConfirm();
@@ -58,22 +66,19 @@ const OrdersPage = () => {
   };
 
   // 支付处理函数
-  const handleGoPay = async (order: Order) => {
-    try {
-      const result = await paymentApi.createPaymentFromOrder(order.id, {
-        out_trade_no: order.order_number,
-        total_amount: order.total_amount,
-        subject: `EasyShop订单-${order.order_number}`,
-        body: `订单ID: ${order.id}，共${order.items.length}件商品`
-      });
-      if (result.pay_url) {
-        navigate('/pay', { state: { payUrl: result.pay_url, orderId: order.id, orderNumber: order.order_number, totalAmount: order.total_amount } });
-      } else {
-        navigate('/pay', { state: { orderId: order.id, orderNumber: order.order_number, totalAmount: order.total_amount } });
+  const handleGoPay = (order: Order) => {
+    sessionStorage.setItem('pending_payment_order', JSON.stringify({
+      orderId: order.id,
+      orderNumber: order.order_number,
+      totalAmount: order.total_amount
+    }));
+    navigate(buildPayUrl(order), {
+      state: {
+        orderId: order.id,
+        orderNumber: order.order_number,
+        totalAmount: order.total_amount
       }
-    } catch (err: any) {
-      toast.error(err.response?.data?.detail || '创建支付订单失败，请重试');
-    }
+    });
   };
 
   if (isLoading) {
@@ -147,7 +152,7 @@ const OrdersPage = () => {
             <div className={styles.orderFooter}>
               <div className={styles.orderTotal}>
                 共 {order.items.length} 件商品，合计：
-                <strong className="text-danger">￥{order.total_amount.toFixed(2)}</strong>
+                <strong className="text-danger">￥{getPrice(order.total_amount).toFixed(2)}</strong>
               </div>
               <button
                 className="btn btn-sm btn-outline-secondary"
@@ -171,7 +176,9 @@ const OrdersPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {order.items.map((item) => (
+                      {order.items.map((item) => {
+                        const price = getPrice(item.price);
+                        return (
                         <tr key={item.id}>
                           <td>
                             <div className="d-flex align-items-center gap-2">
@@ -183,11 +190,12 @@ const OrdersPage = () => {
                               <span>{item.product_name}</span>
                             </div>
                           </td>
-                          <td>￥{item.price.toFixed(2)}</td>
+                          <td>￥{price.toFixed(2)}</td>
                           <td>{item.quantity}</td>
-                          <td>￥{(item.price * item.quantity).toFixed(2)}</td>
+                          <td>￥{(price * item.quantity).toFixed(2)}</td>
                         </tr>
-                      ))}
+                      );
+                      })}
                     </tbody>
                   </table>
                 </div>

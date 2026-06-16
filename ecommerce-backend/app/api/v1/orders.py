@@ -5,6 +5,7 @@ from app.core.database import get_db
 from app.crud.order import order_crud
 from app.schemas.order import OrderCreate, OrderOut, OrderListResponse
 from app.api.deps import get_current_user
+from app.models.order import OrderStatus
 from app.models.user import User
 
 router = APIRouter(tags=["orders"])
@@ -65,3 +66,19 @@ async def cancel_order(
         return order
     except ValueError as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(e))
+
+@router.put("/{order_id}/pay", response_model=OrderOut)
+async def pay_order(
+    order_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    """
+    模拟支付：不调用第三方支付接口，直接将待处理订单标记为已支付。
+    """
+    order = await order_crud.get_with_items(db, id=order_id)
+    if not order or order.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+    if order.status != OrderStatus.PENDING:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="订单状态不可支付")
+    return await order_crud.update_status(db, order=order, new_status=OrderStatus.PAID)

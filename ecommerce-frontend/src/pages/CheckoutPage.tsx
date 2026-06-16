@@ -6,21 +6,43 @@ import { orderApi } from '../api/order';
 import styles from './CheckoutPage.module.css';
 
 const DEFAULT_IMAGE = 'https://via.placeholder.com/80?text=No+Image';
+const getProductPrice = (price: number | string) => Number(price) || 0;
+const buildPayUrl = (order: { id: number; order_number: string; total_amount: number | string }) => {
+  const params = new URLSearchParams({
+    orderId: String(order.id),
+    orderNumber: order.order_number,
+    totalAmount: String(order.total_amount)
+  });
+  return `/pay?${params.toString()}`;
+};
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { items, totalQuantity } = useCartStore();
+  const { items, totalQuantity, isLoading, fetchCart } = useCartStore();
+  const [checkoutItems, setCheckoutItems] = useState(items);
+  const [cartLoaded, setCartLoaded] = useState(false);
   const [shippingAddress, setShippingAddress] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
-    if (!items.length) {
+    fetchCart().finally(() => setCartLoaded(true));
+  }, [fetchCart]);
+
+  useEffect(() => {
+    if (items.length) {
+      setCheckoutItems(items);
+    }
+  }, [items]);
+
+  useEffect(() => {
+    if (cartLoaded && !isLoading && !submitting && !checkoutItems.length) {
       navigate('/');
     }
-  }, [items, navigate]);
+  }, [cartLoaded, checkoutItems.length, isLoading, navigate, submitting]);
 
-  const totalAmount = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  const checkoutTotalQuantity = checkoutItems.reduce((sum, item) => sum + item.quantity, 0);
+  const totalAmount = checkoutItems.reduce((sum, item) => sum + getProductPrice(item.product.price) * item.quantity, 0);
 
   const handleSubmitOrder = async () => {
     if (!shippingAddress.trim()) {
@@ -31,8 +53,20 @@ const CheckoutPage = () => {
     setError('');
     try {
       const order = await orderApi.create({ shipping_address: shippingAddress });
+      sessionStorage.setItem('pending_payment_order', JSON.stringify({
+        orderId: order.id,
+        orderNumber: order.order_number,
+        totalAmount: order.total_amount
+      }));
       // 跳转到支付方式选择页（购物车由 PayPage 清空）
-      navigate('/pay', { state: { orderId: order.id, orderNumber: order.order_number, totalAmount: order.total_amount }, replace: true });
+      navigate(buildPayUrl(order), {
+        state: {
+          orderId: order.id,
+          orderNumber: order.order_number,
+          totalAmount: order.total_amount
+        },
+        replace: true
+      });
     } catch (err: any) {
       setError(err.response?.data?.detail || '创建订单失败，请重试');
     } finally {
@@ -40,8 +74,12 @@ const CheckoutPage = () => {
     }
   };
 
-  if (!items.length) {
-    return null;
+  if (!checkoutItems.length) {
+    return (
+      <div className={styles.container}>
+        <div className="alert alert-warning">购物车为空，无法确认订单。</div>
+      </div>
+    );
   }
 
   return (
@@ -53,23 +91,26 @@ const CheckoutPage = () => {
             <div className="card-header bg-white fw-bold">商品清单</div>
             <div className="card-body p-0">
               <div className="list-group list-group-flush">
-                {items.map((item) => (
-                  <div key={item.id} className="list-group-item">
-                    <div className="d-flex gap-3">
-                      <img
-                        src={item.product.image_url || DEFAULT_IMAGE}
-                        alt={item.product.name}
-                        style={{ width: '80px', height: '80px', objectFit: 'contain' }}
-                      />
-                      <div className="flex-grow-1">
-                        <h6 className="mb-1">{item.product.name}</h6>
-                        <div className="text-muted small">单价：¥{item.product.price.toFixed(2)}</div>
-                        <div>数量：{item.quantity}</div>
+                {checkoutItems.map((item) => {
+                  const price = getProductPrice(item.product.price);
+                  return (
+                    <div key={item.id} className="list-group-item">
+                      <div className="d-flex gap-3">
+                        <img
+                          src={item.product.image_url || DEFAULT_IMAGE}
+                          alt={item.product.name}
+                          style={{ width: '80px', height: '80px', objectFit: 'contain' }}
+                        />
+                        <div className="flex-grow-1">
+                          <h6 className="mb-1">{item.product.name}</h6>
+                          <div className="text-muted small">单价：¥{price.toFixed(2)}</div>
+                          <div>数量：{item.quantity}</div>
+                        </div>
+                        <div className="text-danger fw-bold">¥{(price * item.quantity).toFixed(2)}</div>
                       </div>
-                      <div className="text-danger fw-bold">¥{(item.product.price * item.quantity).toFixed(2)}</div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -81,7 +122,7 @@ const CheckoutPage = () => {
             <div className="card-body">
               <div className="d-flex justify-content-between mb-2">
                 <span>商品总数：</span>
-                <span>{totalQuantity} 件</span>
+                <span>{checkoutTotalQuantity || totalQuantity} 件</span>
               </div>
               <div className="d-flex justify-content-between mb-3">
                 <span>合计金额：</span>
