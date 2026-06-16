@@ -21,8 +21,8 @@ const PublicLayout = () => {
   const category = searchParams.get('category');
   // 只有首页且没有分类参数时才显示轮播
   const showBanner = location.pathname === '/' && !category;
-  // 订单和结算页面使用简化导航栏，只显示"返回首页"
-  const isSimpleNav = location.pathname === '/orders' || location.pathname === '/checkout';
+  // 订单、结算、支付页面使用简化导航栏，只显示"返回首页"
+  const isSimpleNav = location.pathname === '/orders' || location.pathname === '/checkout' || location.pathname === '/pay';
 
   return (
     <div className={styles.layout}>

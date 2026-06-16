@@ -91,7 +91,13 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
             {items.length > 0 && (
               <button className={styles.clearBtn} onClick={handleClear}>清空购物车</button>
             )}
-             <button className={styles.checkoutBtn} onClick={handleCheckout}>去结算</button>
+             <button
+               className={styles.checkoutBtn}
+               onClick={handleCheckout}
+               disabled={items.length === 0}
+             >
+               去结算
+             </button>
           </div>
         </div>
       </div>

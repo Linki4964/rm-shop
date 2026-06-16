@@ -15,23 +15,16 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
-    setError('');          // 清空旧错误
+    setError('');
     if (submitting) return;
     setSubmitting(true);
 
     try {
-      
-      
-     
-      // 1. 登录获取 token
       await login(username, password);
-      // 2. 获取用户信息
       await fetchUser();
-      // 3. 跳转到目标页面
-      // 从 store 中直接读取最新 user（同步方法）
       const currentUser = useAuthStore.getState().user;
       const from = (location.state as any)?.from?.pathname;
-      
+
       if (from) {
         navigate(from, { replace: true });
       } else if (currentUser?.is_superuser) {
@@ -49,39 +42,107 @@ const LoginPage = () => {
       } else if (err.message) {
         errorMsg = err.message;
       }
-      setError(errorMsg);   // 错误信息会一直显示，不会被清空
+      setError(errorMsg);
     } finally {
       setSubmitting(false);
     }
   };
 
   return (
-    <div className={styles.authContainer}>
-      <div className={styles.authCard}>
-        <h2 className="text-center mb-4 fw-bold">用户登录</h2>
-        {location.state?.message && (
-          <div className="alert alert-success">{location.state.message}</div>
-        )}
-        {error && (
-          <div className="alert alert-danger" role="alert">
-            {error}
+    <div className={styles.authPage}>
+      {/* 左侧品牌展示 */}
+      <div className={styles.brandSide}>
+        <div className={styles.brandContent}>
+          <div className={styles.brandLogo}>
+            <span role="img" aria-label="logo">🛒</span>
           </div>
-        )}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">用户名</label>
-            <input type="text" className="form-control" value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username" />
+          <h1 className={styles.brandTitle}>EasyShop</h1>
+          <p className={styles.brandSubtitle}>
+            品质好物，一站购齐
+          </p>
+          <div className={styles.brandFeatures}>
+            <div className={styles.brandFeature}>
+              <i className="bi bi-check-circle-fill" />
+              <span>海量商品，应有尽有</span>
+            </div>
+            <div className={styles.brandFeature}>
+              <i className="bi bi-shield-check" />
+              <span>安全支付，购物无忧</span>
+            </div>
+            <div className={styles.brandFeature}>
+              <i className="bi bi-truck" />
+              <span>极速配送，准时送达</span>
+            </div>
           </div>
-          <div className="mb-3">
-            <label className="form-label">密码</label>
-            <input type="password" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" />
+        </div>
+      </div>
+
+      {/* 右侧登录表单 */}
+      <div className={styles.formSide}>
+        <div className={styles.formCard}>
+          <div className={styles.formHeader}>
+            <h2>欢迎回来</h2>
+            <p>登录你的 EasyShop 账号</p>
           </div>
-          <button type="submit" className="btn btn-danger w-100 py-2" disabled={submitting} >
-            {submitting ? '登录中...' : '登录'}
-          </button>
-        </form>
-        <div className="mt-3 text-center">
-          没有账号？ <Link to="/register" className="text-danger">立即注册</Link>
+
+          {location.state?.message && (
+            <div className={`${styles.alertBox} ${styles.alertSuccess}`}>
+              <i className="bi bi-check-circle-fill" />
+              {location.state.message}
+            </div>
+          )}
+
+          {error && (
+            <div className={`${styles.alertBox} ${styles.alertError}`}>
+              <i className="bi bi-exclamation-triangle-fill" />
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className={styles.inputGroup}>
+              <i className={`bi bi-person ${styles.inputIcon}`} />
+              <input
+                type="text"
+                placeholder="用户名"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                required
+                autoComplete="username"
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <i className={`bi bi-lock ${styles.inputIcon}`} />
+              <input
+                type="password"
+                placeholder="密码"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+              />
+            </div>
+
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              disabled={submitting}
+            >
+              {submitting ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" />
+                  登录中...
+                </>
+              ) : (
+                '登  录'
+              )}
+            </button>
+          </form>
+
+          <div className={styles.formFooter}>
+            还没有账号？<Link to="/register">立即注册</Link>
+          </div>
         </div>
       </div>
     </div>

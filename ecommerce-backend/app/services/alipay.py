@@ -5,12 +5,28 @@ from datetime import datetime, timezone
 from alipay import AliPay
 from app.core.config import settings
 
+
+def _load_alipay_key(value: str, key_name: str) -> str:
+    """支持直接传字符串或文件路径。"""
+    if not value:
+        raise ValueError(f"{key_name} 未配置，请检查 ALIPAY_PRIVATE_KEY_PATH/ALIPAY_PUBLIC_KEY_PATH")
+    if "-----BEGIN" in value:
+        return value
+    try:
+        with open(value, 'r', encoding='utf-8') as f:
+            return f.read()
+    except FileNotFoundError:
+        raise ValueError(f"{key_name} 文件未找到: {value}")
+
+
 def get_alipay_client() -> AliPay:
+    private_key = _load_alipay_key(settings.ALIPAY_PRIVATE_KEY_PATH, "支付宝私钥")
+    public_key = _load_alipay_key(settings.ALIPAY_PUBLIC_KEY_PATH, "支付宝公钥")
     return AliPay(
         appid=settings.ALIPAY_APP_ID,
         app_notify_url=settings.ALIPAY_NOTIFY_URL,
-        app_private_key_string=open(settings.ALIPAY_PRIVATE_KEY_PATH).read(),
-        alipay_public_key_string=open(settings.ALIPAY_PUBLIC_KEY_PATH).read(),
+        app_private_key_string=private_key,
+        alipay_public_key_string=public_key,
         sign_type="RSA2",
         debug=True   # 沙箱环境使用 True，生产环境 False
     )

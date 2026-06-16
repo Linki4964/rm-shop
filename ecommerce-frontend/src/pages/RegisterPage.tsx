@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { SyntheticEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
-import styles from "./Auth.module.css"; // 统一认证样式
+import styles from "./Auth.module.css";
 import {
   validateEmail,
   validateUsername,
@@ -32,7 +32,7 @@ const RegisterPage = () => {
       setError(usernameError);
       return;
     }
-    const pwdError = validatePassword(password, true); // required=true
+    const pwdError = validatePassword(password, true);
     if (pwdError) {
       setError(pwdError);
       return;
@@ -47,66 +47,114 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className={styles.authContainer}>
-      <div className={styles.authCard}>
-        <h2 className="text-center mb-4 fw-bold">创建账号</h2>
-        {error && <div className="alert alert-danger">{error}</div>}
-        <form onSubmit={handleSubmit}>
-          <div className="mb-3">
-            <label className="form-label">邮箱</label>
-            <input
-              type="email"
-              className="form-control"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
+    <div className={styles.authPage}>
+      {/* 左侧品牌展示 */}
+      <div className={styles.brandSide}>
+        <div className={styles.brandContent}>
+          <div className={styles.brandLogo}>
+            <span role="img" aria-label="logo">🛒</span>
           </div>
-          <div className="mb-3">
-            <label className="form-label">用户名</label>
-            <input
-              type="text"
-              className="form-control"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              minLength={3}
-              required
-            />
+          <h1 className={styles.brandTitle}>EasyShop</h1>
+          <p className={styles.brandSubtitle}>
+            品质好物，一站购齐
+          </p>
+          <div className={styles.brandFeatures}>
+            <div className={styles.brandFeature}>
+              <i className="bi bi-person-plus" />
+              <span>一分钟快速注册</span>
+            </div>
+            <div className={styles.brandFeature}>
+              <i className="bi bi-gift" />
+              <span>新用户专享优惠</span>
+            </div>
+            <div className={styles.brandFeature}>
+              <i className="bi bi-heart" />
+              <span>收藏心仪好物</span>
+            </div>
           </div>
-          <div className="mb-3">
-            <label className="form-label">密码</label>
-            <input
-              type="password"
-              className="form-control"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              minLength={6}
-              required
-            />
-            <small className="text-muted">至少6位，必须包含字母和数字</small>
+        </div>
+      </div>
+
+      {/* 右侧注册表单 */}
+      <div className={styles.formSide}>
+        <div className={styles.formCard}>
+          <div className={styles.formHeader}>
+            <h2>创建账号</h2>
+            <p>加入 EasyShop，开启购物之旅</p>
           </div>
-          <div className="mb-3">
-            <label className="form-label">姓名（选填）</label>
-            <input
-              type="text"
-              className="form-control"
-              value={fullName}
-              onChange={(e) => setFullName(e.target.value)}
-            />
+
+          {error && (
+            <div className={`${styles.alertBox} ${styles.alertError}`}>
+              <i className="bi bi-exclamation-triangle-fill" />
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className={styles.inputGroup}>
+              <i className={`bi bi-envelope ${styles.inputIcon}`} />
+              <input
+                type="email"
+                placeholder="邮箱"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <i className={`bi bi-person ${styles.inputIcon}`} />
+              <input
+                type="text"
+                placeholder="用户名（至少3位）"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                minLength={3}
+                required
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <i className={`bi bi-lock ${styles.inputIcon}`} />
+              <input
+                type="password"
+                placeholder="密码（至少6位，需含字母和数字）"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                minLength={6}
+                required
+              />
+            </div>
+
+            <div className={styles.inputGroup}>
+              <i className={`bi bi-person-badge ${styles.inputIcon}`} />
+              <input
+                type="text"
+                placeholder="姓名（选填）"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
+            </div>
+
+            <button
+              type="submit"
+              className={styles.submitBtn}
+              disabled={isLoading}
+            >
+              {isLoading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2" role="status" />
+                  注册中...
+                </>
+              ) : (
+                '注  册'
+              )}
+            </button>
+          </form>
+
+          <div className={styles.formFooter}>
+            已有账号？<Link to="/login">去登录</Link>
           </div>
-          <button
-            type="submit"
-            className="btn btn-danger w-100 py-2"
-            disabled={isLoading}
-          >
-            {isLoading ? "注册中..." : "注册"}
-          </button>
-        </form>
-        <div className="mt-3 text-center">
-          已有账号？{" "}
-          <Link to="/login" className="text-danger">
-            去登录
-          </Link>
         </div>
       </div>
     </div>

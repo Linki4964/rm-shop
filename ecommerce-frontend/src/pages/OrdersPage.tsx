@@ -60,17 +60,16 @@ const OrdersPage = () => {
   // 支付处理函数
   const handleGoPay = async (order: Order) => {
     try {
-      const payload = {
+      const result = await paymentApi.createPaymentFromOrder(order.id, {
         out_trade_no: order.order_number,
         total_amount: order.total_amount,
         subject: `EasyShop订单-${order.order_number}`,
         body: `订单ID: ${order.id}，共${order.items.length}件商品`
-      };
-      const result = await paymentApi.createPaymentFromOrder(order.id,payload);
+      });
       if (result.pay_url) {
-        navigate('/pay', { state: { payUrl: result.pay_url, orderId: order.id } });
+        navigate('/pay', { state: { payUrl: result.pay_url, orderId: order.id, orderNumber: order.order_number, totalAmount: order.total_amount } });
       } else {
-        navigate(`/pay?order_id=${order.id}`);
+        navigate('/pay', { state: { orderId: order.id, orderNumber: order.order_number, totalAmount: order.total_amount } });
       }
     } catch (err: any) {
       toast.error(err.response?.data?.detail || '创建支付订单失败，请重试');
