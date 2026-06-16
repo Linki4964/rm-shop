@@ -7,6 +7,7 @@ import { useAuthStore } from '../store/authStore';
 import type { Product } from '../types/product';
 import type { CategoryContextType } from '../layouts/PublicLayout';
 import ProductDetailModal from '../components/ProductDetailModal/ProductDetailModal';
+import { useToast } from '../components/Toast';
 import styles from './HomePage.module.css';
 
 const DEFAULT_IMAGE = 'https://via.placeholder.com/300x200?text=No+Image';
@@ -16,6 +17,7 @@ const HomePage = () => {
   const { activeCategory } = useOutletContext<CategoryContextType>();
   const { addToCart } = useCartStore();
   const { user } = useAuthStore();
+  const toast = useToast();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -54,16 +56,15 @@ const HomePage = () => {
 
   const handleAddToCart = async (productId: number) => {
     if (!user) {
-      // 未登录，提示并跳转到登录页
-      alert('请先登录');
+      toast.warning('请先登录');
       navigate('/login');
       return;
     }
     try {
       await addToCart({ product_id: productId, quantity: 1 });
-      alert('已添加到购物车');
+      toast.success('已添加到购物车');
     } catch (err: any) {
-      alert(err.response?.data?.detail || '添加失败，请重试');
+      toast.error(err.response?.data?.detail || '添加失败，请重试');
     }
   };
 

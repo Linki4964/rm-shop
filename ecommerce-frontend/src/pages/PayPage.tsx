@@ -3,12 +3,14 @@ import { useEffect, useState, useRef } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import { QRCode } from 'react-qr-code';
 import { paymentApi } from '../api/payment';
+import { useToast } from '../components/Toast';
 import styles from './PayPage.module.css';
 
 const PayPage = () => {
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const navigate = useNavigate();
+  const toast = useToast();
 
   // 获取订单ID
   const orderIdFromState = (location.state as any)?.orderId;
@@ -28,38 +30,36 @@ const PayPage = () => {
     try {
       const res = await paymentApi.queryPayment(Number(orderId));
       if (res.status === 'paid') {
-        if (showMessage) alert('支付成功！');
+        if (showMessage) toast.success('支付成功！');
         navigate('/orders');
       } else if (res.status === 'pending') {
-        if (showMessage) alert('订单尚未支付，请完成支付后再查询');
+        if (showMessage) toast.info('订单尚未支付，请完成支付后再查询');
       } else if (res.status === 'closed') {
-        if (showMessage) alert('订单已关闭');
+        if (showMessage) toast.warning('订单已关闭');
         navigate('/orders');
       } else {
-        if (showMessage) alert(res.message || '查询失败，请稍后手动查看订单状态');
+        if (showMessage) toast.error(res.message || '查询失败，请稍后手动查看订单状态');
       }
     } catch (err) {
       console.error('查询支付状态失败:', err);
-      if (showMessage) alert('查询失败，请稍后手动查看订单状态');
+      if (showMessage) toast.error('查询失败，请稍后手动查看订单状态');
     }
   };
 
   // 监听弹窗发送的支付成功消息
   useEffect(() => {
     const handleMessage = (event: MessageEvent) => {
-      // 校验消息来源（可选，此处简化）
       if (event.data?.type === 'PAYMENT_SUCCESS') {
-        // 关闭弹窗（如果还开着）
         if (popupRef.current && !popupRef.current.closed) {
           popupRef.current.close();
         }
-        alert('支付成功！');
+        toast.success('支付成功！');
         navigate('/orders');
       }
     };
     window.addEventListener('message', handleMessage);
     return () => window.removeEventListener('message', handleMessage);
-  }, [navigate]);
+  }, [navigate, toast]);
 
   // 打开居中弹窗
   const openCenteredWindow = (url: string) => {
@@ -73,7 +73,6 @@ const PayPage = () => {
       `width=${width},height=${height},left=${left},top=${top},toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes`
     );
     if (popupRef.current) {
-      // 如果用户手动关闭弹窗，也检查一次支付状态
       const checkClosed = setInterval(() => {
         if (popupRef.current?.closed) {
           clearInterval(checkClosed);
@@ -87,7 +86,7 @@ const PayPage = () => {
   useEffect(() => {
     if (!orderId) {
       console.error('PayPage: orderId 无效');
-      alert('无效订单');
+      toast.error('无效订单');
       navigate('/orders');
       return;
     }
@@ -108,15 +107,14 @@ const PayPage = () => {
         }
       } catch (err: any) {
         console.error('创建支付失败:', err);
-        alert('创建支付失败: ' + (err.response?.data?.detail || err.message));
-        navigate('/orders');
+        toast.error('创建支付失败: ' + (err.response?.data?.detail || err.message));
       } finally {
         setLoading(false);
       }
     };
 
     fetchPayUrl();
-  }, [orderId, location.state, navigate]);
+  }, [orderId, location.state, navigate, toast]);
 
   if (loading) {
     return (

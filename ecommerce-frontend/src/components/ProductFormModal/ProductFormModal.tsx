@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { productAdminApi } from '../../api/productAdmin';
 import type  { Product, ProductCreate, ProductUpdate } from '../../types/product';
+import { useToast } from '../Toast';
 
 interface Props {
   visible: boolean;
@@ -11,6 +12,7 @@ interface Props {
 }
 
 const ProductFormModal = ({ visible, onClose, product, categories }: Props) => {
+  const toast = useToast();
   const [formData, setFormData] = useState<ProductCreate>({
     name: '',
     description: '',
@@ -78,7 +80,7 @@ const ProductFormModal = ({ visible, onClose, product, categories }: Props) => {
       }
       onClose(true);
     } catch (err: any) {
-      alert(err.response?.data?.detail || '操作失败');
+      toast.error(err.response?.data?.detail || '操作失败');
     } finally {
       setSubmitting(false);
     }

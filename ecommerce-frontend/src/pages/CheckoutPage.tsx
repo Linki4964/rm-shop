@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCartStore } from '../store/cartStore';
 import { orderApi } from '../api/order';
+import { paymentApi } from '../api/payment';
+import { useToast } from '../components/Toast';
 import styles from './CheckoutPage.module.css';
 
 const DEFAULT_IMAGE = 'https://via.placeholder.com/80?text=No+Image';
@@ -13,13 +15,14 @@ const CheckoutPage = () => {
   const [shippingAddress, setShippingAddress] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
-    // 如果购物车为空，跳回首页
-    if (!items.length) {
+    // 如果购物车为空且未在提交订单，跳回首页
+    if (!items.length && !submitting) {
       navigate('/');
     }
-  }, [items, navigate]);
+  }, [items, navigate, submitting]);
 
   const totalAmount = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
 
@@ -31,11 +34,26 @@ const CheckoutPage = () => {
     setSubmitting(true);
     setError('');
     try {
-      await orderApi.create({ shipping_address: shippingAddress });
-      // 创建成功，刷新购物车状态（清空）
+      // 1. 创建订单
+      const order = await orderApi.create({ shipping_address: shippingAddress });
       await fetchCart();
-      alert('订单已提交！');
-      navigate('/orders');
+
+      // 2. 创建支付宝支付
+      try {
+        const result = await paymentApi.createPaymentFromOrder(order.id, {
+          out_trade_no: order.order_number,
+          total_amount: order.total_amount,
+          subject: `EasyShop订单-${order.order_number}`,
+          body: `共${order.items.length}件商品`
+        });
+        if (result.pay_url) {
+          navigate('/pay', { state: { payUrl: result.pay_url, orderId: order.id } });
+        } else {
+          navigate(`/pay?order_id=${order.id}`);
+        }
+      } catch (payErr: any) {
+        toast.error(payErr.response?.data?.detail || '创建支付失败，请重试');
+      }
     } catch (err: any) {
       setError(err.response?.data?.detail || '创建订单失败，请重试');
     } finally {

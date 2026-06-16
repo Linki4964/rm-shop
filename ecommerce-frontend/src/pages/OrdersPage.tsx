@@ -3,7 +3,8 @@ import { useEffect, useState } from "react";
 import { useOrderStore } from "../store/orderStore";
 import { useNavigate } from "react-router-dom";
 import { paymentApi } from '../api/payment';
-import type { Order } from '../types/order';          // 导入 Order 类型
+import type { Order } from '../types/order';
+import { useToast, useConfirm } from '../components/Toast';
 import styles from "./OrdersPage.module.css";
 
 const DEFAULT_IMAGE = "https://via.placeholder.com/60?text=No+Image";
@@ -12,18 +13,21 @@ const OrdersPage = () => {
   const navigate = useNavigate();
   const { orders, total, isLoading, fetchOrders, cancelOrder } = useOrderStore();
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+  const toast = useToast();
+  const confirm = useConfirm();
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
   const handleCancel = async (orderId: number) => {
-    if (!window.confirm("确定要取消该订单吗？")) return;
+    const ok = await confirm({ message: "确定要取消该订单吗？" });
+    if (!ok) return;
     try {
       await cancelOrder(orderId);
-      alert("订单已取消");
+      toast.success("订单已取消");
     } catch (err: any) {
-      alert(err.response?.data?.detail || "取消失败");
+      toast.error(err.response?.data?.detail || "取消失败");
     }
   };
 
@@ -69,7 +73,7 @@ const OrdersPage = () => {
         navigate(`/pay?order_id=${order.id}`);
       }
     } catch (err: any) {
-      alert(err.response?.data?.detail || '创建支付订单失败，请重试');
+      toast.error(err.response?.data?.detail || '创建支付订单失败，请重试');
     }
   };
 

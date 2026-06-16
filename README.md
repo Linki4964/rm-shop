@@ -2,12 +2,19 @@
 一个平平无奇的期末作业
 
 ## 部署方法
+部署开启虚拟环境
+```
+conda create -n venv python=3.10
+conda activate venv
+pip install -r requirement.txt
+```
+
 后端:
 ```shell
 uvicorn app.main:app --reload
 ```
 打开`http://127.0.0.1:8000`
-前端
+前端:
 ```shell
 npm install
 npm run dev

@@ -1,6 +1,7 @@
 // src/components/CartDrawer/CartDrawer.tsx
 import { useEffect } from 'react';
 import { useCartStore } from '../../store/cartStore';
+import { useToast, useConfirm } from '../Toast';
 import styles from './CartDrawer.module.css';
 import { useNavigate } from 'react-router-dom';
 interface CartDrawerProps {
@@ -10,6 +11,8 @@ interface CartDrawerProps {
 
 const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   const { items, totalQuantity, isLoading, fetchCart, updateItemQuantity, removeItem, clearCart } = useCartStore();
+  const toast = useToast();
+  const confirm = useConfirm();
 
   useEffect(() => {
     if (isOpen) {
@@ -24,14 +27,18 @@ const CartDrawer = ({ isOpen, onClose }: CartDrawerProps) => {
   };
 
   const handleRemove = async (itemId: number) => {
-    if (window.confirm('确定要从购物车移除该商品吗？')) {
+    const ok = await confirm({ message: '确定要从购物车移除该商品吗？' });
+    if (ok) {
       await removeItem(itemId);
+      toast.success('已移除');
     }
   };
 
   const handleClear = async () => {
-    if (window.confirm('确定清空购物车吗？')) {
+    const ok = await confirm({ message: '确定清空购物车吗？' });
+    if (ok) {
       await clearCart();
+      toast.success('购物车已清空');
     }
   };
 

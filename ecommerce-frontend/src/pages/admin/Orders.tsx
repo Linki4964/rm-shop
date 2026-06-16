@@ -2,6 +2,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { adminOrderApi } from '../../api/adminOrder';
 import type { AdminOrder } from '../../types/order';
+import { useToast, useConfirm } from '../../components/Toast';
 import styles from './Orders.module.css';
 
 const STATUS_OPTIONS = ['pending', 'paid', 'shipped', 'completed', 'cancelled'];
@@ -25,6 +26,8 @@ const Orders = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<AdminOrder | null>(null);
   const [updatingStatus, setUpdatingStatus] = useState(false);
+  const toast = useToast();
+  const confirm = useConfirm();
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -38,11 +41,11 @@ const Orders = () => {
       setTotal(res.total);
     } catch (err) {
       console.error(err);
-      alert('加载订单列表失败');
+      toast.error('加载订单列表失败');
     } finally {
       setLoading(false);
     }
-  }, [page, size, statusFilter]);
+  }, [page, size, statusFilter, toast]);
 
   useEffect(() => {
     fetchOrders();
@@ -54,24 +57,24 @@ const Orders = () => {
       setSelectedOrder(order);
       setModalVisible(true);
     } catch (err) {
-      alert('获取订单详情失败');
+      toast.error('获取订单详情失败');
     }
   };
 
   const handleStatusChange = async (orderId: number, newStatus: string) => {
-    if (!window.confirm(`确定将订单状态改为“${STATUS_MAP[newStatus]}”吗？`)) return;
+    const ok = await confirm({ message: `确定将订单状态改为”${STATUS_MAP[newStatus]}”吗？` });
+    if (!ok) return;
     setUpdatingStatus(true);
     try {
       await adminOrderApi.updateStatus(orderId, newStatus);
-      // 刷新列表
       fetchOrders();
-      // 如果详情模态框打开且是当前订单，更新 selectedOrder
       if (selectedOrder && selectedOrder.id === orderId) {
         const updated = await adminOrderApi.getDetail(orderId);
         setSelectedOrder(updated);
       }
+      toast.success('状态已更新');
     } catch (err) {
-      alert('状态更新失败');
+      toast.error('状态更新失败');
     } finally {
       setUpdatingStatus(false);
     }
