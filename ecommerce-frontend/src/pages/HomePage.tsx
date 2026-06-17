@@ -1,6 +1,6 @@
 // src/pages/HomePage.tsx
 import { useEffect, useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router-dom';
+import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom';
 import { productPublicApi } from '../api/productPublic';
 import { useCartStore } from '../store/cartStore';
 import { useAuthStore } from '../store/authStore';
@@ -10,14 +10,15 @@ import ProductDetailModal from '../components/ProductDetailModal/ProductDetailMo
 import { useToast } from '../components/Toast';
 import styles from './HomePage.module.css';
 
-const DEFAULT_IMAGE = 'https://via.placeholder.com/300x200?text=No+Image';
+const DEFAULT_IMAGE = 'https://via.placeholder.com/400x400/f5f3ee/9a442d?text=EasyShop';
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const { activeCategory } = useOutletContext<CategoryContextType>();
+  const { activeCategory, setActiveCategory } = useOutletContext<CategoryContextType>();
   const { addToCart } = useCartStore();
   const { user } = useAuthStore();
   const toast = useToast();
+  const [searchParams] = useSearchParams();
 
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -25,34 +26,27 @@ const HomePage = () => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
 
+  // 直接从 URL 读取当前分类，驱动商品加载
+  const urlCategory = searchParams.get('category') || '';
+
   useEffect(() => {
-    const fetchHotProducts = async () => {
+    setActiveCategory(urlCategory);
+    const fetchProducts = async () => {
       try {
         setLoading(true);
         setError(null);
-        const params: any = { page: 1, size: 9, is_active: true };
-        if (activeCategory) params.category = activeCategory;
+        const params: any = { page: 1, size: 12, is_active: true };
+        if (urlCategory) params.category = urlCategory;
         const res = await productPublicApi.list(params);
         setProducts(res.items);
-      } catch (err) {
-        console.error('获取商品失败:', err);
-        setError('加载商品失败，请稍后重试');
+      } catch {
+        setError('加载商品失败');
       } finally {
         setLoading(false);
       }
     };
-    fetchHotProducts();
-  }, [activeCategory]);
-
-  const handleShowDetail = (productId: number) => {
-    setSelectedProductId(productId);
-    setModalVisible(true);
-  };
-
-  const handleCloseModal = () => {
-    setModalVisible(false);
-    setSelectedProductId(null);
-  };
+    fetchProducts();
+  }, [urlCategory]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleAddToCart = async (productId: number) => {
     if (!user) {
@@ -64,71 +58,55 @@ const HomePage = () => {
       await addToCart({ product_id: productId, quantity: 1 });
       toast.success('已添加到购物车');
     } catch (err: any) {
-      toast.error(err.response?.data?.detail || '添加失败，请重试');
+      toast.error(err.response?.data?.detail || '添加失败');
     }
   };
 
   if (loading) {
-    return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-danger" />
-      </div>
-    );
+    return <div className="text-center py-5"><div className="spinner-border" style={{ color: 'var(--primary-container)' }} /></div>;
   }
-
   if (error) {
-    return <div className="alert alert-danger text-center">{error}</div>;
-  }
-
-  if (products.length === 0) {
-    return <div className="text-center text-muted py-5">暂无商品</div>;
+    return <div className="alert" style={{ background: 'var(--error-container)', color: 'var(--error)', borderRadius: 'var(--radius)' }}>{error}</div>;
   }
 
   return (
-    <div className={styles.home}>
-      <h3 className="mb-4 fw-bold">🔥 热销推荐</h3>
-      <div className="row">
-        {products.map((product) => (
-          <div key={product.id} className="col-md-3 mb-4">
-            <div className="card h-100 shadow-sm">
-              <img
-                src={product.image_url || DEFAULT_IMAGE}
-                className="card-img-top"
-                alt={product.name}
-                style={{ height: '200px', objectFit: 'contain', background: '#f8f9fa' }}
-              />
-              <div className="card-body d-flex flex-column">
-                <h5 className="card-title fs-6">{product.name}</h5>
-                <div className="d-flex justify-content-between align-items-center mt-2">
-                  <span className="text-danger fw-bold fs-5">
-                    ¥{product.price.toFixed(2)}
-                  </span>
-                  <div className="btn-group" role="group">
-                    <button
-                      className="btn btn-outline-danger btn-sm"
-                      onClick={() => handleAddToCart(product.id)}
-                    >
-                      <i className="bi bi-cart-plus"></i> 加入
-                    </button>
-                    <button
-                      className="btn btn-outline-secondary btn-sm"
-                      onClick={() => handleShowDetail(product.id)}
-                    >
-                      详情
-                    </button>
+    <div className={styles.home} id="products-section">
+      {/* 商品 */}
+      <section>
+        <h3 className={styles.sectionTitle}>
+          {activeCategory ? activeCategory : '🔥 热销推荐'}
+        </h3>
+        {products.length === 0 ? (
+          <div className="text-center py-5" style={{ color: 'var(--on-surface-variant)' }}>暂无商品</div>
+        ) : (
+          <div className={styles.productGrid}>
+            {products.map(product => {
+              const price = Number(product.price);
+              return (
+                <div key={product.id} className={styles.productCard}>
+                  <div className={styles.imgWrap} onClick={() => { setSelectedProductId(product.id); setModalVisible(true); }}>
+                    <img src={product.image_url || DEFAULT_IMAGE} alt={product.name} className={styles.productImg} />
+                    <span className={styles.hotTag}>HOT</span>
+                  </div>
+                  <div className={styles.productBody}>
+                    <div className={styles.productName}>{product.name}</div>
+                    <div className={styles.productDesc}>{product.description || '精选好物'}</div>
+                    <div className={styles.productFooter}>
+                      <span className={styles.productPrice}>¥{price.toFixed(2)}</span>
+                      <button className={styles.cartBtn} onClick={() => handleAddToCart(product.id)} title="加入购物车">
+                        <i className="bi bi-cart-plus" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
-        ))}
-      </div>
+        )}
+      </section>
 
-      <ProductDetailModal
-        visible={modalVisible}
-        productId={selectedProductId}
-        onClose={handleCloseModal}
-      />
+      <ProductDetailModal visible={modalVisible} productId={selectedProductId}
+        onClose={() => { setModalVisible(false); setSelectedProductId(null); }} />
     </div>
   );
 };

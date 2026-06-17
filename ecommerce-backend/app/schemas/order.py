@@ -31,12 +31,14 @@ class OrderOut(BaseModel):
     id: int
     order_number: str
     total_amount: float
+    discount_amount: float = 0
+    coupon_code: Optional[str] = None
     status: str
     shipping_address: str
     created_at: datetime
     updated_at: datetime
     items: list[OrderItemOut] = []
-    user: Optional[UserBrief] = None  # 新增
+    user: Optional[UserBrief] = None
 
     class Config:
         from_attributes = True
@@ -47,6 +49,7 @@ class OrderListResponse(BaseModel):
 
 class OrderCreate(BaseModel):
     shipping_address: str = Field(..., min_length=5, max_length=500, description="收货地址")
+    coupon_code: Optional[str] = Field(None, max_length=50, description="优惠券代码")
 
 class OrderStatusUpdate(BaseModel):
     status: str = Field(..., description="新状态: pending/paid/shipped/completed/cancelled")

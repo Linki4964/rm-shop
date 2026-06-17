@@ -151,7 +151,13 @@ const OrdersPage = () => {
 
             <div className={styles.orderFooter}>
               <div className={styles.orderTotal}>
-                共 {order.items.length} 件商品，合计：
+                共 {order.items.length} 件商品
+                {order.coupon_code && (
+                  <span className="text-success small ms-2">
+                    <i className="bi bi-tag-fill" /> {order.coupon_code} -¥{(order.discount_amount || 0).toFixed(2)}
+                  </span>
+                )}
+                ，合计：
                 <strong className="text-danger">￥{getPrice(order.total_amount).toFixed(2)}</strong>
               </div>
               <button

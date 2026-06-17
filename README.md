@@ -1,36 +1,84 @@
 # rm-shop
-一个平平无奇的期末作业
+
+一个基于 React + FastAPI + MySQL 的电商平台（期末作业）。
+
+## 功能特性
+
+- 商品浏览与分类筛选
+- 购物车管理
+- 用户注册/登录
+- 订单创建与取消
+- **优惠券系统** — 支持百分比折扣与固定金额折扣
+- 支付宝模拟支付（沙箱环境）
+- 管理员后台（商品管理、用户管理、订单管理）
 
 ## 部署方法
-部署开启虚拟环境
+
+### 环境准备
 ```
 conda create -n venv python=3.10
 conda activate venv
-pip install -r requirement.txt
+pip install -r requirements.txt
 ```
 
-后端:
+### 初始化数据
+```
+# 添加测试商品
+python -m app.scripts.seed_products
+
+# 添加示例优惠券
+python -m app.scripts.seed_coupons
+```
+
+### 启动后端
 ```shell
+cd ecommerce-backend
 uvicorn app.main:app --reload
 ```
-打开`http://127.0.0.1:8000`
-前端:
+打开 `http://127.0.0.1:8000`
+
+### 启动前端
 ```shell
+cd ecommerce-frontend
 npm install
 npm run dev
 ```
-打开`http://localhost:3000/`
+打开 `http://localhost:3000/`
+
 如果出现依赖冲突请执行以下指令进行重新配置
 ```
-# 1. 删掉旧的依赖和锁文件
 rm -rf node_modules package-lock.json
-# 2. 清理缓存
 npm cache clean --force
-# 3. 干净地重新安装
 npm install
-# 4. 再次跑起来
 npm run dev
 ```
+## API 接口概览
+
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/v1/products/` | 商品列表（公开） |
+| POST | `/api/v1/auth/login` | 用户登录 |
+| POST | `/api/v1/auth/register` | 用户注册 |
+| GET | `/api/v1/cart/` | 查看购物车 |
+| POST | `/api/v1/cart/items` | 添加购物车 |
+| POST | `/api/v1/orders/` | 创建订单（支持 coupon_code） |
+| GET | `/api/v1/orders/` | 我的订单 |
+| PUT | `/api/v1/orders/{id}/cancel` | 取消订单 |
+| POST | `/api/v1/coupons/validate` | **验证优惠券** |
+| POST | `/api/v1/payment/alipay/create` | 创建支付宝支付 |
+| GET | `/api/v1/payment/alipay/query` | 查询支付状态 |
+
+## 优惠券
+
+内置 4 张示例优惠券，运行 `python -m app.scripts.seed_coupons` 即可导入：
+
+| 代码 | 类型 | 优惠 | 最低消费 |
+|------|------|------|----------|
+| `WELCOME10` | 百分比 10% | 9 折 | ¥100 |
+| `SAVE50` | 固定 ¥50 | 立减 50 | ¥200 |
+| `NEW100` | 固定 ¥100 | 立减 100 | ¥500 |
+| `SUPER20` | 百分比 20% | 8 折 | ¥300 |
+
 ## 版本信息
 
 ### 运行环境

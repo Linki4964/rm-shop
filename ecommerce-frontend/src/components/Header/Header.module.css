@@ -1,13 +1,104 @@
 .header {
-    background-color: #2f3542;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  }
-  .logo {
-    color: white;
-    display: flex;
-    align-items: center;
-    font-size: 1.5rem;
-  }
-  .logo:hover {
-    color: #ff4757;
-  }
+  background: var(--surface);
+  border-bottom: 1px solid var(--outline-variant);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  letter-spacing: -0.01em;
+}
+.logo:hover { color: var(--primary); }
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.iconBtn {
+  background: none;
+  border: none;
+  color: var(--on-surface-variant);
+  padding: 0.4rem 0.5rem;
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition: color 0.15s;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  position: relative;
+}
+.iconBtn:hover { color: var(--primary); }
+
+.cartBadge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: var(--primary-container);
+  color: #fff;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchBox {
+  display: flex;
+  align-items: center;
+  background: var(--surface-container-low);
+  border-radius: 50px;
+  padding: 0.4rem 1rem;
+  gap: 0.5rem;
+}
+.searchInput {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 0.85rem;
+  width: 200px;
+  color: var(--on-surface);
+}
+.searchInput::placeholder { color: var(--on-surface-variant); }
+
+.divider { color: var(--outline-variant); }
+
+.catNav {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.catLink {
+  padding: 0.35rem 0.75rem;
+  color: var(--on-surface-variant);
+  font-weight: 600;
+  font-size: 0.82rem;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.15s;
+  font-family: inherit;
+  white-space: nowrap;
+}
+.catLink:hover { color: var(--primary-container); }
+.catActive {
+  color: var(--on-primary-container);
+  background: var(--primary-container);
+  font-weight: 700;
+}
