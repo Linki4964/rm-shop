@@ -1,6 +1,4 @@
-.home {
-  padding-bottom: 3rem;
-}
+.home { padding-bottom: 3rem; }
 
 .home::before {
   content: "Define Your Next Digital Horizon";
@@ -24,222 +22,197 @@
   line-height: 1.6;
 }
 
-.sectionTitle {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  font-family: "Manrope", "Noto Sans SC", sans-serif;
-  color: var(--on-surface);
-  font-size: 2rem;
-  line-height: 1.2;
-  font-weight: 800;
-}
-
-.sectionTitle::after {
-  content: "";
-  height: 1px;
-  flex: 1;
-  background: linear-gradient(90deg, rgba(195, 198, 215, 0.58), transparent);
-}
-
-.categories {
-  display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
-  gap: 1rem;
+/* ===== 分类区域 ===== */
+.categorySection {
   margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.categorySection.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.catCard {
+.catHeader {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 1rem;
-  padding: 1.75rem 1rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 32px;
-  background: var(--glass-bg);
-  box-shadow: var(--shadow-card);
-  backdrop-filter: blur(30px);
-  -webkit-backdrop-filter: blur(30px);
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.catTitle {
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.arrowBtns { display: flex; gap: 0.5rem; }
+
+.arrowBtn {
+  width: 42px; height: 42px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 50%;
+  background: var(--surface-container-lowest);
+  color: var(--on-surface-variant);
   cursor: pointer;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
-
-.catCard:hover {
-  transform: translateY(-4px);
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: var(--shadow-hover);
-}
-
-.catCircle {
-  width: 64px;
-  height: 64px;
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--primary-fixed);
-  color: var(--primary);
-  font-size: 1.8rem;
-  transition: transform 0.25s ease;
-}
-
-.catCard:hover .catCircle {
-  transform: scale(1.08);
-}
-
-.catCircle.active {
+.arrowBtn:hover {
   background: var(--primary-container);
+  border-color: var(--primary-container);
   color: var(--on-primary);
 }
 
-.catLabel {
-  color: var(--on-surface);
-  font-size: 0.9rem;
-  font-weight: 800;
+/* ===== 水平滚动行 ===== */
+.scrollRow {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.5rem;
 }
+.scrollRow::-webkit-scrollbar { display: none; }
 
-.productGrid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.5rem;
-}
-
+/* ===== 商品卡片（在行内固定宽度） ===== */
 .productCard {
+  flex: 0 0 260px;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
   border: 1px solid var(--glass-border);
   border-radius: 32px;
   background: var(--glass-bg);
   box-shadow: var(--shadow-card);
   backdrop-filter: blur(30px);
   -webkit-backdrop-filter: blur(30px);
-  transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  scroll-snap-align: start;
+  overflow: hidden;
 }
-
 .productCard:hover {
-  transform: translateY(-6px);
-  background: rgba(255, 255, 255, 0.84);
+  transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
 }
 
+/* 首个卡片更大 */
+.productCard.featured {
+  flex: 0 0 380px;
+}
+.productCard.featured .imgWrap { aspect-ratio: 16/10; margin: 1rem; }
+.productCard.featured .productName { font-size: 1.15rem; }
+.productCard.featured .productPrice { font-size: 1.4rem; }
+.productCard.featured .cartBtn { width: 48px; height: 48px; }
+
+/* ===== 图片区域 ===== */
 .imgWrap {
   position: relative;
   overflow: hidden;
   aspect-ratio: 1;
-  margin: 0.75rem;
-  border-radius: 26px;
+  margin: 0.65rem;
+  border-radius: 24px;
   background: var(--surface-container);
   cursor: pointer;
 }
 
 .productImg {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
   transition: transform 0.6s ease;
 }
+.productCard:hover .productImg { transform: scale(1.06); }
 
-.productCard:hover .productImg {
-  transform: scale(1.08);
-}
-
+/* ===== 标签 ===== */
 .hotTag {
   position: absolute;
-  top: 14px;
-  left: 14px;
-  padding: 0.28rem 0.75rem;
+  top: 10px; left: 10px;
+  padding: 0.2rem 0.6rem;
   border-radius: 999px;
   background: var(--primary-container);
   color: var(--on-primary);
   font-family: "JetBrains Mono", monospace;
-  font-size: 0.68rem;
+  font-size: 0.62rem;
   font-weight: 800;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.04em;
 }
 
+/* ===== 收藏按钮 ===== */
+.favBtn {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 32px; height: 32px;
+  border: none; border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  color: var(--on-surface-variant);
+  font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease; z-index: 2;
+}
+.favBtn:hover { background: #fff; color: #e74c3c; transform: scale(1.1); }
+.favBtn .bi-heart-fill { color: #e74c3c; }
+
+/* ===== 卡片内容 ===== */
 .productBody {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: 0.45rem 1.35rem 1.35rem;
+  display: flex; flex: 1; flex-direction: column;
+  padding: 0.3rem 1.1rem 1.1rem;
 }
 
 .productName {
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.25rem;
   color: var(--on-surface);
-  font-size: 1rem;
+  font-size: 0.9rem;
   font-weight: 800;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 .productDesc {
-  margin-bottom: 1.2rem;
+  margin-bottom: 0.8rem;
   color: var(--secondary);
-  font-size: 0.86rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  font-size: 0.78rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 .productFooter {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: flex; align-items: center; justify-content: space-between;
   margin-top: auto;
 }
 
 .productPrice {
   color: var(--primary);
   font-family: "Manrope", "Noto Sans SC", sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   font-weight: 800;
 }
 
 .cartBtn {
-  width: 44px;
-  height: 44px;
-  border: 0;
-  border-radius: 16px;
+  width: 38px; height: 38px; border: 0;
+  border-radius: 12px;
   background: var(--primary-container);
   color: var(--on-primary);
-  box-shadow: 0 14px 26px rgba(37, 99, 235, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
+.cartBtn:hover { transform: translateY(-2px); box-shadow: 0 16px 28px rgba(37, 99, 235, 0.26); }
 
-.cartBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 34px rgba(37, 99, 235, 0.28);
+/* ===== 旧 sectionTitle（首页标题行不再需要） ===== */
+.sectionTitle {
+  display: none;
 }
 
-.detailBtn {
-  border: 0;
-  background: none;
-  color: var(--secondary);
-  font-size: 0.82rem;
-  font-weight: 700;
-}
-
-@media (max-width: 1100px) {
-  .productGrid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
+/* ===== 响应式 ===== */
 @media (max-width: 768px) {
-  .categories,
-  .productGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 520px) {
-  .productGrid {
-    grid-template-columns: 1fr;
-  }
+  .productCard { flex: 0 0 220px; }
+  .productCard.featured { flex: 0 0 300px; }
+  .catTitle { font-size: 1.2rem; }
 }

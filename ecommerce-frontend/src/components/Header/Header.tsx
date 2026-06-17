@@ -53,6 +53,9 @@ const Header = () => {
               <i className="bi bi-cart" style={{ fontSize: '1.1rem' }} />
               {totalQuantity > 0 && <span className={styles.cartBadge}>{totalQuantity}</span>}
             </button>
+            <Link to="/favorites" className={styles.iconBtn}>
+              <i className="bi bi-heart" style={{ fontSize: '1.1rem' }} />
+            </Link>
             <Link to="/orders" className={styles.iconBtn}>
               <i className="bi bi-box" style={{ fontSize: '1.1rem' }} />
             </Link>

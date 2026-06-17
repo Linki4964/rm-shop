@@ -12,6 +12,7 @@ import Users from '../pages/admin/Users';
 import Carts from '../pages/admin/Carts';
 import CheckoutPage from '../pages/CheckoutPage';
 import OrdersPage from '../pages/OrdersPage';
+import FavoritesPage from '../pages/FavoritesPage';
 import Orders from '../pages/admin/Orders';
 
 import PayPage from '../pages/PayPage';
@@ -83,6 +84,7 @@ export const AppRouter = () => {
           <Route element={<PublicLayout />}>
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/orders" element={<OrdersPage />} />
+            <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/pay" element={<PayPage />} />
           </Route>
         </Route>
