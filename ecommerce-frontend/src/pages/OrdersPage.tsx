@@ -2,28 +2,40 @@
 import { useEffect, useState } from "react";
 import { useOrderStore } from "../store/orderStore";
 import { useNavigate } from "react-router-dom";
-import { paymentApi } from '../api/payment';
-import type { Order } from '../types/order';          // 导入 Order 类型
+import type { Order } from '../types/order';
+import { useToast, useConfirm } from '../components/Toast';
 import styles from "./OrdersPage.module.css";
 
 const DEFAULT_IMAGE = "https://via.placeholder.com/60?text=No+Image";
+const getPrice = (price: number | string) => Number(price) || 0;
+const buildPayUrl = (order: Order) => {
+  const params = new URLSearchParams({
+    orderId: String(order.id),
+    orderNumber: order.order_number,
+    totalAmount: String(order.total_amount)
+  });
+  return `/pay?${params.toString()}`;
+};
 
 const OrdersPage = () => {
   const navigate = useNavigate();
-  const { orders, total, isLoading, fetchOrders, cancelOrder } = useOrderStore();
+  const { orders, isLoading, fetchOrders, cancelOrder } = useOrderStore();
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
+  const toast = useToast();
+  const confirm = useConfirm();
 
   useEffect(() => {
     fetchOrders();
   }, []);
 
   const handleCancel = async (orderId: number) => {
-    if (!window.confirm("确定要取消该订单吗？")) return;
+    const ok = await confirm({ message: "确定要取消该订单吗？" });
+    if (!ok) return;
     try {
       await cancelOrder(orderId);
-      alert("订单已取消");
+      toast.success("订单已取消");
     } catch (err: any) {
-      alert(err.response?.data?.detail || "取消失败");
+      toast.error(err.response?.data?.detail || "取消失败");
     }
   };
 
@@ -54,23 +66,19 @@ const OrdersPage = () => {
   };
 
   // 支付处理函数
-  const handleGoPay = async (order: Order) => {
-    try {
-      const payload = {
-        out_trade_no: order.order_number,
-        total_amount: order.total_amount,
-        subject: `EasyShop订单-${order.order_number}`,
-        body: `订单ID: ${order.id}，共${order.items.length}件商品`
-      };
-      const result = await paymentApi.createPaymentFromOrder(order.id,payload);
-      if (result.pay_url) {
-        navigate('/pay', { state: { payUrl: result.pay_url, orderId: order.id } });
-      } else {
-        navigate(`/pay?order_id=${order.id}`);
+  const handleGoPay = (order: Order) => {
+    sessionStorage.setItem('pending_payment_order', JSON.stringify({
+      orderId: order.id,
+      orderNumber: order.order_number,
+      totalAmount: order.total_amount
+    }));
+    navigate(buildPayUrl(order), {
+      state: {
+        orderId: order.id,
+        orderNumber: order.order_number,
+        totalAmount: order.total_amount
       }
-    } catch (err: any) {
-      alert(err.response?.data?.detail || '创建支付订单失败，请重试');
-    }
+    });
   };
 
   if (isLoading) {
@@ -143,8 +151,14 @@ const OrdersPage = () => {
 
             <div className={styles.orderFooter}>
               <div className={styles.orderTotal}>
-                共 {order.items.length} 件商品，合计：
-                <strong className="text-danger">￥{order.total_amount.toFixed(2)}</strong>
+                共 {order.items.length} 件商品
+                {order.coupon_code && (
+                  <span className="text-success small ms-2">
+                    <i className="bi bi-tag-fill" /> {order.coupon_code} -¥{(order.discount_amount || 0).toFixed(2)}
+                  </span>
+                )}
+                ，合计：
+                <strong className="text-danger">￥{getPrice(order.total_amount).toFixed(2)}</strong>
               </div>
               <button
                 className="btn btn-sm btn-outline-secondary"
@@ -168,7 +182,9 @@ const OrdersPage = () => {
                       </tr>
                     </thead>
                     <tbody>
-                      {order.items.map((item) => (
+                      {order.items.map((item) => {
+                        const price = getPrice(item.price);
+                        return (
                         <tr key={item.id}>
                           <td>
                             <div className="d-flex align-items-center gap-2">
@@ -180,11 +196,12 @@ const OrdersPage = () => {
                               <span>{item.product_name}</span>
                             </div>
                           </td>
-                          <td>￥{item.price.toFixed(2)}</td>
+                          <td>￥{price.toFixed(2)}</td>
                           <td>{item.quantity}</td>
-                          <td>￥{(item.price * item.quantity).toFixed(2)}</td>
+                          <td>￥{(price * item.quantity).toFixed(2)}</td>
                         </tr>
-                      ))}
+                      );
+                      })}
                     </tbody>
                   </table>
                 </div>

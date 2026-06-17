@@ -9,6 +9,7 @@ interface OrderState {
   isLoading: boolean;
   fetchOrders: (skip?: number, limit?: number) => Promise<void>;
   cancelOrder: (orderId: number) => Promise<void>;
+  payOrder: (orderId: number) => Promise<void>;
   clearOrders: () => void;
 }
 
@@ -36,6 +37,16 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       await get().fetchOrders();
     } catch (error) {
       console.error('取消订单失败:', error);
+      throw error;
+    }
+  },
+
+  payOrder: async (orderId: number) => {
+    try {
+      await orderApi.pay(orderId);
+      await get().fetchOrders();
+    } catch (error) {
+      console.error('支付订单失败:', error);
       throw error;
     }
   },

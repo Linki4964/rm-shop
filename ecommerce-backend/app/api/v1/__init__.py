@@ -1,7 +1,7 @@
 # app/api/v1/__init__.py
 from fastapi import APIRouter
 from app.api.v1 import auth, products, admin_products, cart, orders, admin_orders, admin_users, admin_carts, admin_stats
-from app.api.v1 import payment
+from app.api.v1 import payment, coupons, addresses
 # 创建主路由
 api_router = APIRouter()
 
@@ -16,3 +16,6 @@ api_router.include_router(admin_users.router, prefix="/admin/users", tags=["admi
 api_router.include_router(admin_carts.router, prefix="/admin/carts", tags=["admin-carts"])
 api_router.include_router(admin_stats.router, prefix="/admin", tags=["admin-stats"])
 api_router.include_router(payment.router, prefix="/payment", tags=["payment"])
+api_router.include_router(coupons.router, prefix="/coupons", tags=["coupons"])
+api_router.include_router(coupons.admin_router, prefix="/admin/coupons", tags=["admin-coupons"])
+api_router.include_router(addresses.router, prefix="/addresses", tags=["addresses"])

@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { userAdminApi } from '../../api/userAdmin';
 import type { User, UserSearchParams } from '../../types/user';
 import UserFormModal from '../../components/UserFormModal/UserFormModal';
+import { useToast, useConfirm } from '../../components/Toast';
 import styles from './Users.module.css';
 
 const Users = () => {
@@ -12,11 +13,13 @@ const Users = () => {
   const [page, setPage] = useState(1);
   const [size] = useState(10);
   const [keyword, setKeyword] = useState('');
-  const [statusFilter, setStatusFilter] = useState<string>(''); // '' all, 'active', 'inactive'
-  const [roleFilter, setRoleFilter] = useState<string>('');     // '' all, 'admin', 'user'
+  const [statusFilter, setStatusFilter] = useState<string>('');
+  const [roleFilter, setRoleFilter] = useState<string>('');
 
   const [modalVisible, setModalVisible] = useState(false);
   const [editingUser, setEditingUser] = useState<User | null>(null);
+  const toast = useToast();
+  const confirm = useConfirm();
 
   const fetchUsers = useCallback(async () => {
     setLoading(true);
@@ -35,23 +38,25 @@ const Users = () => {
       setTotal(res.total);
     } catch (err) {
       console.error(err);
-      alert('加载用户列表失败');
+      toast.error('加载用户列表失败');
     } finally {
       setLoading(false);
     }
-  }, [page, size, keyword, statusFilter, roleFilter]);
+  }, [page, size, keyword, statusFilter, roleFilter, toast]);
 
   useEffect(() => {
     fetchUsers();
   }, [fetchUsers]);
 
   const handleDelete = async (id: number) => {
-    if (!window.confirm('确定要删除该用户吗？')) return;
+    const ok = await confirm({ message: '确定要删除该用户吗？' });
+    if (!ok) return;
     try {
       await userAdminApi.delete(id);
       fetchUsers();
+      toast.success('用户已删除');
     } catch (err) {
-      alert('删除失败');
+      toast.error('删除失败');
     }
   };
 
@@ -59,8 +64,9 @@ const Users = () => {
     try {
       await userAdminApi.toggleStatus(id, !currentStatus);
       fetchUsers();
+      toast.success('状态已更新');
     } catch (err) {
-      alert('操作失败');
+      toast.error('操作失败');
     }
   };
 

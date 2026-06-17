@@ -73,14 +73,17 @@ export const AppRouter = () => {
         <Route path="/payment-return" element={<PaymentReturn />} />
       
 
-        {/* 普通用户页面 */}
-         <Route element={<ProtectedRoute />}>
+        {/* 首页 — 无需登录即可浏览 */}
+        <Route element={<PublicLayout />}>
+          <Route path="/" element={<HomePage />} />
+        </Route>
+
+        {/* 需要登录的用户页面 */}
+        <Route element={<ProtectedRoute />}>
           <Route element={<PublicLayout />}>
-            <Route path="/" element={<HomePage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
-            <Route path="/orders" element={<OrdersPage />} /> 
+            <Route path="/orders" element={<OrdersPage />} />
             <Route path="/pay" element={<PayPage />} />
-            {/* 其他用户页面放这里 */}
           </Route>
         </Route>
 

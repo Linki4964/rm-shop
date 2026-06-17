@@ -21,6 +21,8 @@ class Order(Base):
     user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     order_number: Mapped[str] = mapped_column(String(50), unique=True, index=True, nullable=False)
     total_amount: Mapped[float] = mapped_column(DECIMAL(10, 2), nullable=False)
+    discount_amount: Mapped[float] = mapped_column(DECIMAL(10, 2), nullable=False, default=0, comment="优惠券抵扣金额")
+    coupon_code: Mapped[str | None] = mapped_column(String(50), nullable=True)
     status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False)
     shipping_address: Mapped[str] = mapped_column(String(500), nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())

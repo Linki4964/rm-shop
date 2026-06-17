@@ -80,8 +80,8 @@ async def query_alipay_payment(
 # ========== 支付创建接口 ==========
 @router.post("/alipay/create", response_model=Dict)
 async def create_payment(
-    order_id: int,
     order_req: OrderCreateRequest,
+    order_id: int = Query(..., description="订单ID"),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
@@ -108,9 +108,12 @@ async def create_payment(
             total_amount=str(target_order.total_amount),
             subject=target_order.subject,
         )
+    except ValueError as e:
+        logger.error(f"支付宝配置错误: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
     except Exception as e:
         logger.error(f"生成支付链接失败: {e}")
-        raise HTTPException(status_code=500, detail="支付宝接口异常")
+        raise HTTPException(status_code=500, detail="支付宝接口异常，请检查配置")
 
     return {"out_trade_no": target_order.out_trade_no, "pay_url": pay_url}
 

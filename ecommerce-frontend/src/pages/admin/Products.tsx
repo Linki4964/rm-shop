@@ -3,6 +3,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { productAdminApi, productPublicApi } from '../../api/productAdmin';
 import type  { Product, ProductSearchParams } from '../../types/product';
 import ProductFormModal from '../../components/ProductFormModal/ProductFormModal';
+import { useToast, useConfirm } from '../../components/Toast';
 import styles from './Products.module.css';
 
 const Products = () => {
@@ -12,6 +13,8 @@ const Products = () => {
   const [page, setPage] = useState(1);
   const [size] = useState(10);
   const [categories, setCategories] = useState<string[]>([]);
+  const toast = useToast();
+  const confirm = useConfirm();
 
   // 筛选状态
   const [filters, setFilters] = useState<{
@@ -58,11 +61,11 @@ const Products = () => {
       setTotal(res.total);
     } catch (err) {
       console.error(err);
-      alert('加载商品列表失败');
+      toast.error('加载商品列表失败');
     } finally {
       setLoading(false);
     }
-  }, [page, size, filters]);
+  }, [page, size, filters, toast]);
 
   useEffect(() => {
     fetchProducts();
@@ -70,12 +73,14 @@ const Products = () => {
 
   // 处理删除
   const handleDelete = async (id: number) => {
-    if (!window.confirm('确定要删除该商品吗？')) return;
+    const ok = await confirm({ message: '确定要删除该商品吗？' });
+    if (!ok) return;
     try {
       await productAdminApi.delete(id);
       fetchProducts();
+      toast.success('商品已删除');
     } catch (err) {
-      alert('删除失败');
+      toast.error('删除失败');
     }
   };
 
@@ -84,8 +89,9 @@ const Products = () => {
     try {
       await productAdminApi.toggleStatus(id, !currentStatus);
       fetchProducts();
+      toast.success('状态已更新');
     } catch (err) {
-      alert('操作失败');
+      toast.error('操作失败');
     }
   };
 
@@ -108,14 +114,15 @@ const Products = () => {
     if (newStock === null) return;
     const stockNum = parseInt(newStock, 10);
     if (isNaN(stockNum) || stockNum < 0) {
-      alert('请输入非负整数');
+      toast.warning('请输入非负整数');
       return;
     }
     try {
       await productAdminApi.updateStock(id, stockNum);
       fetchProducts();
+      toast.success('库存已更新');
     } catch (err) {
-      alert('更新库存失败');
+      toast.error('更新库存失败');
     }
   };
 

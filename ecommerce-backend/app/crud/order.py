@@ -7,17 +7,18 @@ from sqlalchemy.orm import selectinload
 from app.crud.base import CRUDBase
 from app.crud.product import product as product_crud
 from app.crud.cart import cart as cart_crud
+from app.crud.coupon import coupon_crud
 from app.models.order import Order, OrderItem, OrderStatus
 from app.schemas.order import OrderCreate
 from datetime import datetime
 
 class CRUDOrder(CRUDBase[Order]):
 
-    # ========== 创建订单（保持不变）==========
+    # ========== 创建订单 ==========
     async def create_order_from_cart(
         self, db: AsyncSession, *, user_id: int, obj_in: OrderCreate
     ) -> Order:
-        """从购物车创建订单"""
+        """从购物车创建订单，支持优惠券折扣"""
         cart_items = await cart_crud.get_user_cart(db, user_id=user_id)
         if not cart_items:
             raise ValueError("购物车为空，无法创建订单")
@@ -40,12 +41,27 @@ class CRUDOrder(CRUDBase[Order]):
                 "price": product.price
             })
 
+        # 处理优惠券
+        discount_amount = Decimal('0.0')
+        coupon_code: str | None = None
+        if obj_in.coupon_code:
+            code = obj_in.coupon_code.strip().upper()
+            result = await coupon_crud.validate(
+                db, code=code, order_amount=float(total_amount)
+            )
+            if not result["valid"]:
+                raise ValueError(result["message"])
+            discount_amount = Decimal(str(result["discount_amount"]))
+            coupon_code = code
+
         order_number = f"ORD{datetime.now().strftime('%Y%m%d%H%M%S')}{user_id:04d}"
 
         order = Order(
             user_id=user_id,
             order_number=order_number,
             total_amount=total_amount,
+            discount_amount=discount_amount,
+            coupon_code=coupon_code,
             status=OrderStatus.PENDING,
             shipping_address=obj_in.shipping_address
         )
@@ -65,10 +81,13 @@ class CRUDOrder(CRUDBase[Order]):
         for item in cart_items:
             await product_crud.reduce_stock(db, product_id=item.product_id, quantity=item.quantity)
 
+        # 增加优惠券使用次数
+        if coupon_code:
+            await coupon_crud.increment_usage(db, code=coupon_code)
+
         await cart_crud.clear_cart(db, user_id=user_id)
 
         await db.commit()
-        # 返回完整订单
         return await self.get_with_items(db, id=order.id)
 
     # ========== 获取订单（含完整预加载）==========

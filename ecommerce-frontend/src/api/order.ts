@@ -23,4 +23,9 @@ export const orderApi = {
     const response = await apiClient.put(`/orders/${orderId}/cancel`);
     return response.data;
   },
+  // 模拟支付
+  pay: async (orderId: number): Promise<Order> => {
+    const response = await apiClient.put(`/orders/${orderId}/pay`);
+    return response.data;
+  },
 };

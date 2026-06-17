@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { adminCartApi } from '../../api/adminCart';
 import type { AdminCartOverview, CartItem } from '../../types/cart';
+import { useToast, useConfirm } from '../../components/Toast';
 import styles from './Carts.module.css';
 
 const Carts = () => {
@@ -13,6 +14,8 @@ const Carts = () => {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [cartLoading, setCartLoading] = useState(false);
+  const toast = useToast();
+  const confirm = useConfirm();
 
   const fetchUsers = async () => {
     setLoading(true);
@@ -45,31 +48,33 @@ const Carts = () => {
   }, [selectedUserId]);
 
   const handleDeleteItem = async (itemId: number) => {
-    if (!confirm('确定删除该购物车项吗？')) return;
+    const ok = await confirm({ message: '确定删除该购物车项吗？' });
+    if (!ok) return;
     try {
       await adminCartApi.deleteItem(itemId);
-      // 刷新当前用户的购物车
       if (selectedUserId) {
         const res = await adminCartApi.getUserCart(selectedUserId);
         setCartItems(res.items);
       }
-      // 同时刷新用户概览
       fetchUsers();
+      toast.success('已删除');
     } catch (err) {
-      alert('删除失败');
+      toast.error('删除失败');
     }
   };
 
   const handleClearCart = async (userId: number) => {
-    if (!confirm('确定清空该用户的购物车吗？')) return;
+    const ok = await confirm({ message: '确定清空该用户的购物车吗？' });
+    if (!ok) return;
     try {
       await adminCartApi.clearUserCart(userId);
       if (selectedUserId === userId) {
         setCartItems([]);
       }
       fetchUsers();
+      toast.success('购物车已清空');
     } catch (err) {
-      alert('清空失败');
+      toast.error('清空失败');
     }
   };
 

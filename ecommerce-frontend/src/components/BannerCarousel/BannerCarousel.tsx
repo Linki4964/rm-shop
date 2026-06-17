@@ -1,36 +1,33 @@
 import styles from './BannerCarousel.module.css';
 
-const banners = [
-  { image: 'https://picsum.photos/id/10/1200/400', title: '春季新品上市', desc: '满199减50' },
-  { image: 'https://picsum.photos/id/20/1200/400', title: '数码家电狂欢', desc: '爆款直降' },
-];
-
 const BannerCarousel = () => {
+  const scrollToProducts = () => {
+    document.getElementById('products-section')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <div id="mainCarousel" className={`carousel slide ${styles.carousel}`} data-bs-ride="carousel">
-      <div className="carousel-indicators">
-        {banners.map((_, index) => (
-          <button key={index} type="button" data-bs-target="#mainCarousel" data-bs-slide-to={index} className={index === 0 ? 'active' : ''} aria-label={`Slide ${index + 1}`}></button>
-        ))}
+    <section className={styles.hero}>
+      <img
+        className={styles.heroImg}
+        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU8MFMPHKYJo0s-lEnQdY3T3lSyF6Jb92jILcRsX9KYi6SSw90hJ287vRUki_dd-UUalbF7BjNx0xkjchdLyZMZ3A9zFloVryE0u2RtGndE8GnLtls_7Cpib5pfKxCEYMb0I_MGc-V8F_vP8og0pNImFDNCUY3795ks2WtPIN31-rWqVveflVbCzYku3Ha48uWY_c8-UrieoB393JMOp4oElsr-r5r3pYhIwhTHmJfJNQSmAbbagmlYc8mXtL2W41ZJulLvuvyNoU"
+        alt="春季新品"
+      />
+      <div className={styles.overlay}>
+        <div className={styles.content}>
+          <span className={styles.tag}>NEW COLLECTION 2024</span>
+          <h1 className={styles.title}>
+            春季新品上市<br />
+            <span className={styles.titleAccent}>满199减50</span>
+          </h1>
+          <p className={styles.desc}>
+            探索全新数码生活，发现让生活更简单的精致科技产品。今日下单享受限时顺丰包邮。
+          </p>
+          <button className={styles.cta} onClick={scrollToProducts}>
+            立即选购 <i className="bi bi-arrow-right" />
+          </button>
+        </div>
       </div>
-      <div className="carousel-inner">
-        {banners.map((banner, index) => (
-          <div key={index} className={`carousel-item ${index === 0 ? 'active' : ''}`}>
-            <img src={banner.image} className="d-block w-110" alt={banner.title} />
-            <div className={`carousel-caption d-none d-md-block ${styles.caption}`}>
-              <h3>{banner.title}</h3>
-              <p>{banner.desc}</p>
-            </div>
-          </div>
-        ))}
-      </div>
-      <button className="carousel-control-prev" type="button" data-bs-target="#mainCarousel" data-bs-slide="prev">
-        <span className="carousel-control-prev-icon"></span>
-      </button>
-      <button className="carousel-control-next" type="button" data-bs-target="#mainCarousel" data-bs-slide="next">
-        <span className="carousel-control-next-icon"></span>
-      </button>
-    </div>
+    </section>
   );
 };
 

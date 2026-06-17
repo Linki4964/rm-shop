@@ -1,138 +1,119 @@
 // src/pages/PayPage.tsx
-import { useEffect, useState, useRef } from 'react';
-import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
-import { QRCode } from 'react-qr-code';
-import { paymentApi } from '../api/payment';
+import { useEffect, useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useOrderStore } from '../store/orderStore';
+import { useCartStore } from '../store/cartStore';
+import { useToast, useConfirm } from '../components/Toast';
 import styles from './PayPage.module.css';
 
-const PayPage = () => {
-  const [searchParams] = useSearchParams();
-  const location = useLocation();
-  const navigate = useNavigate();
+type PaymentOrderState = {
+  orderId?: number;
+  orderNumber?: string;
+  totalAmount?: number | string;
+};
 
-  // 获取订单ID
-  const orderIdFromState = (location.state as any)?.orderId;
-  const orderIdFromQuery = searchParams.get('order_id');
-  const orderId = orderIdFromState || orderIdFromQuery;
-
-  const [payUrl, setPayUrl] = useState('');
-  const [loading, setLoading] = useState(true);
-  const popupRef = useRef<Window | null>(null);
-
-  // 查询支付状态并跳转
-  const handleCheckPayment = async (showMessage = true) => {
-    if (!orderId) {
-      console.error('handleCheckPayment: orderId 为空');
-      return;
-    }
-    try {
-      const res = await paymentApi.queryPayment(Number(orderId));
-      if (res.status === 'paid') {
-        if (showMessage) alert('支付成功！');
-        navigate('/orders');
-      } else if (res.status === 'pending') {
-        if (showMessage) alert('订单尚未支付，请完成支付后再查询');
-      } else if (res.status === 'closed') {
-        if (showMessage) alert('订单已关闭');
-        navigate('/orders');
-      } else {
-        if (showMessage) alert(res.message || '查询失败，请稍后手动查看订单状态');
-      }
-    } catch (err) {
-      console.error('查询支付状态失败:', err);
-      if (showMessage) alert('查询失败，请稍后手动查看订单状态');
-    }
-  };
-
-  // 监听弹窗发送的支付成功消息
-  useEffect(() => {
-    const handleMessage = (event: MessageEvent) => {
-      // 校验消息来源（可选，此处简化）
-      if (event.data?.type === 'PAYMENT_SUCCESS') {
-        // 关闭弹窗（如果还开着）
-        if (popupRef.current && !popupRef.current.closed) {
-          popupRef.current.close();
-        }
-        alert('支付成功！');
-        navigate('/orders');
-      }
-    };
-    window.addEventListener('message', handleMessage);
-    return () => window.removeEventListener('message', handleMessage);
-  }, [navigate]);
-
-  // 打开居中弹窗
-  const openCenteredWindow = (url: string) => {
-    const width = 800;
-    const height = 600;
-    const left = (window.screen.width - width) / 2;
-    const top = (window.screen.height - height) / 2;
-    popupRef.current = window.open(
-      url,
-      '_blank',
-      `width=${width},height=${height},left=${left},top=${top},toolbar=no,location=yes,status=no,menubar=no,scrollbars=yes,resizable=yes`
-    );
-    if (popupRef.current) {
-      // 如果用户手动关闭弹窗，也检查一次支付状态
-      const checkClosed = setInterval(() => {
-        if (popupRef.current?.closed) {
-          clearInterval(checkClosed);
-          handleCheckPayment(true);
-        }
-      }, 500);
-    }
-  };
-
-  // 获取支付链接
-  useEffect(() => {
-    if (!orderId) {
-      console.error('PayPage: orderId 无效');
-      alert('无效订单');
-      navigate('/orders');
-      return;
-    }
-
-    const fetchPayUrl = async () => {
-      try {
-        const statePayUrl = (location.state as any)?.payUrl;
-        if (statePayUrl) {
-          setPayUrl(statePayUrl);
-          setLoading(false);
-          return;
-        }
-        const res = await paymentApi.createAlipay(Number(orderId));
-        if (res?.pay_url) {
-          setPayUrl(res.pay_url);
-        } else {
-          throw new Error('后端未返回 pay_url');
-        }
-      } catch (err: any) {
-        console.error('创建支付失败:', err);
-        alert('创建支付失败: ' + (err.response?.data?.detail || err.message));
-        navigate('/orders');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchPayUrl();
-  }, [orderId, location.state, navigate]);
-
-  if (loading) {
-    return (
-      <div className="text-center py-5">
-        <div className="spinner-border text-danger" />
-        <p>正在加载支付信息...</p>
-      </div>
-    );
+const getStoredPaymentOrder = (): PaymentOrderState => {
+  try {
+    return JSON.parse(sessionStorage.getItem('pending_payment_order') || '{}');
+  } catch {
+    return {};
   }
+};
 
-  if (!payUrl) {
+const getPaymentOrderFromSearch = (search: string): PaymentOrderState => {
+  const params = new URLSearchParams(search);
+  return {
+    orderId: params.get('orderId') ? Number(params.get('orderId')) : undefined,
+    orderNumber: params.get('orderNumber') || undefined,
+    totalAmount: params.get('totalAmount') || undefined
+  };
+};
+
+const PayPage = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const toast = useToast();
+  const confirm = useConfirm();
+  const { cancelOrder, payOrder } = useOrderStore();
+  const fetchCart = useCartStore(s => s.fetchCart);
+
+  // 从 checkout / 订单页跳转过来的订单信息
+  const queryOrder = getPaymentOrderFromSearch(location.search);
+  const storedOrder = getStoredPaymentOrder();
+  const routeState = (location.state as PaymentOrderState | null) || {};
+  const orderId = queryOrder.orderId ?? routeState.orderId ?? storedOrder.orderId;
+  const orderNumber = queryOrder.orderNumber ?? routeState.orderNumber ?? storedOrder.orderNumber;
+  const rawTotalAmount = queryOrder.totalAmount ?? routeState.totalAmount ?? storedOrder.totalAmount;
+  const totalAmount = Number(rawTotalAmount);
+  const hasOrderInfo = Boolean(orderId && orderNumber && Number.isFinite(totalAmount));
+
+  const [payLoading, setPayLoading] = useState(false);
+  const [payError, setPayError] = useState('');
+  const [cancelling, setCancelling] = useState(false);
+
+  // 进入支付页时清空购物车
+  useEffect(() => {
+    fetchCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 无订单信息时保留在支付页，给用户一个可恢复的状态，避免白屏。
+  useEffect(() => {
+    if (!hasOrderInfo) {
+      toast.error('订单信息缺失');
+    }
+  }, [hasOrderInfo, toast]);
+
+  // 模拟支付
+  const handlePay = async () => {
+    if (!hasOrderInfo || !orderId) return;
+    setPayLoading(true);
+    setPayError('');
+    try {
+      await payOrder(orderId);
+      sessionStorage.removeItem('pending_payment_order');
+      toast.success('支付成功');
+      navigate('/orders', { replace: true });
+    } catch (err: any) {
+      setPayError(err.response?.data?.detail || '支付失败，请重试');
+    } finally {
+      setPayLoading(false);
+    }
+  };
+
+  // 取消订单
+  const handleCancelOrder = async () => {
+    if (!orderId) return;
+    const ok = await confirm({
+      title: '取消订单',
+      message: '确定要取消该订单吗？取消后可在"我的订单"中查看。',
+      confirmText: '确定取消',
+      variant: 'danger'
+    });
+    if (!ok) return;
+    setCancelling(true);
+    try {
+      await cancelOrder(orderId);
+      sessionStorage.removeItem('pending_payment_order');
+      toast.success('订单已取消');
+      navigate('/orders', { replace: true });
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || '取消失败');
+    } finally {
+      setCancelling(false);
+    }
+  };
+
+  if (!hasOrderInfo) {
     return (
-      <div className="text-center py-5">
-        <p>无法获取支付链接，请返回重试。</p>
-        <button className="btn btn-primary" onClick={() => navigate('/orders')}>
-          返回订单列表
+      <div className={styles.container}>
+        <h3 className="fw-bold mb-4">订单支付</h3>
+        <div className={styles.errorBox}>
+          <i className="bi bi-exclamation-triangle-fill" />
+          <span>订单信息缺失，请从“我的订单”重新进入支付。</span>
+        </div>
+        <button className="btn btn-primary" onClick={() => navigate('/orders', { replace: true })}>
+          返回我的订单
         </button>
       </div>
     );
@@ -140,27 +121,67 @@ const PayPage = () => {
 
   return (
     <div className={styles.container}>
-      <h3 className="fw-bold mb-4">支付宝支付</h3>
-      <div className="card p-4 text-center">
-        <div className="mb-3">
-          <QRCode value={payUrl} size={200} />
+      <h3 className="fw-bold mb-4">订单支付</h3>
+
+      {/* 订单信息 */}
+      <div className={styles.orderCard}>
+        <div className={styles.orderHeader}>
+          <h4 className={styles.orderTitle}>
+            订单详情
+            <span className={styles.orderNumber}> #{orderNumber}</span>
+          </h4>
         </div>
-        <p>
-          请使用支付宝沙箱版APP扫描二维码或
-          <button
-            className="btn btn-link p-0 ms-1"
-            onClick={() => openCenteredWindow(payUrl)}
-            style={{ verticalAlign: 'baseline' }}
-          >
-            点击跳转
-          </button>
-        </p>
-        <div className="mt-3">
-          <button className="btn btn-primary mt-3" onClick={() => handleCheckPayment(true)}>
-            完成支付后查看订单
-          </button>
+        <div className={styles.orderRow}>
+          <span className={styles.orderLabel}>订单编号</span>
+          <span className={styles.orderValue}>{orderNumber}</span>
         </div>
-        <small className="text-muted mt-2">支付成功后页面会自动跳转</small>
+        <div className={styles.orderRow}>
+          <span className={styles.orderLabel}>应付金额</span>
+          <span className={styles.totalAmount}>¥{totalAmount.toFixed(2)}</span>
+        </div>
+      </div>
+
+      {/* 错误提示 */}
+      {payError && (
+        <div className={styles.errorBox}>
+          <i className="bi bi-exclamation-triangle-fill" />
+          <span>{payError}</span>
+        </div>
+      )}
+
+      <div className={styles.methodsSection}>
+        <h4 className={styles.methodsTitle}>模拟支付</h4>
+        <button
+          className={styles.payBtn}
+          onClick={handlePay}
+          disabled={payLoading || cancelling}
+        >
+          {payLoading ? (
+            <>
+              <i className={`bi bi-arrow-repeat ${styles.spin} me-1`} />
+              支付中...
+            </>
+          ) : (
+            '立即支付'
+          )}
+        </button>
+      </div>
+
+      <div className={styles.actions}>
+        <button
+          className={styles.cancelBtn}
+          onClick={handleCancelOrder}
+          disabled={cancelling || payLoading}
+        >
+          {cancelling ? (
+            <>
+              <i className={`bi bi-arrow-repeat ${styles.spin} me-1`} />
+              取消中...
+            </>
+          ) : (
+            '取消订单'
+          )}
+        </button>
       </div>
     </div>
   );

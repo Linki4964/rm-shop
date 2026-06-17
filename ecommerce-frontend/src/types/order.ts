@@ -16,6 +16,8 @@ export interface OrderItem {
     id: number;
     order_number: string;
     total_amount: number;
+    discount_amount?: number;
+    coupon_code?: string | null;
     status: string;
     shipping_address: string;
     created_at: string;
@@ -25,6 +27,7 @@ export interface OrderItem {
   
   export interface OrderCreate {
     shipping_address: string;
+    coupon_code?: string;
   }
   
   export interface OrderListResponse {
