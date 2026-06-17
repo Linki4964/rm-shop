@@ -1,77 +1,428 @@
-.container { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+  color: var(--on-surface);
+}
 
-/* ===== 进度条 ===== */
-.stepper { display: flex; align-items: center; justify-content: center; gap: 0; margin-bottom: 2rem; flex-wrap: wrap; }
-.step { display: flex; flex-direction: column; align-items: center; gap: 0.25rem; }
-.stepCircle { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 700; }
-.stepCircleDone { background: var(--secondary); color: #fff; }
-.stepCircleActive { background: var(--primary-container); color: var(--on-primary-container); }
-.stepCirclePending { border: 2px solid var(--outline-variant); color: var(--outline); }
-.stepLabel { font-size: 0.82rem; font-weight: 600; }
-.stepLabelActive { color: var(--primary-container); }
-.stepLabelPending { color: var(--outline); }
-.stepLine { width: 64px; height: 1px; background: var(--outline-variant); margin: 0 0.5rem 1rem; }
-@media (max-width: 768px) { .stepper { display: none; } }
+.container::before {
+  content: "Secure Checkout";
+  display: block;
+  margin-bottom: 0.5rem;
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 3rem;
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--on-surface);
+}
 
-/* ===== 卡片 ===== */
-.card { background: var(--surface-container-lowest); border-radius: var(--radius); border: 1px solid rgba(219,193,186,0.3); box-shadow: var(--shadow-card); padding: 1.5rem; margin-bottom: 1.5rem; }
-.cardTitle { font-size: 1.1rem; font-weight: 700; color: var(--on-surface); margin-bottom: 1rem; display: flex; align-items: center; justify-content: space-between; }
+.container::after {
+  content: "Review your details and complete your purchase.";
+  display: block;
+  margin: -0.25rem 0 2rem;
+  color: var(--secondary);
+  font-size: 1.05rem;
+}
 
-/* ===== 商品清单 ===== */
-.itemRow { display: flex; gap: 1rem; padding: 1rem 0; border-bottom: 1px solid var(--outline-variant); }
-.itemRow:last-child { border-bottom: none; padding-bottom: 0; }
-.itemImg { width: 72px; height: 72px; border-radius: 8px; overflow: hidden; background: var(--surface-container-low); flex-shrink: 0; border: 1px solid var(--outline-variant); }
-.itemImg img { width: 100%; height: 100%; object-fit: cover; }
-.itemInfo { flex: 1; }
-.itemName { font-weight: 600; font-size: 1rem; color: var(--on-surface); margin-bottom: 0.3rem; }
-.itemMeta { font-size: 0.82rem; color: var(--on-surface-variant); margin-bottom: 0.5rem; }
-.itemPrice { font-size: 1.1rem; font-weight: 700; color: var(--primary); text-align: right; }
+.stepper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  margin-bottom: 2.5rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.55);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(36px);
+  -webkit-backdrop-filter: blur(36px);
+}
 
-/* ===== 地址 ===== */
-.addrCard { border: 2px solid var(--outline-variant); border-radius: var(--radius); padding: 1rem 1.25rem; position: relative; cursor: pointer; margin-bottom: 0.5rem; background: var(--surface-container-lowest); transition: border-color 0.15s; }
-.addrCard:hover { border-color: var(--primary-container); }
-.addrCardSelected { border-color: var(--primary-container); background: rgba(255,219,210,0.1); }
-.addrName { font-weight: 600; font-size: 1rem; color: var(--on-surface); margin-bottom: 0.25rem; }
-.addrDetail { font-size: 0.85rem; color: var(--on-surface-variant); line-height: 1.5; }
-.addrBadge { display: inline-block; background: var(--primary-container); color: var(--on-primary-container); padding: 1px 8px; border-radius: 4px; font-size: 0.65rem; font-weight: 700; margin-left: 0.5rem; }
-.addrCheck { position: absolute; top: 1rem; right: 1rem; color: var(--primary-container); font-size: 1.2rem; }
+.step {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
 
-/* ===== 支付方式 ===== */
-.payMethods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
-@media (max-width: 576px) { .payMethods { grid-template-columns: repeat(2, 1fr); } }
-.payBtn { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; padding: 1rem 0.5rem; border: 2px solid var(--outline-variant); border-radius: var(--radius); background: transparent; cursor: pointer; transition: all 0.15s; font-size: 0.82rem; font-weight: 600; color: var(--on-surface-variant); }
-.payBtn:hover { background: var(--surface-container); }
-.payBtnSelected { border-color: var(--primary-container); background: rgba(255,219,210,0.2); color: var(--primary); }
-.payBtn i { font-size: 1.4rem; }
+.stepCircle {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+  font-weight: 800;
+  font-family: "JetBrains Mono", monospace;
+}
 
-/* ===== 面板按钮 ===== */
-.panelBtn { width: 100%; text-align: left; padding: 0.75rem 1rem; background: var(--surface-container-lowest); border: 1px solid var(--outline-variant); border-radius: var(--radius); display: flex; align-items: center; gap: 0.75rem; cursor: pointer; font-size: 0.9rem; color: var(--on-surface-variant); transition: all 0.15s; margin-bottom: 0.25rem; }
-.panelBtn:hover { border-color: var(--primary-container); }
-.panelBtnIcon { font-size: 1.2rem; color: var(--primary-container); }
-.panelBtnBody { flex: 1; text-align: left; }
-.panelBtnLabel { font-size: 0.75rem; color: var(--on-surface-variant); }
-.panelBtnValue { font-size: 0.85rem; color: var(--on-surface); font-weight: 600; }
+.stepCircleDone,
+.stepCircleActive {
+  background: var(--primary-container);
+  color: var(--on-primary);
+  box-shadow: 0 12px 26px rgba(37, 99, 235, 0.18);
+}
 
-.panelContent { background: var(--surface-container-low); border: 1px solid var(--outline-variant); border-top: none; border-radius: 0 0 var(--radius) var(--radius); padding: 1rem; margin-top: -1px; margin-bottom: 0.5rem; }
+.stepCirclePending {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(115, 118, 134, 0.25);
+  color: var(--outline);
+}
 
-/* ===== 摘要卡片（粘性） ===== */
-.summary { background: var(--surface-container-lowest); border-radius: 24px; border: 1px solid rgba(219,193,186,0.5); box-shadow: var(--shadow-card); padding: 1.25rem 1.5rem; position: sticky; top: 100px; }
-.summaryTitle { font-size: 1.1rem; font-weight: 700; color: var(--on-surface); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid var(--outline-variant); }
-.summaryRow { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; font-size: 0.95rem; }
-.summaryRow span:first-child { color: var(--on-surface-variant); }
-.summaryRow span:last-child { font-weight: 600; }
-.summaryTotal { margin-top: 0.75rem; padding-top: 1rem; border-top: 1px solid var(--outline-variant); display: flex; justify-content: space-between; align-items: flex-end; }
-.totalLabel { font-size: 1.1rem; font-weight: 600; }
-.totalPrice { font-size: 2rem; font-weight: 700; color: var(--primary); line-height: 1.1; }
+.stepLabel {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--secondary);
+}
 
-.submitBtn { width: 100%; margin-top: 1rem; padding: 0.85rem; border: none; border-radius: var(--radius); background: var(--primary-container); color: var(--on-primary-container); font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; box-shadow: 0 4px 16px rgba(224,122,95,0.2); }
-.submitBtn:hover:not(:disabled) { opacity: 0.9; }
-.submitBtn:active:not(:disabled) { transform: scale(0.97); }
-.submitBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+.stepLabelActive {
+  color: var(--primary);
+}
 
-.trustBadges { display: flex; justify-content: space-around; margin-top: 1rem; padding-top: 0.75rem; color: var(--on-surface-variant); }
-.trustBadges div { display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 600; gap: 0.25rem; }
-.trustBadges i { font-size: 1rem; }
+.stepLabelPending {
+  color: var(--outline);
+}
 
-/* ===== 错误提示 ===== */
-.errorBox { padding: 0.5rem 1rem; background: var(--error-container); color: var(--error); border-radius: var(--radius); margin-bottom: 0.75rem; font-size: 0.85rem; }
+.stepLine {
+  width: 80px;
+  height: 1px;
+  margin: 0 1rem;
+  background: linear-gradient(90deg, rgba(37, 99, 235, 0.3), rgba(195, 198, 215, 0.3));
+}
+
+.card,
+.summary {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
+.card {
+  padding: 2rem;
+  margin-bottom: 2rem;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.card:hover {
+  background: rgba(255, 255, 255, 0.78);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.cardTitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.45rem;
+  line-height: 1.25;
+  font-weight: 800;
+  color: var(--on-surface);
+}
+
+.itemRow {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  margin-bottom: 0.85rem;
+  border: 1px solid rgba(195, 198, 215, 0.28);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.36);
+}
+
+.itemRow:last-child {
+  margin-bottom: 0;
+}
+
+.itemImg {
+  width: 82px;
+  height: 82px;
+  border-radius: 20px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--surface-container);
+  border: 1px solid rgba(255, 255, 255, 0.55);
+}
+
+.itemImg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.itemInfo {
+  flex: 1;
+  min-width: 0;
+  color: var(--secondary);
+}
+
+.itemName {
+  margin-bottom: 0.35rem;
+  color: var(--on-surface);
+  font-weight: 800;
+}
+
+.itemMeta {
+  margin-bottom: 0.35rem;
+  color: var(--secondary);
+  font-size: 0.88rem;
+}
+
+.itemPrice {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--primary);
+  font-size: 1rem;
+  font-weight: 800;
+  text-align: right;
+}
+
+.addrCard {
+  position: relative;
+  margin-bottom: 0.75rem;
+  padding: 1.25rem 1.4rem;
+  border: 1px solid rgba(195, 198, 215, 0.35);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.34);
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.addrCard:hover {
+  border-color: rgba(37, 99, 235, 0.45);
+  background: rgba(255, 255, 255, 0.55);
+  transform: translateY(-1px);
+}
+
+.addrCardSelected {
+  border-color: var(--primary-container);
+  background: rgba(37, 99, 235, 0.07);
+}
+
+.addrName {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.35rem;
+  color: var(--on-surface);
+  font-weight: 800;
+}
+
+.addrDetail {
+  color: var(--secondary);
+  line-height: 1.55;
+  font-size: 0.92rem;
+}
+
+.addrBadge {
+  display: inline-block;
+  margin-left: 0.5rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  background: var(--secondary-container);
+  color: var(--on-secondary-container);
+  font-size: 0.68rem;
+  font-weight: 800;
+}
+
+.addrCheck {
+  position: absolute;
+  right: 1.2rem;
+  top: 1.1rem;
+  color: var(--primary-container);
+  font-size: 1.2rem;
+}
+
+.payMethods {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.payBtn {
+  min-height: 104px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid rgba(195, 198, 215, 0.35);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.34);
+  color: var(--secondary);
+  cursor: pointer;
+  font-weight: 800;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease, color 0.2s ease;
+}
+
+.payBtn:hover {
+  border-color: rgba(37, 99, 235, 0.45);
+  background: rgba(255, 255, 255, 0.58);
+  transform: translateY(-2px);
+}
+
+.payBtnSelected {
+  border-color: var(--primary-container);
+  background: rgba(37, 99, 235, 0.08);
+  color: var(--primary);
+}
+
+.payBtn i {
+  font-size: 1.55rem;
+}
+
+.summary {
+  position: sticky;
+  top: 7rem;
+  padding: 2rem;
+}
+
+.summaryTitle {
+  margin-bottom: 1.5rem;
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.summaryRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0;
+  color: var(--secondary);
+}
+
+.summaryRow span:last-child {
+  color: var(--on-surface);
+  font-weight: 700;
+}
+
+.summaryTotal {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: 1.2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(195, 198, 215, 0.35);
+}
+
+.totalLabel {
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
+
+.totalPrice {
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  color: var(--primary);
+  font-size: 2.35rem;
+  line-height: 1;
+  font-weight: 800;
+}
+
+.submitBtn {
+  width: 100%;
+  margin-top: 1.75rem;
+  padding: 1.05rem 1.25rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2563eb 0%, #004ac6 100%);
+  color: var(--on-primary);
+  font-size: 1.05rem;
+  font-weight: 800;
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.22);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px) scale(1.01);
+  box-shadow: 0 24px 44px rgba(37, 99, 235, 0.28);
+}
+
+.submitBtn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.submitBtn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.trustBadges {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.4rem;
+  color: var(--secondary);
+}
+
+.trustBadges div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+}
+
+.trustBadges i {
+  color: var(--primary-container);
+  font-size: 1.1rem;
+}
+
+.errorBox {
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid rgba(186, 26, 26, 0.12);
+  border-radius: 16px;
+  background: var(--error-container);
+  color: var(--error);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+@media (max-width: 992px) {
+  .container {
+    padding: 2rem 1rem 3rem;
+  }
+
+  .container::before {
+    font-size: 2.25rem;
+  }
+
+  .summary {
+    position: static;
+  }
+}
+
+@media (max-width: 768px) {
+  .stepper {
+    display: none;
+  }
+
+  .card,
+  .summary {
+    border-radius: 24px;
+    padding: 1.25rem;
+  }
+
+  .payMethods {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .itemRow {
+    align-items: flex-start;
+  }
+
+  .itemPrice {
+    font-size: 0.9rem;
+  }
+}

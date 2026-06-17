@@ -13,6 +13,14 @@ import styles from './CheckoutPage.module.css';
 
 const DEFAULT_IMAGE = 'https://via.placeholder.com/80/f5f3ee/9a442d?text=EasyShop';
 const getPrice = (p: number | string) => Number(p) || 0;
+const buildPayUrl = (order: { id: number; order_number: string; total_amount: number | string }) => {
+  const params = new URLSearchParams({
+    orderId: String(order.id),
+    orderNumber: order.order_number,
+    totalAmount: String(order.total_amount)
+  });
+  return `/pay?${params.toString()}`;
+};
 
 const PAY_METHODS = [
   { key: 'wechat', icon: 'bi-wallet2', label: '微信支付' },
@@ -23,7 +31,7 @@ const PAY_METHODS = [
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
-  const { items, totalQuantity, isLoading, fetchCart } = useCartStore();
+  const { items, isLoading, fetchCart } = useCartStore();
   const [checkoutItems, setCheckoutItems] = useState(items);
   const [cartLoaded, setCartLoaded] = useState(false);
   const [submitting, setSubmitting] = useState(false);
@@ -78,7 +86,6 @@ const CheckoutPage = () => {
     }
   }, [totalAmount]);
 
-  const discount = selectedCoupon?.discount_amount ?? 0;
   const finalAmount = selectedCoupon?.final_amount ?? totalAmount;
   const selAddr = addresses.find(a => a.id === selectedAddr);
 
@@ -99,10 +106,20 @@ const CheckoutPage = () => {
     const shipping = [selAddr.recipient_name, selAddr.recipient_phone, selAddr.province + selAddr.city + selAddr.detail].filter(Boolean).join('，');
     try {
       const order = await orderApi.create({ shipping_address: shipping, coupon_code: selectedCoupon?.code || undefined });
-      // 测试版：直接模拟支付成功
-      await orderApi.pay(order.id);
-      toast.success('下单成功，已模拟支付');
-      navigate('/orders', { replace: true });
+      sessionStorage.setItem('pending_payment_order', JSON.stringify({
+        orderId: order.id,
+        orderNumber: order.order_number,
+        totalAmount: order.total_amount
+      }));
+      toast.success('订单创建成功，请完成支付');
+      navigate(buildPayUrl(order), {
+        state: {
+          orderId: order.id,
+          orderNumber: order.order_number,
+          totalAmount: order.total_amount
+        },
+        replace: true
+      });
     } catch (e: any) { didSubmitRef.current = false; setError(e.response?.data?.detail || '创建订单失败'); }
     finally { setSubmitting(false); }
   };
