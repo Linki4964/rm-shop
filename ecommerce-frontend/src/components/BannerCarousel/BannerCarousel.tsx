@@ -9,12 +9,12 @@ const BannerCarousel = () => {
     <section className={styles.hero}>
       <img
         className={styles.heroImg}
-        src="https://lh3.googleusercontent.com/aida-public/AB6AXuBU8MFMPHKYJo0s-lEnQdY3T3lSyF6Jb92jILcRsX9KYi6SSw90hJ287vRUki_dd-UUalbF7BjNx0xkjchdLyZMZ3A9zFloVryE0u2RtGndE8GnLtls_7Cpib5pfKxCEYMb0I_MGc-V8F_vP8og0pNImFDNCUY3795ks2WtPIN31-rWqVveflVbCzYku3Ha48uWY_c8-UrieoB393JMOp4oElsr-r5r3pYhIwhTHmJfJNQSmAbbagmlYc8mXtL2W41ZJulLvuvyNoU"
+        src="/homepage.jpg"
         alt="春季新品"
       />
       <div className={styles.overlay}>
         <div className={styles.content}>
-          <span className={styles.tag}>NEW COLLECTION 2024</span>
+          <span className={styles.tag}>NEW COLLECTION 2026</span>
           <h1 className={styles.title}>
             春季新品上市<br />
             <span className={styles.titleAccent}>满199减50</span>

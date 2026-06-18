@@ -30,11 +30,10 @@ async def get_db() -> AsyncGenerator[AsyncSession, Any]:
 # 创建数据库表
 async def init_db():
     """初始化数据库，创建所有表"""
-    # 重要：确保所有模型都被导入
-    from app.models import user  # 导入模型模块
-    
+    # 重要：导入所有模型以注册到 Base.metadata
+    import app.models  # noqa: F401 — 触发 __init__.py 中的所有模型导入
+
     async with engine.begin() as conn:
-        # 打印将要创建的表名（用于调试）
         print("将要创建的表:", list(Base.metadata.tables.keys()))
         await conn.run_sync(Base.metadata.create_all)
         print("✅ 数据库表创建完成")

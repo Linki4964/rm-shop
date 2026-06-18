@@ -82,3 +82,18 @@ async def pay_order(
     if order.status != OrderStatus.PENDING:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="订单状态不可支付")
     return await order_crud.update_status(db, order=order, new_status=OrderStatus.PAID)
+
+@router.delete("/{order_id}")
+async def delete_order(
+    order_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """删除订单（仅允许已完成/已取消的订单）"""
+    order = await order_crud.get_with_items(db, id=order_id)
+    if not order or order.user_id != current_user.id:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="订单不存在")
+    if order.status not in (OrderStatus.COMPLETED, OrderStatus.CANCELLED):
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="仅可删除已完成或已取消的订单")
+    await order_crud.remove(db, id=order_id)
+    return {"detail": "订单已删除"}

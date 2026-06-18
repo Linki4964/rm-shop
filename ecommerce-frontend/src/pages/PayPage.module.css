@@ -1,226 +1,209 @@
 .container {
-  max-width: 640px;
-  margin: 2rem auto;
-  padding: 0 1rem;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 3rem 1rem 4rem;
 }
 
-/* 订单信息卡片 */
+.container > h3 {
+  margin-bottom: 1.5rem !important;
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+}
+
+.orderCard,
+.qrSection,
+.methodsSection {
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+}
+
 .orderCard {
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 12px;
-  padding: 1.5rem;
+  padding: 2rem;
   margin-bottom: 1.5rem;
 }
 
 .orderHeader {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #f0f0f0;
+  justify-content: space-between;
+  margin-bottom: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(195, 198, 215, 0.32);
 }
 
 .orderTitle {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: #2f3542;
   margin: 0;
+  color: var(--on-surface);
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.35rem;
+  font-weight: 800;
 }
 
 .orderNumber {
-  font-size: 0.8rem;
-  color: #999;
-  font-weight: 400;
+  color: var(--secondary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  font-weight: 500;
 }
 
 .orderRow {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0.35rem 0;
+  gap: 1rem;
+  padding: 0.45rem 0;
 }
 
 .orderLabel {
-  color: #888;
-  font-size: 0.9rem;
+  color: var(--secondary);
 }
 
 .orderValue {
-  font-weight: 600;
-  color: #2f3542;
+  color: var(--on-surface);
+  font-weight: 800;
 }
 
 .totalAmount {
-  font-size: 1.4rem;
-  color: #ff4757;
-  font-weight: 700;
+  color: var(--primary);
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.8rem;
+  line-height: 1;
+  font-weight: 800;
 }
 
-/* 支付方式选择 */
 .methodsSection {
-  margin-bottom: 1.5rem;
+  padding: 2rem;
+  margin-bottom: 1rem;
 }
 
 .methodsTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: #2f3542;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1rem;
+  color: var(--on-surface);
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
 }
 
 .methodCard {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.25rem;
-  border: 2px solid #e8e8e8;
-  border-radius: 10px;
+  padding: 1.2rem;
+  border: 1px solid rgba(195, 198, 215, 0.35);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.42);
   cursor: pointer;
-  transition: all 0.2s;
-  background: #fff;
-}
-
-.methodCard:hover:not(.methodDisabled) {
-  border-color: #ff4757;
-  box-shadow: 0 2px 12px rgba(255, 71, 87, 0.1);
 }
 
 .methodCardSelected {
-  border-color: #ff4757;
-  background: #fff5f5;
+  border-color: var(--primary-container);
+  background: rgba(37, 99, 235, 0.08);
 }
 
 .methodDisabled {
-  opacity: 0.5;
+  opacity: 0.55;
   cursor: not-allowed;
 }
 
 .methodIcon {
-  width: 44px;
-  height: 44px;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border-radius: 16px;
+  background: var(--primary-fixed);
+  color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.3rem;
-  font-weight: 700;
-  flex-shrink: 0;
+  font-weight: 800;
 }
 
 .alipayIcon {
-  background: #e6f0ff;
-  color: #1677ff;
-  font-size: 0.85rem;
+  background: var(--primary-fixed);
+  color: var(--primary);
 }
 
 .methodName {
-  font-weight: 600;
-  color: #2f3542;
-  font-size: 0.95rem;
+  color: var(--on-surface);
+  font-weight: 800;
 }
 
-.methodDesc {
-  font-size: 0.8rem;
-  color: #999;
-  margin-top: 2px;
-}
-
+.methodDesc,
 .methodArrow {
-  margin-left: auto;
-  color: #ccc;
-  font-size: 1.1rem;
+  color: var(--secondary);
 }
 
-/* 错误提示 */
 .errorBox {
   display: flex;
   align-items: flex-start;
-  gap: 0.6rem;
-  padding: 1rem 1.25rem;
-  background: #fff2f0;
-  border: 1px solid #ffccc7;
-  border-radius: 10px;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  color: #991b1b;
-  line-height: 1.6;
+  gap: 0.65rem;
+  margin-bottom: 1.2rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid rgba(186, 26, 26, 0.16);
+  border-radius: 18px;
+  background: var(--error-container);
+  color: var(--error);
+  font-weight: 700;
 }
 
-.errorBox i {
-  color: #ff4d4f;
-  font-size: 1.1rem;
-  margin-top: 1px;
-  flex-shrink: 0;
-}
-
-/* QR 码区域 */
 .qrSection {
-  text-align: center;
-  padding: 2rem 1rem;
-  background: #fff;
-  border: 1px solid #e8e8e8;
-  border-radius: 12px;
+  padding: 2rem;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .qrSection p {
   margin-top: 1rem;
-  color: #666;
-  font-size: 0.9rem;
+  color: var(--secondary);
+}
+
+.qrActions,
+.actions {
+  display: flex;
+  gap: 0.85rem;
 }
 
 .qrActions {
-  display: flex;
-  gap: 0.75rem;
   justify-content: center;
   margin-top: 1.5rem;
 }
 
-/* 底部操作按钮 */
-.actions {
-  display: flex;
-  gap: 0.75rem;
+.cancelBtn,
+.payBtn {
+  min-height: 48px;
+  border-radius: 999px;
+  padding: 0 1.25rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
 
 .cancelBtn {
   flex: 1;
-  padding: 0.7rem;
-  border: 1.5px solid #ddd;
-  background: #fff;
-  color: #666;
-  border-radius: 10px;
-  font-size: 0.9rem;
-  cursor: pointer;
-  transition: all 0.15s;
-}
-
-.cancelBtn:hover {
-  border-color: #ff4757;
-  color: #ff4757;
+  border: 1px solid rgba(195, 198, 215, 0.48);
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--secondary);
 }
 
 .payBtn {
-  flex: 2;
-  padding: 0.7rem;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #ff4757, #e84150);
-  color: #fff;
-  font-size: 0.95rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
+  width: 100%;
+  border: 0;
+  background: linear-gradient(180deg, #2563eb, #004ac6);
+  color: var(--on-primary);
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.22);
 }
 
-.payBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(255, 71, 87, 0.3);
+.payBtn:hover:not(:disabled),
+.cancelBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
 }
 
-.payBtn:disabled {
-  opacity: 0.5;
+.payBtn:disabled,
+.cancelBtn:disabled {
+  opacity: 0.55;
   cursor: not-allowed;
 }
 

@@ -1,63 +1,59 @@
-/* src/index.css */
+html {
+  scroll-behavior: smooth;
+}
+
 body {
-  background: #f0f2f5;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-width: 320px;
+  overflow-x: hidden;
 }
 
-/* 顶部导航自定义 */
-.navbar-brand {
-  font-weight: bold;
-  font-size: 1.5rem;
-  color: #0d6efd;
+::selection {
+  background: var(--primary-fixed);
+  color: var(--primary);
 }
 
-/* 轮播广告 */
-.carousel-item img {
-  height: 400px;
-  object-fit: cover;
+.container,
+.container-fluid {
+  --bs-gutter-x: 1.5rem;
 }
 
-/* 分类图标 */
-.category-icon {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+.btn,
+.form-control,
+.form-select,
+.page-link,
+.modal-content,
+.dropdown-menu {
+  border-radius: var(--radius) !important;
 }
 
-/* 商品卡片 */
-.product-card {
-  transition: transform 0.2s, box-shadow 0.2s;
-  border: none;
-}
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-}
-.product-card .card-img-top {
-  height: 200px;
-  object-fit: contain;
-  padding: 1rem;
-  background: #fafafa;
+.form-control,
+.form-select {
+  border: 1px solid rgba(195, 198, 215, 0.48) !important;
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--on-surface) !important;
 }
 
-/* 登录/注册卡片 */
-.auth-card {
-  border: none;
-  border-radius: 1rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-  background: #fff;
+.table {
+  --bs-table-bg: transparent;
+  --bs-table-color: var(--on-surface);
+  --bs-table-border-color: rgba(195, 198, 215, 0.32);
 }
 
-/* 登录/注册页面背景 */
-.auth-page {
-  min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.table-light {
+  --bs-table-bg: rgba(219, 225, 255, 0.45);
+  --bs-table-color: var(--on-surface);
 }
 
-/* 页脚 */
-.footer {
-  background: #2c3e50;
-  color: #ecf0f1;
+.alert,
+.modal-content,
+.dropdown-menu {
+  border: 1px solid var(--glass-border) !important;
+  background: var(--glass-bg) !important;
+  box-shadow: var(--shadow-card) !important;
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+.text-muted {
+  color: var(--secondary) !important;
 }

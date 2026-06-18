@@ -5,6 +5,7 @@ import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
 import { productPublicApi } from '../../api/productPublic';
 import CartDrawer from '../CartDrawer/CartDrawer';
+import { useThemeStore } from '../../store/themeStore';
 import styles from './Header.module.css';
 
 const Header = () => {
@@ -15,6 +16,7 @@ const Header = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const currentCategory = searchParams.get('category') || '';
+  const { theme, toggle: toggleTheme } = useThemeStore();
 
   useEffect(() => {
     productPublicApi.getCategories().then(setCategories).catch(() => {});
@@ -53,6 +55,12 @@ const Header = () => {
               <i className="bi bi-cart" style={{ fontSize: '1.1rem' }} />
               {totalQuantity > 0 && <span className={styles.cartBadge}>{totalQuantity}</span>}
             </button>
+            <button className={styles.iconBtn} onClick={toggleTheme} title={theme === 'light' ? '切换暗色模式' : '切换亮色模式'}>
+              <i className={`bi ${theme === 'light' ? 'bi-moon' : 'bi-sun'}`} style={{ fontSize: '1.1rem' }} />
+            </button>
+            <Link to="/favorites" className={styles.iconBtn}>
+              <i className="bi bi-heart" style={{ fontSize: '1.1rem' }} />
+            </Link>
             <Link to="/orders" className={styles.iconBtn}>
               <i className="bi bi-box" style={{ fontSize: '1.1rem' }} />
             </Link>

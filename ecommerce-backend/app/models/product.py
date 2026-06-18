@@ -1,6 +1,7 @@
 # app/models/product.py
 from sqlalchemy import String, Integer, DECIMAL, Text, Boolean, DateTime, func
 from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import relationship
 from app.core.database import Base
 
 class Product(Base):
@@ -16,7 +17,9 @@ class Product(Base):
     is_active: Mapped[bool] = mapped_column(Boolean, default=True, nullable=False)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(
-        DateTime, 
-        server_default=func.now(), 
+        DateTime,
+        server_default=func.now(),
         onupdate=func.now()
     )
+
+    favorites: Mapped[list["Favorite"]] = relationship("Favorite", back_populates="product", cascade="all, delete-orphan")

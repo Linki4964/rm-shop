@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LuminaRetail | Premium Digital Experience</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Manrope:wght@600;700;800&amp;family=JetBrains+Mono:wght@500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Theme Configuration -->
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-fixed": "#0b1c30",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#faf8ff",
+                    "inverse-on-surface": "#eef0ff",
+                    "secondary-container": "#d0e1fb",
+                    "surface-container": "#eaedff",
+                    "background": "#faf8ff",
+                    "secondary-fixed": "#d3e4fe",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-dim": "#d2d9f4",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "error": "#ba1a1a",
+                    "on-surface-variant": "#434655",
+                    "primary": "#004ac6",
+                    "on-surface": "#131b2e",
+                    "secondary": "#505f76",
+                    "on-error-container": "#93000a",
+                    "primary-container": "#2563eb",
+                    "tertiary-fixed": "#e0e3e5",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-container-high": "#e2e7ff",
+                    "surface-variant": "#dae2fd",
+                    "tertiary": "#525657",
+                    "tertiary-container": "#6b6e70",
+                    "inverse-primary": "#b4c5ff",
+                    "on-error": "#ffffff",
+                    "error-container": "#ffdad6",
+                    "outline": "#737686",
+                    "surface-tint": "#0053db",
+                    "on-tertiary-container": "#eff1f3",
+                    "on-tertiary-fixed": "#191c1e",
+                    "outline-variant": "#c3c6d7",
+                    "inverse-surface": "#283044",
+                    "surface-container-low": "#f2f3ff",
+                    "on-tertiary-fixed-variant": "#444749",
+                    "on-secondary": "#ffffff",
+                    "on-primary-container": "#eeefff",
+                    "surface": "#faf8ff",
+                    "secondary-fixed-dim": "#b7c8e1",
+                    "on-secondary-container": "#54647a",
+                    "on-background": "#131b2e",
+                    "on-primary-fixed": "#00174b",
+                    "surface-container-highest": "#dae2fd",
+                    "on-tertiary": "#ffffff",
+                    "tertiary-fixed-dim": "#c4c7c9",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "on-secondary-fixed-variant": "#38485d"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "2xl": "1rem",
+                    "3xl": "1.5rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "24px",
+                    "container-padding": "32px",
+                    "stack-lg": "48px",
+                    "stack-md": "24px",
+                    "stack-sm": "12px",
+                    "base": "8px"
+            },
+            "fontFamily": {
+                    "headline-xl": ["Manrope"],
+                    "body-md": ["Inter"],
+                    "body-lg": ["Inter"],
+                    "headline-lg": ["Manrope"],
+                    "label-md": ["JetBrains Mono"],
+                    "headline-md": ["Manrope"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #F8FAFC;
+            color: #131B2E;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-4px);
+            background: rgba(255, 255, 255, 0.85);
+            box-shadow: 0 30px 60px -15px rgba(0, 74, 198, 0.08);
+        }
+        .ambient-shadow {
+            box-shadow: 0 30px 60px -15px rgba(0, 74, 198, 0.05);
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md overflow-x-hidden">
+<!-- TopNavBar -->
+<nav class="sticky top-0 z-50 flex justify-between items-center w-full max-w-[1280px] mx-auto px-gutter py-4 bg-white/70 backdrop-blur-[60px] rounded-xl mt-4 mx-container-padding border border-white/40 shadow-[0_30px_60px_-15px_rgba(0,74,198,0.05)]">
+<div class="flex items-center gap-8">
+<span class="font-headline-md text-headline-md font-bold text-primary">LuminaRetail</span>
+<div class="hidden md:flex gap-6">
+<a class="text-primary font-bold border-b-2 border-primary pb-1 transition-colors" href="#">Shop</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Collections</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">New Arrivals</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Sustainability</a>
+<a class="text-secondary hover:text-primary transition-colors" href="#">Support</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative hidden lg:block">
+<input class="bg-surface-container-low border-none rounded-full px-6 py-2 w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search..." type="text"/>
+<span class="material-symbols-outlined absolute right-4 top-2 text-outline">search</span>
+</div>
+<div class="flex gap-2">
+<button class="p-2 rounded-full hover:bg-white/40 transition-all duration-300">
+<span class="material-symbols-outlined text-secondary" data-icon="favorite">favorite</span>
+</button>
+<button class="p-2 rounded-full hover:bg-white/40 transition-all duration-300">
+<span class="material-symbols-outlined text-secondary" data-icon="person">person</span>
+</button>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-5 py-2 rounded-full font-medium scale-[0.98] active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[20px]" data-icon="shopping_cart">shopping_cart</span>
+<span>Cart</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="max-w-[1280px] mx-auto px-gutter mt-stack-lg">
+<!-- Hero Section -->
+<section class="relative w-full h-[640px] rounded-[48px] overflow-hidden ambient-shadow">
+<div class="absolute inset-0 w-full h-full">
+<img class="w-full h-full object-cover" data-alt="A sleek, professional silver laptop sitting on a minimalist white marble desk. The scene is bathed in soft, diffused morning sunlight coming through a nearby window, creating gentle highlights and long, soft shadows. The overall aesthetic is clean, premium, and calm, utilizing a palette of light grays and crisp whites to emphasize a modern professional lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOCWcI3TS98ZF1n7thp19gWaMcSEbZFvvtoCqV38OOdtUQCKkyXTrff-lnOF3yQ0I-JYhrvebr33Xlm4mF7Uuevr9RZE2c9zkgs4bBWTfky2NYGKSLtaBN3tlys-KmJkvKFvCzpLce7Z4BetkU3c7pIp7sq4rPwkG8QM6qC6BJfRaGFHkSD58sL-ruBmFPbblKrFPfMnb4ViXcwJog4GUofURNZUwPnSKayFHYbQMcy6GqEL03oxOL8GDlNbqBAJgMmQc0EBSB-po"/>
+</div>
+<div class="absolute inset-0 bg-gradient-to-r from-on-surface/40 to-transparent"></div>
+<div class="relative h-full flex flex-col justify-center px-16 max-w-2xl">
+<div class="glass-panel p-10 rounded-[32px] inline-block">
+<span class="font-label-md text-label-md text-primary-container bg-primary-fixed px-4 py-1.5 rounded-full inline-block mb-6">NEW PERFORMANCE SERIES</span>
+<h1 class="font-headline-xl text-headline-xl text-on-surface mb-6 leading-tight">Define Your Next<br/><span class="text-primary">Digital Horizon</span></h1>
+<p class="font-body-lg text-body-lg text-secondary mb-8">Experience the pinnacle of engineering with the all-new Lumina Pro. Power that moves with you.</p>
+<div class="flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-4 rounded-xl font-bold hover:shadow-lg hover:shadow-primary/20 transition-all active:scale-95">Explore Now</button>
+<button class="glass-panel px-8 py-4 rounded-xl font-bold text-on-surface hover:bg-white/90 transition-all active:scale-95">Watch Keynote</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Browser -->
+<section class="mt-stack-lg">
+<div class="flex justify-between items-end mb-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Browse by Category</h2>
+<p class="text-secondary mt-2">Find exactly what you need for your ecosystem.</p>
+</div>
+<button class="text-primary font-bold flex items-center gap-2 hover:gap-3 transition-all">
+                    View All <span class="material-symbols-outlined">arrow_forward</span>
+</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+<!-- Category Card 1 -->
+<a class="glass-card p-8 rounded-[32px] flex flex-col items-center text-center group" href="#">
+<div class="w-16 h-16 rounded-2xl bg-primary-fixed flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="laptop_mac">laptop_mac</span>
+</div>
+<span class="font-bold text-on-surface">Computing</span>
+</a>
+<!-- Category Card 2 -->
+<a class="glass-card p-8 rounded-[32px] flex flex-col items-center text-center group" href="#">
+<div class="w-16 h-16 rounded-2xl bg-secondary-fixed flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-on-secondary-container text-3xl" data-icon="smartphone">smartphone</span>
+</div>
+<span class="font-bold text-on-surface">Mobiles</span>
+</a>
+<!-- Category Card 3 -->
+<a class="glass-card p-8 rounded-[32px] flex flex-col items-center text-center group" href="#">
+<div class="w-16 h-16 rounded-2xl bg-tertiary-fixed flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-tertiary text-3xl" data-icon="headphones">headphones</span>
+</div>
+<span class="font-bold text-on-surface">Audio</span>
+</a>
+<!-- Category Card 4 -->
+<a class="glass-card p-8 rounded-[32px] flex flex-col items-center text-center group" href="#">
+<div class="w-16 h-16 rounded-2xl bg-error-container flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-on-error-container text-3xl" data-icon="sports_esports">sports_esports</span>
+</div>
+<span class="font-bold text-on-surface">Gaming</span>
+</a>
+<!-- Category Card 5 -->
+<a class="glass-card p-8 rounded-[32px] flex flex-col items-center text-center group" href="#">
+<div class="w-16 h-16 rounded-2xl bg-surface-variant flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="watch">watch</span>
+</div>
+<span class="font-bold text-on-surface">Wearables</span>
+</a>
+</div>
+</section>
+<!-- Trending Now (Bento Grid Style) -->
+<section class="mt-stack-lg">
+<div class="flex items-center gap-4 mb-stack-md">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Trending Now</h2>
+<div class="h-px flex-1 bg-outline-variant/30"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 grid-rows-2 gap-6 h-auto md:h-[700px]">
+<!-- Large Feature -->
+<div class="md:col-span-2 md:row-span-2 glass-card rounded-[40px] overflow-hidden flex flex-col group">
+<div class="relative h-2/3 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" data-alt="A top-down professional shot of a modern tablet with a precision stylus lying across its vibrant screen. The device is placed on a minimalist dark wood surface, surrounded by soft bokeh lights. The lighting is editorial and moody, highlighting the tablet's slim profile and high-resolution display using a sophisticated deep blue and warm amber color palette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdJ0hoCx70FzbVaEjFlblx8C2rdz8eUhOhd8TPdjkaAhfie36jMak5jFu_mCuHFij9JIejTtVnK4KMj38k4xftQNxNV4AtekOLZaUkwh95GLvEEQNRyRK_3nwwOx2sM3SgzoKxHGikO5GkQEaFJW7i_skIYchSUbJCOPq3d53fOH-OoxN7P7ii4GG6AmXgho4d-zYGRcbA1IMT-FC-rL6gdC9hOgc4052cI66RG0C1weUQqC66zgt16ISlAjjkS-wzmfvfUNJlErI"/>
+<div class="absolute top-6 left-6 flex gap-2">
+<span class="bg-primary text-white text-[12px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Top Rated</span>
+</div>
+</div>
+<div class="p-10 flex flex-col justify-center flex-1">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Lumina Tab Ultra</h3>
+<p class="text-secondary mb-6">The ultimate canvas for professionals and creators alike.</p>
+<div class="flex items-center justify-between mt-auto">
+<span class="text-2xl font-bold text-primary">$899.00</span>
+<button class="bg-on-surface text-surface px-6 py-3 rounded-2xl font-medium flex items-center gap-2 hover:bg-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">add_shopping_cart</span> Add to Cart
+                            </button>
+</div>
+</div>
+</div>
+<!-- Secondary Trend 1 -->
+<div class="md:col-span-2 glass-card rounded-[40px] p-8 flex items-center gap-8 group">
+<div class="w-1/3 h-full overflow-hidden rounded-3xl">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="Close-up of premium over-ear noise-canceling headphones with a metallic finish and soft leather cushions. The product is featured in a high-end photography style with a shallow depth of field, set against a soft, light-blue studio background. The mood is sophisticated and auditory-focused, emphasizing comfort and high-fidelity sound technology." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBSd1dMT9jJOjXHkdZmQ_aYxMzo7UKGryf3knR8IJE_Hzj0n-KAqza1vkhUP0S7Z5snXpXaxCv7LE8RJoz7Xh3piipOvptF-_6NpfOi9q5w-4qPtrdP4K1nsMp0Q5jZXJX4wYxhRp--cdEZ9LSQpzPnqG5X0tDpwFTK2kdZCqfETKpt6JWkFIthV7QhClJ7oiEzcNeR3TGRCmnpuBtLMglxr-XuKWhvLLrOdEdOuoRf6fOMmV-8iznoChvGfS4pDdShN1DKZ9DzPYQ"/>
+</div>
+<div class="flex-1">
+<span class="text-primary font-label-md text-label-md mb-2 block">BEST SELLER</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">SonicFlow H1</h3>
+<div class="flex items-center gap-4">
+<span class="text-xl font-bold text-on-surface">$249.00</span>
+<button class="p-3 rounded-2xl bg-secondary-container text-on-secondary-container hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Secondary Trend 2 -->
+<div class="md:col-span-2 glass-card rounded-[40px] p-8 flex flex-row-reverse items-center gap-8 group">
+<div class="w-1/3 h-full overflow-hidden rounded-3xl">
+<img class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" data-alt="A luxury smartwatch with a minimalist circular face and a high-end silicone strap, displayed on a clean white pedestal. The image uses sharp focus and bright, airy lighting to emphasize the sleek interface and premium build materials. The color scheme is predominantly white and silver with a vibrant touch of primary blue on the screen, reflecting a modern, healthy lifestyle." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCH6sv_KTHk2rtXgadOTC0ozc5r1vWiGNJVgOx0ObDwC99wTAJTu0AmsBh9R3eywskXUE_Pznj3OyQQkCPGucL5W4Uh57G9rOw0UG-SS8LB4Byd08lqzvDlizzRQdIC-qEM0KJaeQfe-lu34tWa8CobPJAF8HtBflZxvch-yIbIwUff5EKTiU2sQ7Prtqv6z__T_XhZATTfDYFIVDFa59yLsvqFWKdMTjWN-8xP7sT9ubPDg21qMgLst7-iJF2QoTKCOffpbyks7vo"/>
+</div>
+<div class="flex-1 text-right">
+<span class="text-primary font-label-md text-label-md mb-2 block">JUST ARRIVED</span>
+<h3 class="font-headline-md text-headline-md text-on-surface mb-2">Vitality Watch 3</h3>
+<div class="flex items-center justify-end gap-4">
+<span class="text-xl font-bold text-on-surface">$329.00</span>
+<button class="p-3 rounded-2xl bg-secondary-container text-on-secondary-container hover:bg-primary hover:text-white transition-all">
+<span class="material-symbols-outlined">shopping_bag</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Newsletter Section -->
+<section class="mt-stack-lg mb-stack-lg">
+<div class="relative rounded-[48px] bg-inverse-surface p-12 md:p-20 overflow-hidden">
+<!-- Abstract BG Glows -->
+<div class="absolute top-0 right-0 w-96 h-96 bg-primary opacity-20 blur-[120px] -mr-48 -mt-48"></div>
+<div class="absolute bottom-0 left-0 w-64 h-64 bg-secondary opacity-10 blur-[100px] -ml-32 -mb-32"></div>
+<div class="relative z-10 max-w-2xl">
+<h2 class="font-headline-xl text-headline-xl text-inverse-on-surface mb-6">Stay Informed</h2>
+<p class="text-outline-variant text-body-lg mb-10">Join our community of 50,000+ tech enthusiasts. Get exclusive access to product drops, editorial deep-dives, and seasonal collections.</p>
+<form class="flex flex-col md:flex-row gap-4">
+<input class="flex-1 bg-white/10 border border-white/20 rounded-2xl px-6 py-4 text-white placeholder-outline-variant focus:ring-2 focus:ring-primary focus:bg-white/15 outline-none transition-all" placeholder="Enter your email address" type="email"/>
+<button class="bg-primary text-on-primary px-10 py-4 rounded-2xl font-bold hover:bg-primary-container transition-all" type="submit">Subscribe Now</button>
+</form>
+<p class="text-outline-variant text-[12px] mt-6">By subscribing, you agree to our Privacy Policy and Terms of Service. You can unsubscribe at any time.</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-stack-lg pt-stack-lg pb-stack-md px-container-padding max-w-[1280px] mx-auto bg-surface-container-low rounded-t-[48px] border-t border-white/40">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+<div class="col-span-1 md:col-span-1">
+<span class="font-headline-sm text-headline-sm font-bold text-primary block mb-6">LuminaRetail</span>
+<p class="text-on-surface-variant">Elevating digital living through thoughtful design and uncompromising performance.</p>
+<div class="flex gap-4 mt-8">
+<a class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary shadow-sm hover:scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]">public</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary shadow-sm hover:scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</a>
+<a class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary shadow-sm hover:scale-110 transition-transform" href="#">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+</a>
+</div>
+</div>
+<div>
+<h4 class="font-bold text-on-surface mb-6">Products</h4>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Laptops</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Smartphones</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Audio Gear</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Accessories</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-on-surface mb-6">Company</h4>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">About Us</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Sustainability</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Careers</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Press</a></li>
+</ul>
+</div>
+<div>
+<h4 class="font-bold text-on-surface mb-6">Support</h4>
+<ul class="space-y-4">
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Help Center</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Order Status</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Shipping Policy</a></li>
+<li><a class="text-on-surface-variant hover:text-primary hover:translate-x-1 transition-all duration-200 block" href="#">Contact</a></li>
+</ul>
+</div>
+</div>
+<div class="pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center gap-4">
+<span class="text-on-surface-variant text-[14px]">© 2024 LuminaRetail. All rights reserved.</span>
+<div class="flex gap-8">
+<a class="text-[14px] text-on-surface-variant hover:text-primary" href="#">Privacy Policy</a>
+<a class="text-[14px] text-on-surface-variant hover:text-primary" href="#">Terms of Service</a>
+<a class="text-[14px] text-on-surface-variant hover:text-primary" href="#">Cookie Settings</a>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and soft reveal effects
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('opacity-100', 'translate-y-0');
+                        entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    }
+                });
+            }, observerOptions);
+
+            const scrollTargets = document.querySelectorAll('section');
+            scrollTargets.forEach(target => {
+                target.classList.add('transition-all', 'duration-1000', 'opacity-0', 'translate-y-10');
+                observer.observe(target);
+            });
+        });
+    </script>
+</body></html>

@@ -1,97 +1,101 @@
 .authPage {
   min-height: 100vh;
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.8fr);
+  background:
+    radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.12), transparent 34%),
+    radial-gradient(circle at 90% 82%, rgba(0, 74, 198, 0.08), transparent 38%),
+    var(--surface);
 }
 
-/* ====== 左侧品牌区 ====== */
 .brandSide {
-  flex: 1;
-  background: linear-gradient(160deg, #3d5a40 0%, #588157 30%, #8b9d77 70%, #c5b79e 100%);
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
-  position: relative;
+  padding: 4rem;
   overflow: hidden;
 }
 
 .brandSide::before {
-  content: '';
+  content: "";
   position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 80%, rgba(224, 122, 95, 0.25) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+  inset: 2rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 48px;
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(42px);
+  -webkit-backdrop-filter: blur(42px);
 }
 
 .brandContent {
   position: relative;
   z-index: 1;
-  text-align: center;
-  color: #fff;
+  max-width: 460px;
+  color: var(--on-surface);
 }
 
 .brandLogo {
-  width: 80px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(10px);
-  border-radius: 20px;
+  width: 84px;
+  height: 84px;
+  margin-bottom: 1.5rem;
+  border-radius: 28px;
+  background: var(--primary-fixed);
+  color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.5rem;
-  font-size: 36px;
+  font-size: 2.4rem;
 }
 
 .brandTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  letter-spacing: -0.5px;
+  margin-bottom: 0.75rem;
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 3rem;
+  font-weight: 800;
 }
 
 .brandSubtitle {
-  font-size: 0.95rem;
-  opacity: 0.75;
-  line-height: 1.7;
-  max-width: 300px;
-  margin: 0 auto;
+  color: var(--secondary);
+  line-height: 1.75;
 }
 
 .brandFeatures {
-  margin-top: 2.5rem;
-  display: flex;
-  flex-direction: column;
+  display: grid;
   gap: 1rem;
+  margin-top: 2.5rem;
 }
 
 .brandFeature {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.9rem;
-  opacity: 0.85;
+  gap: 0.8rem;
+  color: var(--on-surface);
+  font-weight: 700;
 }
 
 .brandFeature i {
-  font-size: 1.1rem;
-  opacity: 0.9;
+  color: var(--primary);
 }
 
-/* ====== 右侧表单区 ====== */
 .formSide {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 3rem;
-  background: #fafbfc;
 }
 
 .formCard {
   width: 100%;
-  max-width: 400px;
+  max-width: 430px;
+  padding: 2.2rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.74);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
 }
 
 .formHeader {
@@ -99,141 +103,100 @@
 }
 
 .formHeader h2 {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #2f3542;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.4rem;
+  color: var(--on-surface);
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
 }
 
-.formHeader p {
-  color: #888;
-  font-size: 0.9rem;
-  margin: 0;
+.formHeader p,
+.formFooter {
+  color: var(--secondary);
 }
 
-/* ====== 表单控件 ====== */
 .inputGroup {
   position: relative;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 }
 
 .inputIcon {
   position: absolute;
-  left: 14px;
   top: 50%;
+  left: 1rem;
   transform: translateY(-50%);
-  color: #aaa;
-  font-size: 1.05rem;
-  z-index: 2;
-  pointer-events: none;
+  color: var(--secondary);
 }
 
 .inputGroup input {
   width: 100%;
-  padding: 0.75rem 1rem 0.75rem 2.6rem;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  font-size: 0.95rem;
-  background: #fff;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  min-height: 52px;
+  padding: 0 1rem 0 2.8rem;
+  border: 1px solid rgba(195, 198, 215, 0.45);
+  border-radius: 18px;
   outline: none;
+  background: rgba(242, 243, 255, 0.74);
+  color: var(--on-surface);
 }
 
 .inputGroup input:focus {
-  border-color: #ff4757;
-  box-shadow: 0 0 0 3px rgba(255, 71, 87, 0.1);
+  border-color: var(--primary-container);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+  background: rgba(255, 255, 255, 0.86);
 }
 
-.inputGroup input::placeholder {
-  color: #bbb;
-}
-
-/* ====== 按钮 ====== */
 .submitBtn {
   width: 100%;
-  padding: 0.8rem;
-  border: none;
-  border-radius: 10px;
-  background: linear-gradient(135deg, #e07a5f, #c96a52);
-  color: #fff;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: transform 0.15s, box-shadow 0.2s;
-  margin-top: 0.25rem;
-}
-
-.submitBtn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(255, 71, 87, 0.35);
-}
-
-.submitBtn:active:not(:disabled) {
-  transform: translateY(0);
+  min-height: 54px;
+  margin-top: 0.5rem;
+  border: 0;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #2563eb, #004ac6);
+  color: var(--on-primary);
+  font-weight: 800;
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.22);
 }
 
 .submitBtn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  opacity: 0.55;
 }
 
-/* ====== 错误/成功提示 ====== */
 .alertBox {
-  padding: 0.75rem 1rem;
-  border-radius: 10px;
-  font-size: 0.88rem;
-  margin-bottom: 1.25rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 18px;
+  font-weight: 700;
 }
 
 .alertError {
-  background: #fef2f2;
-  border: 1px solid #fecaca;
-  color: #991b1b;
+  background: var(--error-container);
+  color: var(--error);
 }
 
 .alertSuccess {
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
-  color: #166534;
+  background: #dff8ea;
+  color: #10643b;
 }
 
-/* ====== 底部链接 ====== */
 .formFooter {
-  margin-top: 1.5rem;
+  margin-top: 1.4rem;
   text-align: center;
-  font-size: 0.9rem;
-  color: #888;
 }
 
 .formFooter a {
-  color: #ff4757;
-  font-weight: 600;
-  text-decoration: none;
-  transition: color 0.15s;
+  color: var(--primary);
+  font-weight: 800;
 }
 
-.formFooter a:hover {
-  color: #e84150;
-}
+@media (max-width: 900px) {
+  .authPage {
+    grid-template-columns: 1fr;
+  }
 
-/* ====== 响应式 ====== */
-@media (max-width: 768px) {
   .brandSide {
     display: none;
-  }
-
-  .formSide {
-    padding: 2rem 1.5rem;
-    background: linear-gradient(160deg, #2f3542 0%, #3d4554 40%, #ff4757 130%);
-  }
-
-  .formCard {
-    background: #fff;
-    padding: 2rem 1.5rem;
-    border-radius: 16px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
   }
 }

@@ -19,7 +19,7 @@ const buildPayUrl = (order: Order) => {
 
 const OrdersPage = () => {
   const navigate = useNavigate();
-  const { orders, isLoading, fetchOrders, cancelOrder } = useOrderStore();
+  const { orders, isLoading, fetchOrders, cancelOrder, deleteOrder } = useOrderStore();
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
   const toast = useToast();
   const confirm = useConfirm();
@@ -36,6 +36,17 @@ const OrdersPage = () => {
       toast.success("订单已取消");
     } catch (err: any) {
       toast.error(err.response?.data?.detail || "取消失败");
+    }
+  };
+
+  const handleDelete = async (orderId: number) => {
+    const ok = await confirm({ message: "确定要删除该订单吗？删除后不可恢复。" });
+    if (!ok) return;
+    try {
+      await deleteOrder(orderId);
+      toast.success("订单已删除");
+    } catch (err: any) {
+      toast.error(err.response?.data?.detail || "删除失败");
     }
   };
 
@@ -114,6 +125,16 @@ const OrdersPage = () => {
                 <span className={`${styles.badge} ${styles[getStatusClass(order.status)]}`}>
                   {getStatusText(order.status)}
                 </span>
+                {(order.status === "completed" || order.status === "cancelled") && (
+                  <div className={styles.orderActions}>
+                    <button
+                      className={`btn btn-sm btn-outline-danger ${styles.cancelBtn}`}
+                      onClick={() => handleDelete(order.id)}
+                    >
+                      <i className="bi bi-trash me-1" />删除
+                    </button>
+                  </div>
+                )}
                 {order.status === "pending" && (
                   <div className={styles.orderActions}>
                     <button
@@ -124,7 +145,7 @@ const OrdersPage = () => {
                     </button>
                     <button
                       className="btn btn-sm btn-danger"
-                      onClick={() => handleGoPay(order)}   // 修改为调用 handleGoPay
+                      onClick={() => handleGoPay(order)}
                     >
                       去支付
                     </button>

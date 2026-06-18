@@ -28,4 +28,8 @@ export const orderApi = {
     const response = await apiClient.put(`/orders/${orderId}/pay`);
     return response.data;
   },
+  // 删除订单
+  delete: async (orderId: number): Promise<void> => {
+    await apiClient.delete(`/orders/${orderId}`);
+  },
 };

@@ -1,188 +1,218 @@
-.home { padding-bottom: 2rem; }
+.home { padding-bottom: 3rem; }
 
-.sectionTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
+.home::before {
+  content: "Define Your Next Digital Horizon";
+  display: block;
+  max-width: 820px;
+  margin: 0 0 0.7rem;
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
   color: var(--on-surface);
-  margin-bottom: 1.5rem;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.06;
+  font-weight: 800;
+}
+
+.home::after {
+  content: "Experience a premium catalog shaped around clarity, calm surfaces, and modern performance.";
+  display: block;
+  max-width: 620px;
+  margin-bottom: 2.5rem;
+  color: var(--secondary);
+  font-size: 1.08rem;
+  line-height: 1.6;
+}
+
+/* ===== 分类区域 ===== */
+.categorySection {
+  margin-bottom: 3rem;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.categorySection.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.catHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.catTitle {
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--on-surface);
+  margin: 0;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
-.sectionTitle::before {
-  content: '';
-  display: inline-block;
-  width: 6px;
-  height: 32px;
-  background: var(--primary-container);
-  border-radius: 3px;
-}
 
-/* ===== 分类卡片 ===== */
-.categories {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 1rem;
-  margin-bottom: 3rem;
-}
-@media (max-width: 768px) {
-  .categories { grid-template-columns: repeat(3, 1fr); }
-}
+.arrowBtns { display: flex; gap: 0.5rem; }
 
-.catCard {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.5rem 1rem;
-  background: var(--surface-container-low);
-  border-radius: var(--radius);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.catCard:hover {
-  background: var(--surface-container-high);
-}
-
-.catCircle {
-  width: 64px;
-  height: 64px;
+.arrowBtn {
+  width: 42px; height: 42px;
+  border: 1px solid var(--outline-variant);
   border-radius: 50%;
   background: var(--surface-container-lowest);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.8rem;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  transition: transform 0.2s;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem;
+  transition: all 0.2s ease;
 }
-.catCard:hover .catCircle { transform: scale(1.1); }
-.catCircle.active {
+.arrowBtn:hover {
   background: var(--primary-container);
-  color: #fff;
+  border-color: var(--primary-container);
+  color: var(--on-primary);
 }
 
-.catLabel {
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: var(--on-surface);
+/* ===== 水平滚动行 ===== */
+.scrollRow {
+  display: flex;
+  gap: 1.25rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 0.5rem;
 }
+.scrollRow::-webkit-scrollbar { display: none; }
 
-/* ===== 商品网格 ===== */
-.productGrid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.5rem;
-}
-@media (max-width: 992px) { .productGrid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 576px) { .productGrid { grid-template-columns: 1fr; } }
-
-/* ===== 商品卡片 ===== */
+/* ===== 商品卡片（在行内固定宽度） ===== */
 .productCard {
-  background: var(--surface-container-lowest);
-  border-radius: var(--radius);
-  overflow: hidden;
-  border: 1px solid rgba(219, 193, 186, 0.3);
-  transition: transform 0.3s, box-shadow 0.3s;
+  flex: 0 0 260px;
   display: flex;
   flex-direction: column;
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+  scroll-snap-align: start;
+  overflow: hidden;
 }
 .productCard:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-hover);
 }
 
+/* 首个卡片更大 */
+.productCard.featured {
+  flex: 0 0 380px;
+}
+.productCard.featured .imgWrap { aspect-ratio: 16/10; margin: 1rem; }
+.productCard.featured .productName { font-size: 1.15rem; }
+.productCard.featured .productPrice { font-size: 1.4rem; }
+.productCard.featured .cartBtn { width: 48px; height: 48px; }
+
+/* ===== 图片区域 ===== */
 .imgWrap {
   position: relative;
   overflow: hidden;
   aspect-ratio: 1;
+  margin: 0.65rem;
+  border-radius: 24px;
+  background: var(--surface-container);
+  cursor: pointer;
 }
 
 .productImg {
-  width: 100%;
-  height: 100%;
+  width: 100%; height: 100%;
   object-fit: cover;
-  transition: transform 0.5s;
+  transition: transform 0.6s ease;
 }
-.productCard:hover .productImg { transform: scale(1.05); }
+.productCard:hover .productImg { transform: scale(1.06); }
 
+/* ===== 标签 ===== */
 .hotTag {
   position: absolute;
-  top: 12px;
-  left: 12px;
-  background: var(--error);
-  color: #fff;
-  padding: 2px 10px;
-  border-radius: 20px;
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  top: 10px; left: 10px;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: var(--primary-container);
+  color: var(--on-primary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
 }
 
+/* ===== 收藏按钮 ===== */
+.favBtn {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 32px; height: 32px;
+  border: none; border-radius: 50%;
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(8px);
+  color: var(--on-surface-variant);
+  font-size: 0.9rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease; z-index: 2;
+}
+.favBtn:hover { background: #fff; color: #e74c3c; transform: scale(1.1); }
+.favBtn .bi-heart-fill { color: #e74c3c; }
+
+/* ===== 卡片内容 ===== */
 .productBody {
-  padding: 1rem 1.25rem 1.25rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
+  display: flex; flex: 1; flex-direction: column;
+  padding: 0.3rem 1.1rem 1.1rem;
 }
 
 .productName {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--on-surface);
   margin-bottom: 0.25rem;
+  color: var(--on-surface);
+  font-size: 0.9rem;
+  font-weight: 800;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
-.productCard:hover .productName { color: var(--primary); }
 
 .productDesc {
-  font-size: 0.82rem;
-  color: var(--on-surface-variant);
-  margin-bottom: 1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  margin-bottom: 0.8rem;
+  color: var(--secondary);
+  font-size: 0.78rem;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
 .productFooter {
+  display: flex; align-items: center; justify-content: space-between;
   margin-top: auto;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
 }
 
 .productPrice {
-  font-size: 1.25rem;
-  font-weight: 700;
   color: var(--primary);
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.2rem;
+  font-weight: 800;
 }
 
 .cartBtn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  width: 38px; height: 38px; border: 0;
+  border-radius: 12px;
   background: var(--primary-container);
-  color: #fff;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--on-primary);
+  box-shadow: 0 10px 20px rgba(37, 99, 235, 0.18);
+  display: flex; align-items: center; justify-content: center;
   cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
-.cartBtn:hover {
-  background: var(--primary);
+.cartBtn:hover { transform: translateY(-2px); box-shadow: 0 16px 28px rgba(37, 99, 235, 0.26); }
+
+/* ===== 旧 sectionTitle（首页标题行不再需要） ===== */
+.sectionTitle {
+  display: none;
 }
 
-.detailBtn {
-  font-size: 0.8rem;
-  color: var(--on-surface-variant);
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  text-decoration: underline;
-  text-underline-offset: 3px;
+/* ===== 响应式 ===== */
+@media (max-width: 768px) {
+  .productCard { flex: 0 0 220px; }
+  .productCard.featured { flex: 0 0 300px; }
+  .catTitle { font-size: 1.2rem; }
 }
-.detailBtn:hover { color: var(--primary); }
