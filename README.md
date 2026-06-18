@@ -23,7 +23,7 @@ pip install -r requirements.txt
 
 ### 初始化数据
 ```shell
-# 一键初始化（创建数据库、表、商品、优惠券）
+## 一键初始化（创建数据库、表、商品、优惠券）
 python -m app.scripts.init_db
 ```
 
