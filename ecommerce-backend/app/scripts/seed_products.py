@@ -19,7 +19,7 @@ SAMPLE_PRODUCTS = [
     {
         "name": "iPhone 15 Pro Max",
         "description": "苹果最新旗舰手机，A17 Pro芯片，钛金属设计",
-        "price": 9999.00,
+        "price": 9998.00,
         "stock": 50,
         "image_url": "https://picsum.photos/400/300?random=1",
         "category": "手机数码",

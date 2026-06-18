@@ -75,7 +75,7 @@ const Footer = () => {
           </div>
         </div>
         <div className={styles.footerLine}>
-          © 2024 EasyShop. All rights reserved.
+          © 2026 EasyShop. All rights reserved.
         </div>
       </div>
     </footer>

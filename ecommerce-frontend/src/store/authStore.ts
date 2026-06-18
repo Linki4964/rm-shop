@@ -44,7 +44,6 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       // 保存 token
       localStorage.setItem('access_token', access_token);
       set({ token: access_token });
-      // 注意：不在这里调用 fetchUser
     } catch (error) {
       // 登录失败，仅清除存储，不触发任何跳转
       localStorage.removeItem('access_token');
@@ -88,7 +87,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   logout: () => {
     localStorage.removeItem('access_token');
     set({ token: null, user: null });
-  }
+  },
 }));
 
 // 页面启动时，如果有 token 则尝试获取用户信息（静默失败）

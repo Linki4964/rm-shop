@@ -113,12 +113,8 @@ const CheckoutPage = () => {
       }));
       toast.success('订单创建成功，请完成支付');
       navigate(buildPayUrl(order), {
-        state: {
-          orderId: order.id,
-          orderNumber: order.order_number,
-          totalAmount: order.total_amount
-        },
-        replace: true
+        state: { orderId: order.id, orderNumber: order.order_number, totalAmount: order.total_amount },
+        replace: true,
       });
     } catch (e: any) { didSubmitRef.current = false; setError(e.response?.data?.detail || '创建订单失败'); }
     finally { setSubmitting(false); }
