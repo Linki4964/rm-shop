@@ -4,6 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useOrderStore } from '../store/orderStore';
 import { useCartStore } from '../store/cartStore';
 import { useToast, useConfirm } from '../components/Toast';
+import Confetti from '../components/Confetti/Confetti';
 import styles from './PayPage.module.css';
 
 type PaymentOrderState = {
@@ -49,6 +50,7 @@ const PayPage = () => {
 
   const [payLoading, setPayLoading] = useState(false);
   const [payError, setPayError] = useState('');
+  const [showConfetti, setShowConfetti] = useState(false);
   const [cancelling, setCancelling] = useState(false);
 
   // 进入支付页时清空购物车
@@ -72,8 +74,11 @@ const PayPage = () => {
     try {
       await payOrder(orderId);
       sessionStorage.removeItem('pending_payment_order');
-      toast.success('支付成功');
-      navigate('/orders', { replace: true });
+      toast.success('🎉 支付成功！');
+      setShowConfetti(true);
+      setTimeout(() => {
+        navigate('/orders', { replace: true });
+      }, 1200);
     } catch (err: any) {
       setPayError(err.response?.data?.detail || '支付失败，请重试');
     } finally {
@@ -121,6 +126,7 @@ const PayPage = () => {
 
   return (
     <div className={styles.container}>
+      <Confetti active={showConfetti} onDone={() => setShowConfetti(false)} />
       <h3 className="fw-bold mb-4">订单支付</h3>
 
       {/* 订单信息 */}

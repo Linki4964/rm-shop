@@ -21,12 +21,14 @@ interface ProductRowProps {
   title: string;
   products: Product[];
   favoritedIds: Set<number>;
+  animatingId: number | null;
+  animatingCart: number | null;
   onToggleFav: (id: number) => void;
   onAddCart: (id: number) => void;
   onDetail: (id: number) => void;
 }
 
-const ProductRow = ({ title, products, favoritedIds, onToggleFav, onAddCart, onDetail }: ProductRowProps) => {
+const ProductRow = ({ title, products, favoritedIds, animatingId, animatingCart, onToggleFav, onAddCart, onDetail }: ProductRowProps) => {
   const rowRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const [visible, setVisible] = useState(false);
@@ -68,7 +70,9 @@ const ProductRow = ({ title, products, favoritedIds, onToggleFav, onAddCart, onD
               <div className={styles.imgWrap} onClick={() => onDetail(product.id)}>
                 <img src={product.image_url || DEFAULT_IMAGE} alt={product.name} className={styles.productImg} />
                 <span className={styles.hotTag}>HOT</span>
-                <button className={styles.favBtn} onClick={(e) => { e.stopPropagation(); onToggleFav(product.id); }}
+                <button
+                  className={`${styles.favBtn} ${animatingId === product.id ? styles.pop : ''}`}
+                  onClick={(e) => { e.stopPropagation(); onToggleFav(product.id); }}
                   title={favoritedIds.has(product.id) ? '取消收藏' : '添加收藏'}>
                   <i className={`bi ${favoritedIds.has(product.id) ? 'bi-heart-fill' : 'bi-heart'}`} />
                 </button>
@@ -78,7 +82,7 @@ const ProductRow = ({ title, products, favoritedIds, onToggleFav, onAddCart, onD
                 <div className={styles.productDesc}>{product.description || '精选好物'}</div>
                 <div className={styles.productFooter}>
                   <span className={styles.productPrice}>¥{price.toFixed(2)}</span>
-                  <button className={styles.cartBtn} onClick={() => onAddCart(product.id)} title="加入购物车">
+                  <button className={`${styles.cartBtn} ${animatingCart === product.id ? styles.pop : ''}`} onClick={() => onAddCart(product.id)} title="加入购物车">
                     <i className="bi bi-cart-plus" />
                   </button>
                 </div>
@@ -105,6 +109,8 @@ const HomePage = () => {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [favoritedIds, setFavoritedIds] = useState<Set<number>>(new Set());
+  const [animatingId, setAnimatingId] = useState<number | null>(null);
+  const [animatingCart, setAnimatingCart] = useState<number | null>(null);
 
   const urlCategory = searchParams.get('category') || '';
 
@@ -138,12 +144,16 @@ const HomePage = () => {
 
   const handleAddToCart = async (id: number) => {
     if (!user) { toast.warning('请先登录'); navigate('/login'); return; }
+    setAnimatingCart(id);
+    setTimeout(() => setAnimatingCart(null), 500);
     try { await addToCart({ product_id: id, quantity: 1 }); toast.success('已添加到购物车'); }
     catch (e: any) { toast.error(e.response?.data?.detail || '添加失败'); }
   };
 
   const handleToggleFav = async (id: number) => {
     if (!user) { toast.warning('请先登录'); navigate('/login'); return; }
+    setAnimatingId(id);
+    setTimeout(() => setAnimatingId(null), 500);
     try {
       const res = await favoriteApi.toggle(id);
       setFavoritedIds(prev => { const n = new Set(prev); res.favorited ? n.add(id) : n.delete(id); return n; });
@@ -162,6 +172,8 @@ const HomePage = () => {
           title={(CATEGORY_EMOJI[urlCategory] || '📦') + ' ' + urlCategory}
           products={allProducts}
           favoritedIds={favoritedIds}
+          animatingId={animatingId}
+          animatingCart={animatingCart}
           onToggleFav={handleToggleFav}
           onAddCart={handleAddToCart}
           onDetail={(id) => { setSelectedProductId(id); setModalVisible(true); }}
@@ -173,6 +185,8 @@ const HomePage = () => {
             title="🔥 热门推荐"
             products={allProducts}
             favoritedIds={favoritedIds}
+            animatingId={animatingId}
+            animatingCart={animatingCart}
             onToggleFav={handleToggleFav}
             onAddCart={handleAddToCart}
             onDetail={(id) => { setSelectedProductId(id); setModalVisible(true); }}
@@ -184,6 +198,8 @@ const HomePage = () => {
               title={(CATEGORY_EMOJI[cat] || '📦') + ' ' + cat}
               products={grouped[cat]}
               favoritedIds={favoritedIds}
+              animatingId={animatingId}
+              animatingCart={animatingCart}
               onToggleFav={handleToggleFav}
               onAddCart={handleAddToCart}
               onDetail={(id) => { setSelectedProductId(id); setModalVisible(true); }}
