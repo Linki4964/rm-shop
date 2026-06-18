@@ -4,7 +4,7 @@
   padding: 0.35rem;
   border: 1px solid var(--glass-border);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.58);
+  background: var(--glass-surface);
   box-shadow: var(--shadow-card);
   backdrop-filter: blur(36px);
   -webkit-backdrop-filter: blur(36px);
@@ -50,7 +50,7 @@
 .navLink:hover,
 .backBtn:hover {
   color: var(--primary);
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--glass-hover);
   transform: translateY(-1px);
 }
 

@@ -11,7 +11,7 @@ import ProductDetailModal from '../components/ProductDetailModal/ProductDetailMo
 import { useToast } from '../components/Toast';
 import styles from './HomePage.module.css';
 
-const DEFAULT_IMAGE = 'https://via.placeholder.com/400x400/f5f3ee/9a442d?text=EasyShop';
+const DEFAULT_IMAGE = '/homepage.jpg';
 
 const CATEGORY_EMOJI: Record<string, string> = {
   '手机数码': '📱', '电脑办公': '💻', '影音娱乐': '🎧', '智能穿戴': '⌚', '游戏娱乐': '🎮',

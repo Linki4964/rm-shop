@@ -52,13 +52,13 @@ async def seed_data():
     from datetime import datetime, timedelta
 
     products = [
-        {"name": "iPhone 15 Pro Max", "description": "苹果最新旗舰手机，A17 Pro芯片，钛金属设计", "price": 9999.00, "stock": 50, "image_url": "https://picsum.photos/400/400?random=1", "category": "手机数码"},
-        {"name": "MacBook Pro 14", "description": "M3 Pro芯片，14英寸Liquid Retina XDR显示屏", "price": 14999.00, "stock": 30, "image_url": "https://picsum.photos/400/400?random=2", "category": "电脑办公"},
-        {"name": "AirPods Pro 2", "description": "主动降噪无线耳机，自适应音频", "price": 1899.00, "stock": 100, "image_url": "https://picsum.photos/400/400?random=3", "category": "影音娱乐"},
-        {"name": "小米手环8 Pro", "description": "1.74英寸AMOLED大屏，独立GPS", "price": 399.00, "stock": 200, "image_url": "https://picsum.photos/400/400?random=4", "category": "智能穿戴"},
-        {"name": "Sony WH-1000XM5", "description": "顶级降噪耳机，30小时续航", "price": 2499.00, "stock": 45, "image_url": "https://picsum.photos/400/400?random=5", "category": "影音娱乐"},
-        {"name": "任天堂Switch OLED", "description": "7英寸OLED屏幕，续航增强版", "price": 2599.00, "stock": 25, "image_url": "https://picsum.photos/400/400?random=6", "category": "游戏娱乐"},
-        {"name": "戴尔XPS 15", "description": "3.5K OLED触控屏，i9处理器", "price": 18999.00, "stock": 15, "image_url": "https://picsum.photos/400/400?random=7", "category": "电脑办公"},
+        {"name": "iPhone 15 Pro Max", "description": "苹果最新旗舰手机，A17 Pro芯片，钛金属设计", "price": 9999.00, "stock": 50, "image_url": "/products/iphone15.jpg", "category": "手机数码"},
+        {"name": "MacBook Pro 14", "description": "M3 Pro芯片，14英寸Liquid Retina XDR显示屏", "price": 14999.00, "stock": 30, "image_url": "/products/macbookpro.jpg", "category": "电脑办公"},
+        {"name": "AirPods Pro 2", "description": "主动降噪无线耳机，自适应音频", "price": 1899.00, "stock": 100, "image_url": "/products/airpods.jpg", "category": "影音娱乐"},
+        {"name": "小米手环8 Pro", "description": "1.74英寸AMOLED大屏，独立GPS", "price": 399.00, "stock": 200, "image_url": "/products/xiaomi.jpg", "category": "智能穿戴"},
+        {"name": "Sony WH-1000XM5", "description": "顶级降噪耳机，30小时续航", "price": 2499.00, "stock": 45, "image_url": "/products/sony.jpg", "category": "影音娱乐"},
+        {"name": "任天堂Switch OLED", "description": "7英寸OLED屏幕，续航增强版", "price": 2599.00, "stock": 25, "image_url": "/products/switch.jpg", "category": "游戏娱乐"},
+        {"name": "戴尔XPS 15", "description": "3.5K OLED触控屏，i9处理器", "price": 18999.00, "stock": 15, "image_url": "/products/dell.jpg", "category": "电脑办公"},
     ]
 
     coupons = [

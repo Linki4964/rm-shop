@@ -43,7 +43,7 @@
 .memberDesc {
   max-width: 620px;
   margin-bottom: 2rem;
-  color: rgba(238, 240, 255, 0.74);
+  color: var(--surface);
   line-height: 1.7;
 }
 
@@ -57,15 +57,15 @@
   flex: 1;
   min-width: 0;
   padding: 1rem 1.2rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid var(--surface);
   border-radius: 20px;
   outline: none;
   background: rgba(255, 255, 255, 0.1);
-  color: #fff;
+  color: var(--surface);
 }
 
 .subscribeInput::placeholder {
-  color: rgba(238, 240, 255, 0.62);
+  color:var(--surface);
 }
 
 .subscribeBtn {
@@ -95,7 +95,7 @@
   padding: 3rem 2rem 1.5rem;
   border: 1px solid var(--glass-border);
   border-radius: 48px 48px 0 0;
-  background: rgba(242, 243, 255, 0.72);
+  background: var(--glass-input);
 }
 
 .footerGrid {
@@ -128,7 +128,7 @@
   width: 40px;
   height: 40px;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--glass-element);
   color: var(--primary);
   display: flex;
   align-items: center;
@@ -157,14 +157,14 @@
 }
 
 .footerLinks a:hover {
-  color: var(--primary);
+  color: var(--primary-container);
   transform: translateX(4px);
 }
 
 .footerLine {
   margin-top: 2.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid rgba(195, 198, 215, 0.35);
+  border-top: 1px solid var(--outline-variant);
   color: var(--secondary);
   text-align: center;
   font-size: 0.88rem;

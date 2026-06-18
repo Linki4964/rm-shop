@@ -23,8 +23,8 @@
   overflow: hidden;
   border: 1px solid var(--glass-border);
   border-radius: 40px;
-  background: rgba(255, 255, 255, 0.78);
-  box-shadow: 0 34px 80px -20px rgba(0, 74, 198, 0.24);
+  background: var(--glass-surface);
+  box-shadow: var(--shadow-card);
   backdrop-filter: blur(42px);
   -webkit-backdrop-filter: blur(42px);
   animation: modalIn 0.32s cubic-bezier(0.34, 1.2, 0.64, 1);
@@ -44,7 +44,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 1rem 1.5rem;
-  border-bottom: 1px solid rgba(195, 198, 215, 0.28);
+  border-bottom: 1px solid var(--outline-variant);
 }
 
 .breadcrumbs {
@@ -64,7 +64,7 @@
   height: 42px;
   border: 0;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.58);
+  background: var(--glass-element);
   color: var(--secondary);
   cursor: pointer;
 }
@@ -126,7 +126,7 @@
   padding: 2rem;
   border: 1px solid var(--glass-border);
   border-radius: 32px;
-  background: rgba(255, 255, 255, 0.5);
+  background: var(--glass-element);
 }
 
 .badge {
@@ -176,7 +176,7 @@
 
 .divider {
   height: 1px;
-  background: rgba(195, 198, 215, 0.34);
+  background: var(--outline-variant);
 }
 
 .qtyRow {
@@ -194,9 +194,9 @@
 .qtyBox {
   display: flex;
   align-items: center;
-  border: 1px solid rgba(195, 198, 215, 0.44);
+  border: 1px solid var(--outline-variant);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.58);
+  background: var(--glass-element);
 }
 
 .qtyBtn {
@@ -244,7 +244,7 @@
 
 .cartBtn2 {
   border: 1px solid rgba(37, 99, 235, 0.22);
-  background: rgba(255, 255, 255, 0.42);
+  background: var(--glass-element);
   color: var(--primary);
 }
 
@@ -325,7 +325,7 @@
 
 .specTable td {
   padding: 0.8rem 0;
-  border-bottom: 1px solid rgba(195, 198, 215, 0.3);
+  border-bottom: 1px solid var(--outline-variant);
 }
 
 .specTable td:first-child {

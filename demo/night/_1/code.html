@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>LUXELEC | Digital Horizon</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-tertiary-fixed": "#360f00",
+                    "on-secondary-container": "#00374d",
+                    "surface-dim": "#11131b",
+                    "surface-container-lowest": "#0c0e16",
+                    "on-secondary-fixed": "#001e2c",
+                    "on-surface": "#e1e2ed",
+                    "on-primary": "#002a78",
+                    "inverse-primary": "#0053db",
+                    "surface-container-highest": "#32343d",
+                    "error-container": "#93000a",
+                    "tertiary-fixed-dim": "#ffb596",
+                    "outline-variant": "#434655",
+                    "primary": "#b4c5ff",
+                    "secondary": "#7bd0ff",
+                    "secondary-container": "#00a6e0",
+                    "secondary-fixed-dim": "#7bd0ff",
+                    "surface-variant": "#32343d",
+                    "on-error": "#690005",
+                    "tertiary-container": "#bc4800",
+                    "on-background": "#e1e2ed",
+                    "on-error-container": "#ffdad6",
+                    "inverse-on-surface": "#2e3039",
+                    "on-tertiary-fixed-variant": "#7d2d00",
+                    "primary-fixed-dim": "#b4c5ff",
+                    "on-primary-container": "#eeefff",
+                    "on-tertiary": "#581e00",
+                    "tertiary": "#ffb596",
+                    "on-primary-fixed": "#00174b",
+                    "surface-container-high": "#282a32",
+                    "on-tertiary-container": "#ffede6",
+                    "secondary-fixed": "#c4e7ff",
+                    "primary-fixed": "#dbe1ff",
+                    "surface-bright": "#373942",
+                    "background": "#11131b",
+                    "outline": "#8d90a0",
+                    "tertiary-fixed": "#ffdbcd",
+                    "surface-container": "#1d1f27",
+                    "on-surface-variant": "#c3c6d7",
+                    "surface-container-low": "#191b23",
+                    "on-secondary": "#00354a",
+                    "inverse-surface": "#e1e2ed",
+                    "error": "#ffb4ab",
+                    "on-primary-fixed-variant": "#003ea8",
+                    "surface-tint": "#b4c5ff",
+                    "surface": "#11131b",
+                    "on-secondary-fixed-variant": "#004c69",
+                    "primary-container": "#2563eb"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "gutter": "16px",
+                    "stack-sm": "8px",
+                    "unit": "8px",
+                    "stack-lg": "32px",
+                    "container-margin": "24px",
+                    "stack-md": "16px"
+            },
+            "fontFamily": {
+                    "headline-lg-mobile": ["Manrope"],
+                    "body-lg": ["Manrope"],
+                    "headline-lg": ["Manrope"],
+                    "display-lg": ["Manrope"],
+                    "title-md": ["Manrope"],
+                    "body-sm": ["Manrope"],
+                    "label-caps": ["Manrope"]
+            },
+            "fontSize": {
+                    "headline-lg-mobile": ["28px", {"lineHeight": "1.2", "fontWeight": "700"}],
+                    "body-lg": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                    "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700"}],
+                    "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                    "title-md": ["20px", {"lineHeight": "1.4", "fontWeight": "600"}],
+                    "body-sm": ["14px", {"lineHeight": "1.5", "fontWeight": "400"}],
+                    "label-caps": ["12px", {"lineHeight": "1", "letterSpacing": "0.05em", "fontWeight": "700"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: #11131b;
+            color: #e1e2ed;
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(12px);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 1px solid rgba(255, 255, 255, 0.2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .glow-button:hover {
+            box-shadow: 0 0 20px 2px rgba(37, 99, 235, 0.4);
+            transform: translateY(-1px);
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+
+        .active-nav {
+            color: #b4c5ff;
+            border-bottom: 2px solid #b4c5ff;
+            padding-bottom: 4px;
+        }
+
+        /* Custom scrollbar for premium feel */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0c0e16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #32343d;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #434655;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen">
+<!-- TopNavBar -->
+<header class="fixed top-4 inset-x-4 rounded-xl z-50 bg-surface-container/70 dark:bg-surface-dim/70 backdrop-blur-xl border border-white/20 shadow-xl flex justify-between items-center px-container-margin py-unit w-full max-w-7xl mx-auto">
+<div class="flex items-center gap-stack-md">
+<span class="font-display-lg text-display-lg font-extrabold tracking-tighter text-primary">LUXELEC</span>
+</div>
+<nav class="hidden md:flex items-center gap-gutter">
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-on-surface transition-colors" href="#">Audio</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-on-surface transition-colors" href="#">Visual</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-on-surface transition-colors" href="#">Computing</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-on-surface transition-colors" href="#">Gaming</a>
+<a class="font-body-lg text-body-lg text-on-surface-variant hover:text-on-surface transition-colors" href="#">Smart Home</a>
+</nav>
+<div class="flex items-center gap-stack-md">
+<button class="p-2 hover:bg-white/10 rounded-full transition-all duration-300 active:scale-95">
+<span class="material-symbols-outlined text-primary">search</span>
+</button>
+<button class="p-2 hover:bg-white/10 rounded-full transition-all duration-300 active:scale-95">
+<span class="material-symbols-outlined text-primary">shopping_cart</span>
+</button>
+<button class="p-2 hover:bg-white/10 rounded-full transition-all duration-300 active:scale-95">
+<span class="material-symbols-outlined text-primary">person</span>
+</button>
+</div>
+</header>
+<main class="pt-32 pb-stack-lg">
+<!-- Hero Section -->
+<section class="px-container-margin max-w-7xl mx-auto mb-stack-lg">
+<div class="relative w-full h-[500px] md:h-[600px] rounded-3xl overflow-hidden glass-card">
+<div class="absolute inset-0 z-0">
+<img class="w-full h-full object-cover opacity-80" data-alt="A cinematic, high-fidelity shot of a sleek, dark metallic professional laptop floating in a void. The screen displays a vibrant, ethereal aurora-like wallpaper in deep blues and purples titled Digital Horizon. Subtle volumetric lighting hits the edges of the laptop's chassis, emphasizing its thin profile. The atmosphere is premium, technologically advanced, and ultra-modern, set against a deep navy blue background with soft lens flares." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA1FYU2AzT8MaJA8Bm3h2HZWSHtqdc23_ccfpAb3R_8knGHl2EMFyqnLqmgAw7THHgSoLBjC4I-qyJUwIHs2F4k16h1ro9HRr0Wt6XSEyoK4QVzCCgBtAsjGcgGULIJgXcUCxKUJseatNIQCZ8QzXGi47mt-tGadaKwq6Hkde_oSqnHRRx8Ue9PpvLEqI1FX3jgl03fC_GBVz5eHgOKUjmWDbNsG12kWzaA1qvH1EEvCavT8NbnG-FQ6G0xrvN30cvamDN4_stveL0"/>
+<div class="absolute inset-0 bg-gradient-to-r from-background via-background/40 to-transparent"></div>
+</div>
+<div class="relative z-10 h-full flex flex-col justify-center px-12 md:px-24">
+<span class="inline-block px-3 py-1 mb-4 rounded-full bg-primary/20 text-primary font-label-caps text-label-caps border border-primary/30 uppercase tracking-widest">Next-Gen Performance</span>
+<h1 class="font-display-lg text-display-lg text-on-surface mb-4 leading-tight">Digital<br/>Horizon</h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-md mb-8">Experience the pinnacle of engineering with the all-new Pro Series. Designed for creators who demand zero compromise.</p>
+<div class="flex flex-wrap gap-stack-md">
+<button class="bg-primary-container text-on-primary-container font-title-md text-title-md px-8 py-4 rounded-xl glow-button transition-all duration-300">Shop Now</button>
+<button class="glass-card text-on-surface font-title-md text-title-md px-8 py-4 rounded-xl hover:bg-white/10 transition-all duration-300">Learn More</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Category Section -->
+<section class="px-container-margin max-w-7xl mx-auto mb-stack-lg">
+<div class="grid grid-cols-2 md:grid-cols-5 gap-stack-md">
+<!-- Computing -->
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/5 transition-all duration-300 cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">laptop_mac</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Computing</span>
+</div>
+<!-- Mobiles -->
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/5 transition-all duration-300 cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">smartphone</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Mobiles</span>
+</div>
+<!-- Audio -->
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/5 transition-all duration-300 cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">headphones</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Audio</span>
+</div>
+<!-- Gaming -->
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/5 transition-all duration-300 cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">sports_esports</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Gaming</span>
+</div>
+<!-- Wearables -->
+<div class="glass-card rounded-2xl p-6 flex flex-col items-center justify-center gap-4 hover:bg-white/5 transition-all duration-300 cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-container-high flex items-center justify-center text-secondary group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-4xl">watch</span>
+</div>
+<span class="font-title-md text-title-md text-on-surface">Wearables</span>
+</div>
+</div>
+</section>
+<!-- Trending Now -->
+<section class="px-container-margin max-w-7xl mx-auto">
+<div class="flex justify-between items-end mb-stack-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Trending Now</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Top-rated tech from our global collection.</p>
+</div>
+<a class="text-primary font-title-md text-title-md flex items-center gap-2 hover:underline" href="#">
+                    View All <span class="material-symbols-outlined">arrow_forward</span>
+</a>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Product 1 -->
+<div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A high-end, sleek tablet called Lumina Tab Ultra, shown from a perspective angle on a dark reflective surface. The tablet features a brilliant, bezel-less OLED screen with deep blacks and vibrant neon blue and cyan accents. The background is a minimalist studio setting with soft blue rim lighting, creating a futuristic 'Command Center' feel. 8k resolution, photorealistic style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB4pfr-KlMIQdnKYdACsDHgr9kFENjghX_k5_S3_ybeDTxrF1En83qNU-f7KgjTtgOeWXrbGme7le5JAV1JY9Lt723_hoV5eyqpjnowSuFo41sH2d90rxCwrVWZkZuf1Wb90r1shK_0ymRIOrw7ECos6HAyBIEGGErhAUpdgUoK_RWd1fyO4CvaSjVMpltGiyQZLph_VzVtAzGdNJtolHp_cLvlwbcNyaueadaCd2pvcWX5KhSZA3sLsH9Mmn66cR5MOMqtUT4_LNE"/>
+<div class="absolute top-4 right-4 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-caps text-label-caps">New</div>
+</div>
+<div class="p-6 flex flex-col grow">
+<h3 class="font-title-md text-title-md text-on-surface mb-2">Lumina Tab Ultra</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 grow">Next-gen OLED display with ultra-responsive 144Hz refresh rate and M-Series chip integration.</p>
+<div class="flex justify-between items-center mt-auto">
+<span class="font-headline-lg text-headline-lg text-primary">$1,299</span>
+<button class="p-3 bg-white/5 hover:bg-primary-container hover:text-on-primary-container rounded-xl transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 2 -->
+<div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A sophisticated smartwatch named Vitality Watch 3 with a matte black metal casing and a textured silicone strap. The watch face glows with vibrant blue health monitoring data, set against a dark, moody background with subtle particle effects. The lighting highlights the premium finish of the crown and bezel. High-end product photography style with a focus on depth and glass textures." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAYISxriqcFe28j0BoaQO4H2ynbKhv7N7PG-soWW0wQLg8I2eHlnokSK4Pq1Ep4b1-IF47OwW-MeA8x9anwd4L-X1Qu6a1AdTecDmCrssYFi9xM7wa5PgTNFa9Uh5AYJMDgdLd8XypUKdbJgV-u2SDIr2yWPu_B1g8uCBrCQQYyr9-kWnsqZCLW2EpnmnT8vFNArinGQwTQOYUlaejvYuYKFNKShyqwxBd2uzVcsxy9924crzOZGFuBL-HkKDHZxNITpSeBWTT-QWo"/>
+<div class="absolute top-4 right-4 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full font-label-caps text-label-caps">Popular</div>
+</div>
+<div class="p-6 flex flex-col grow">
+<h3 class="font-title-md text-title-md text-on-surface mb-2">Vitality Watch 3</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 grow">Advanced biometric sensors providing real-time health insights and 7-day battery life.</p>
+<div class="flex justify-between items-center mt-auto">
+<span class="font-headline-lg text-headline-lg text-primary">$349</span>
+<button class="p-3 bg-white/5 hover:bg-primary-container hover:text-on-primary-container rounded-xl transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Product 3 -->
+<div class="glass-card rounded-3xl overflow-hidden flex flex-col h-full group">
+<div class="relative h-64 overflow-hidden">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Sleek, minimalist matte black noise-canceling headphones floating in a dark atmospheric space. Subtle blue neon outlines highlight the aerodynamic curves of the earcups. The background features a soft bokeh of city lights at night, creating a sense of urban luxury. The lighting is low-key with a focus on high-contrast metallic highlights. 8k rendered aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs_avOZIz5uEArfdAiHo_sqAoobljseiBr8_xS5J6EYw_6l4sTStmmg8DXq_XYGhKeaP4c57u8KXvbhZmUD9ciExGdvgeQWWqslZekeQCnx5ENrwz-HzlvJE-2MGEaL_hEO3DNcKXr9Q6ei68G2Gu581oWM-hM5Ezreo3jyvCi1DMA0Rf0t0t91o6cvFaAT2JsVcSWKhvHlLZBsP8cJ5hriCYzBbUZYOwWzhv5hU5X6-xiim9DZZRk85KHvA_IMrFPZsNxk3foIRE"/>
+</div>
+<div class="p-6 flex flex-col grow">
+<h3 class="font-title-md text-title-md text-on-surface mb-2">Sonic Echo Pro</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-6 grow">Adaptive noise cancellation with lossless spatial audio for an immersive listening experience.</p>
+<div class="flex justify-between items-center mt-auto">
+<span class="font-headline-lg text-headline-lg text-primary">$599</span>
+<button class="p-3 bg-white/5 hover:bg-primary-container hover:text-on-primary-container rounded-xl transition-all duration-300">
+<span class="material-symbols-outlined">add_shopping_cart</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="w-full mt-stack-lg border-t border-outline-variant/30 bg-surface-container-lowest dark:bg-surface-container-lowest">
+<div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start gap-stack-md px-container-margin py-stack-lg w-full">
+<div class="flex flex-col gap-stack-sm">
+<span class="font-title-md text-title-md font-bold text-on-surface">LUXELEC</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">Elevating your digital lifestyle with curated, high-performance technology for the modern professional.</p>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-3 gap-stack-lg">
+<div class="flex flex-col gap-2">
+<h4 class="font-label-caps text-label-caps text-primary mb-2">Products</h4>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Computing</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Audio</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Gaming</a>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-label-caps text-label-caps text-primary mb-2">Company</h4>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Careers</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Sustainability</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Press</a>
+</div>
+<div class="flex flex-col gap-2">
+<h4 class="font-label-caps text-label-caps text-primary mb-2">Support</h4>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Privacy Policy</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Terms of Service</a>
+<a class="font-body-sm text-body-sm text-on-surface-variant hover:text-secondary transition-colors cursor-pointer" href="#">Help Center</a>
+</div>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-container-margin py-stack-md flex flex-col md:flex-row justify-between items-center border-t border-outline-variant/10 text-on-surface-variant">
+<p class="font-body-sm text-body-sm">© 2024 LUXELEC Global. All rights reserved.</p>
+<div class="flex gap-stack-md mt-4 md:mt-0">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">language</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary transition-colors">share</span>
+</div>
+</div>
+</footer>
+<script>
+        // Simple scroll effect for the glass navbar
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('bg-surface-dim/90');
+                header.classList.remove('top-4');
+                header.classList.add('top-0', 'rounded-none', 'max-w-full');
+            } else {
+                header.classList.remove('bg-surface-dim/90');
+                header.classList.add('top-4');
+                header.classList.remove('top-0', 'rounded-none', 'max-w-full');
+            }
+        });
+    </script>
+</body></html>
