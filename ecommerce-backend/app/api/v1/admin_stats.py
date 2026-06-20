@@ -12,6 +12,20 @@ from app.models.product import Product
 router = APIRouter(tags=["admin-stats"])
 
 
+@router.get("/stats/revenue")
+async def total_revenue(
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_superuser),
+):
+    result = await db.execute(
+        select(func.sum(Order.total_amount)).where(
+            Order.status.in_([OrderStatus.PAID.value, OrderStatus.COMPLETED.value])
+        )
+    )
+    total = result.scalar() or 0
+    return {"revenue": float(total)}
+
+
 @router.get("/stats/orders/trend")
 async def order_trend(
     db: AsyncSession = Depends(get_db),

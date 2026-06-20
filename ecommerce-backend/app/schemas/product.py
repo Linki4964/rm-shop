@@ -13,6 +13,7 @@ class ProductBase(BaseModel):
     image_url: Optional[str] = Field(None, max_length=500, description="商品图片URL")
     category: Optional[str] = Field(None, max_length=100, description="商品分类")
     is_active: bool = Field(True, description="是否上架")
+    features: Optional[list[dict]] = Field(None, description="产品特性 [{icon,title,desc}]")
 
     @field_validator('price')
     @classmethod
@@ -50,6 +51,7 @@ class ProductUpdate(BaseModel):
     image_url: Optional[str] = Field(None, max_length=500)
     category: Optional[str] = Field(None, max_length=100)
     is_active: Optional[bool] = None
+    features: Optional[list[dict]] = Field(None, description="产品特性")
 
     @field_validator('price')
     @classmethod
