@@ -76,6 +76,40 @@
   font-size: 1.2rem;
 }
 
+.footer {
+  padding: 1rem;
+  border-top: 1px solid rgba(195, 198, 215, 0.32);
+}
+
+.userInfo {
+  display: block;
+  color: var(--secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.logoutBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1px solid rgba(195, 198, 215, 0.35);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--secondary);
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.logoutBtn:hover {
+  color: var(--error);
+  border-color: var(--error);
+  background: var(--error-container);
+}
+
 .userInfo {
   display: flex;
   align-items: center;

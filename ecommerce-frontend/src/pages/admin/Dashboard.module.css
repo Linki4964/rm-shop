@@ -1,3 +1,57 @@
 .dashboard h3 {
-    color: #2f3542;
-  }
+  color: var(--on-surface);
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  background: var(--glass-surface);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.statCard:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.statIcon {
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.35rem; flex-shrink: 0;
+}
+
+.statBody { flex: 1; }
+
+.statValue {
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-size: 1.8rem; font-weight: 800; line-height: 1.1;
+  color: var(--on-surface);
+}
+
+.statLabel {
+  color: var(--secondary);
+  font-size: 0.82rem; font-weight: 600; margin-top: 0.2rem;
+}
+
+.chartCard {
+  padding: 1.5rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 20px;
+  background: var(--glass-surface);
+  box-shadow: var(--shadow-card);
+  min-height: 200px;
+}
+
+.chartTitle {
+  font-family: "Manrope", "Noto Sans SC", sans-serif;
+  font-weight: 800; font-size: 1rem;
+  color: var(--on-surface);
+  margin-bottom: 0.75rem;
+}
