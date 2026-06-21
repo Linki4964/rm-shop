@@ -1,5 +1,5 @@
 // src/components/AdminSidebar/AdminSidebar.tsx
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../store/authStore';
 import styles from './AdminSidebar.module.css';
 
@@ -12,8 +12,14 @@ const menuItems = [
 ];
 
 const AdminSidebar = () => {
-  const { user } = useAuthStore();
+  const { user, logout } = useAuthStore();
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate('/login', { replace: true });
+  };
 
   return (
     <aside className={styles.sidebar}>
@@ -25,15 +31,12 @@ const AdminSidebar = () => {
       <nav className={styles.nav}>
         <ul className={styles.menuList}>
           {menuItems.map((item) => {
-            // 精确匹配当前路径
             const isExactActive = location.pathname === item.path;
             return (
               <li key={item.path}>
                 <NavLink
                   to={item.path}
                   className={`${styles.menuLink} ${isExactActive ? styles.active : ''}`}
-                  // 确保 NavLink 不会自动添加任何 active 类
-                  // 可设置 end 属性辅助（但已用精确比较，可有可无）
                 >
                   <i className={`bi ${item.icon} ${styles.menuIcon}`}></i>
                   <span>{item.label}</span>
@@ -43,6 +46,13 @@ const AdminSidebar = () => {
           })}
         </ul>
       </nav>
+
+      <div className={styles.footer}>
+        <span className={styles.userInfo}>{user?.username}</span>
+        <button className={styles.logoutBtn} onClick={handleLogout}>
+          <i className="bi bi-box-arrow-right" /> 退出登录
+        </button>
+      </div>
     </aside>
   );
 };

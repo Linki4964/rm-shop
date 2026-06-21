@@ -1,7 +1,19 @@
 // src/components/ProductFormModal/ProductFormModal.tsx
 import { useEffect, useState } from 'react';
 import { productAdminApi } from '../../api/productAdmin';
-import type  { Product, ProductCreate, ProductUpdate } from '../../types/product';
+import type  { Product, ProductCreate, ProductUpdate, ProductFeature } from '../../types/product';
+
+const FEATURE_ICONS = [
+  'bi-cpu', 'bi-motherboard', 'bi-camera', 'bi-camera-video',
+  'bi-display', 'bi-tv', 'bi-headphones', 'bi-volume-up',
+  'bi-battery-charging', 'bi-lightning-charge', 'bi-wifi', 'bi-bluetooth',
+  'bi-usb-plug', 'bi-speedometer2', 'bi-rocket-takeoff',
+  'bi-shield-check', 'bi-shield-lock', 'bi-fingerprint',
+  'bi-gem', 'bi-palette', 'bi-droplet', 'bi-star', 'bi-heart',
+  'bi-gift', 'bi-trophy', 'bi-hdd', 'bi-sd-card', 'bi-cloud-arrow-up',
+  'bi-phone', 'bi-laptop', 'bi-smartwatch', 'bi-speaker',
+  'bi-mouse', 'bi-keyboard', 'bi-router',
+];
 import { useToast } from '../Toast';
 
 interface Props {
@@ -21,6 +33,7 @@ const ProductFormModal = ({ visible, onClose, product, categories }: Props) => {
     image_url: '',
     category: '',
     is_active: true,
+    features: [],
   });
   const [submitting, setSubmitting] = useState(false);
 
@@ -34,6 +47,7 @@ const ProductFormModal = ({ visible, onClose, product, categories }: Props) => {
         image_url: product.image_url || '',
         category: product.category || '',
         is_active: product.is_active,
+        features: product.features || [],
       });
     } else {
       setFormData({
@@ -44,6 +58,7 @@ const ProductFormModal = ({ visible, onClose, product, categories }: Props) => {
         image_url: '',
         category: '',
         is_active: true,
+        features: [],
       });
     }
   }, [product, visible]);
@@ -73,6 +88,7 @@ const ProductFormModal = ({ visible, onClose, product, categories }: Props) => {
         if (formData.image_url !== product.image_url) updateData.image_url = formData.image_url;
         if (formData.category !== product.category) updateData.category = formData.category;
         if (formData.is_active !== product.is_active) updateData.is_active = formData.is_active;
+        if (JSON.stringify(formData.features) !== JSON.stringify(product.features || [])) updateData.features = formData.features;
         await productAdminApi.update(product.id, updateData);
       } else {
         // 新增
@@ -173,6 +189,88 @@ const ProductFormModal = ({ visible, onClose, product, categories }: Props) => {
                     placeholder="https://..."
                   />
                 </div>
+              </div>
+              {/* 产品特性编辑 */}
+              <div className="mb-3">
+                <label className="form-label">产品特性卡片（详情页展示）</label>
+                {(formData.features || []).map((f, idx) => (
+                  <div key={idx} className="row g-2 mb-2">
+                    <div className="col-2">
+                      <div style={{ position: 'relative' }}>
+                        <button type="button" className="form-control form-control-sm text-start" style={{ cursor: 'pointer' }}
+                          onClick={() => {
+                            const panel = document.getElementById(`icon-panel-${idx}`);
+                            if (panel) panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+                          }}>
+                          {f.icon ? <><i className={`bi ${f.icon}`} /> {f.icon}</> : '选择图标'}
+                        </button>
+                        <div id={`icon-panel-${idx}`} style={{ display: 'none', position: 'absolute', zIndex: 10, background: 'var(--surface-container-lowest)', border: '1px solid var(--outline-variant)', borderRadius: '12px', padding: '0.5rem', width: '280px', maxHeight: '200px', overflowY: 'auto', boxShadow: 'var(--shadow-card)' }}>
+                          <div className="d-flex flex-wrap gap-1">
+                            {FEATURE_ICONS.map(ic => (
+                              <button key={ic} type="button"
+                                className={`btn btn-sm ${f.icon === ic ? 'btn-primary' : 'btn-outline-secondary'}`}
+                                style={{ fontSize: '0.75rem' }}
+                                title={ic}
+                                onClick={() => {
+                                  const updated = [...(formData.features || [])];
+                                  updated[idx] = { ...updated[idx], icon: ic };
+                                  setFormData(prev => ({ ...prev, features: updated }));
+                                  const panel = document.getElementById(`icon-panel-${idx}`);
+                                  if (panel) panel.style.display = 'none';
+                                }}>
+                                <i className={`bi ${ic}`} />
+                              </button>
+                            ))}
+                          </div>
+                          <div className="input-group input-group-sm mt-2">
+                            <span className="input-group-text" style={{ fontSize: '0.7rem' }}>bi-</span>
+                            <input className="form-control form-control-sm" placeholder="自定义图标名..."
+                              defaultValue={f.icon?.startsWith('bi-') ? f.icon.slice(3) : f.icon}
+                              onKeyDown={e => {
+                                if (e.key === 'Enter') {
+                                  const val = (e.target as HTMLInputElement).value.trim();
+                                  if (val) {
+                                    const ic = val.startsWith('bi-') ? val : `bi-${val}`;
+                                    const updated = [...(formData.features || [])];
+                                    updated[idx] = { ...updated[idx], icon: ic };
+                                    setFormData(prev => ({ ...prev, features: updated }));
+                                    const panel = document.getElementById(`icon-panel-${idx}`);
+                                    if (panel) panel.style.display = 'none';
+                                  }
+                                }
+                              }} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-3">
+                      <input className="form-control form-control-sm" placeholder="标题" value={f.title}
+                        onChange={e => {
+                          const updated = [...(formData.features || [])];
+                          updated[idx] = { ...updated[idx], title: e.target.value };
+                          setFormData(prev => ({ ...prev, features: updated }));
+                        }} />
+                    </div>
+                    <div className="col-5">
+                      <input className="form-control form-control-sm" placeholder="描述" value={f.desc}
+                        onChange={e => {
+                          const updated = [...(formData.features || [])];
+                          updated[idx] = { ...updated[idx], desc: e.target.value };
+                          setFormData(prev => ({ ...prev, features: updated }));
+                        }} />
+                    </div>
+                    <div className="col-2">
+                      <button type="button" className="btn btn-sm btn-outline-danger w-100"
+                        onClick={() => setFormData(prev => ({ ...prev, features: (prev.features || []).filter((_, i) => i !== idx) }))}>
+                        <i className="bi bi-trash" />
+                      </button>
+                    </div>
+                  </div>
+                ))}
+                <button type="button" className="btn btn-sm btn-outline-primary"
+                  onClick={() => setFormData(prev => ({ ...prev, features: [...(prev.features || []), { icon: 'bi-star', title: '', desc: '' }] }))}>
+                  <i className="bi bi-plus-circle" /> 添加特性
+                </button>
               </div>
               <div className="form-check">
                 <input

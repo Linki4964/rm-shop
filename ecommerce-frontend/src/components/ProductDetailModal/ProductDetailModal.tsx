@@ -149,9 +149,16 @@ const ProductDetailModal = ({ visible, productId, onClose }: Props) => {
               <div className={styles.tabContent}>
                 {activeTab === 'desc' ? (
                   <div className={styles.featureGrid}>
-                    <div className={styles.featureCard}><i className="bi bi-cpu" /><h4>A17 Pro 芯片</h4><p>全新级别的 iPhone 芯片，带来前所未有的图形性能。</p></div>
-                    <div className={styles.featureCard}><i className="bi bi-camera" /><h4>专业相机系统</h4><p>多个焦段可选，如同随身携带七个专业镜头。</p></div>
-                    <div className={styles.featureCard}><i className="bi bi-usb-plug" /><h4>USB-C 接口</h4><p>支持 USB 3，数据传输速度大幅提升。</p></div>
+                    {(product.features && product.features.length > 0
+                      ? product.features
+                      : [{ icon: 'bi-star', title: '精选好物', desc: '品质保证，值得信赖' }]
+                    ).map((f, i) => (
+                      <div key={i} className={styles.featureCard}>
+                        <i className={`bi ${f.icon || 'bi-star'}`} />
+                        <h4>{f.title}</h4>
+                        <p>{f.desc}</p>
+                      </div>
+                    ))}
                   </div>
                 ) : activeTab === 'specs' ? (
                   <table className={styles.specTable}>

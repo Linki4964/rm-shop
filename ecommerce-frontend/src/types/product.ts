@@ -1,4 +1,10 @@
 // src/types/product.ts
+export interface ProductFeature {
+  icon: string;
+  title: string;
+  desc: string;
+}
+
 export interface Product {
     id: number;
     name: string;
@@ -8,10 +14,11 @@ export interface Product {
     image_url: string | null;
     category: string | null;
     is_active: boolean;
+    features?: ProductFeature[] | null;
     created_at: string;
     updated_at: string;
   }
-  
+
   export interface ProductCreate {
     name: string;
     description?: string | null;
@@ -20,8 +27,9 @@ export interface Product {
     image_url?: string | null;
     category?: string | null;
     is_active?: boolean;
+    features?: ProductFeature[] | null;
   }
-  
+
   export interface ProductUpdate {
     name?: string;
     description?: string | null;
@@ -30,6 +38,7 @@ export interface Product {
     image_url?: string | null;
     category?: string | null;
     is_active?: boolean;
+    features?: ProductFeature[] | null;
   }
   
   export interface ProductListResponse {
