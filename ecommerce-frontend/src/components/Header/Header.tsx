@@ -1,29 +1,42 @@
-// src/components/Header/Header.tsx
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+
+import { productPublicApi } from '../../api/productPublic';
 import { useAuthStore } from '../../store/authStore';
 import { useCartStore } from '../../store/cartStore';
-import { productPublicApi } from '../../api/productPublic';
-import CartDrawer from '../CartDrawer/CartDrawer';
-import AddressManageModal from '../AddressManageModal/AddressManageModal';
 import { useThemeStore } from '../../store/themeStore';
+import AddressManageModal from '../AddressManageModal/AddressManageModal';
+import CartDrawer from '../CartDrawer/CartDrawer';
 import styles from './Header.module.css';
 
 const Header = () => {
   const { user, logout } = useAuthStore();
   const { totalQuantity, fetchCart } = useCartStore();
+  const { theme, toggle: toggleTheme } = useThemeStore();
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+
   const [cartDrawerOpen, setCartDrawerOpen] = useState(false);
   const [addrModalOpen, setAddrModalOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
   const [categories, setCategories] = useState<string[]>([]);
-  const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [keyword, setKeyword] = useState(searchParams.get('keyword') || '');
   const currentCategory = searchParams.get('category') || '';
-  const { theme, toggle: toggleTheme } = useThemeStore();
 
   useEffect(() => {
     productPublicApi.getCategories().then(setCategories).catch(() => {});
   }, []);
+
+  useEffect(() => {
+    setKeyword(searchParams.get('keyword') || '');
+  }, [searchParams]);
+
+  const goSearch = () => {
+    const next = new URLSearchParams(searchParams);
+    if (keyword.trim()) next.set('keyword', keyword.trim());
+    else next.delete('keyword');
+    navigate(`/?${next.toString()}`);
+  };
 
   return (
     <>
@@ -38,7 +51,7 @@ const Header = () => {
               >
                 全部
               </button>
-              {categories.map(cat => (
+              {categories.map((cat) => (
                 <button
                   key={cat}
                   className={`${styles.catLink} ${currentCategory === cat ? styles.catActive : ''}`}
@@ -49,11 +62,21 @@ const Header = () => {
               ))}
             </nav>
           </div>
+
           <div className={styles.navActions}>
             <div className={`${styles.searchBox} d-none d-md-flex`}>
               <i className="bi bi-search" style={{ color: 'var(--on-surface-variant)', fontSize: '0.9rem' }} />
-              <input className={styles.searchInput} placeholder="搜索产品..." />
+              <input
+                className={styles.searchInput}
+                placeholder="搜索商品..."
+                value={keyword}
+                onChange={(e) => setKeyword(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') goSearch();
+                }}
+              />
             </div>
+            <button className="btn btn-sm btn-outline-secondary d-none d-md-inline-flex" onClick={goSearch}>搜索</button>
             <button className={styles.iconBtn} onClick={() => { fetchCart(); setCartDrawerOpen(true); }}>
               <i className="bi bi-cart" style={{ fontSize: '1.1rem' }} />
               {totalQuantity > 0 && <span className={styles.cartBadge}>{totalQuantity}</span>}
@@ -61,16 +84,20 @@ const Header = () => {
             <button className={styles.iconBtn} onClick={toggleTheme} title={theme === 'light' ? '切换暗色模式' : '切换亮色模式'}>
               <i className={`bi ${theme === 'light' ? 'bi-moon' : 'bi-sun'}`} style={{ fontSize: '1.1rem' }} />
             </button>
+            <Link to="/coupon-center" className={styles.iconBtn}>
+              <i className="bi bi-ticket-perforated" style={{ fontSize: '1.1rem' }} />
+            </Link>
             <Link to="/favorites" className={styles.iconBtn}>
               <i className="bi bi-heart" style={{ fontSize: '1.1rem' }} />
             </Link>
             <Link to="/orders" className={styles.iconBtn}>
               <i className="bi bi-box" style={{ fontSize: '1.1rem' }} />
             </Link>
+
             {user ? (
               <div className={styles.userMenuWrap}>
-                <button className={styles.iconBtn} onClick={() => setUserMenuOpen(!userMenuOpen)}>
-                  <i className="bi bi-person" style={{ fontSize: '1.1rem' }} />
+                <button className={styles.iconBtn} onClick={() => setUserMenuOpen((prev) => !prev)}>
+                  <i className="bi bi-person-circle" style={{ fontSize: '1.1rem' }} />
                   <span className="d-none d-md-inline">{user.full_name || user.username}</span>
                 </button>
                 {userMenuOpen && (
@@ -81,9 +108,12 @@ const Header = () => {
                         <strong>{user.full_name || user.username}</strong>
                         <span>{user.email}</span>
                       </div>
-                      <button className={styles.dropdownItem} onClick={() => { setUserMenuOpen(false); logout(); navigate('/login', { replace: true }); }}>
-                        <i className="bi bi-arrow-repeat" /> 切换账号
-                      </button>
+                      <Link to="/profile" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
+                        <i className="bi bi-person-vcard" /> 个人中心
+                      </Link>
+                      <Link to="/coupon-center" className={styles.dropdownItem} onClick={() => setUserMenuOpen(false)}>
+                        <i className="bi bi-ticket-perforated" /> 领券中心
+                      </Link>
                       <button className={styles.dropdownItem} onClick={() => { setAddrModalOpen(true); setUserMenuOpen(false); }}>
                         <i className="bi bi-geo-alt" /> 管理地址
                       </button>
@@ -92,7 +122,7 @@ const Header = () => {
                           <i className="bi bi-speedometer2" /> 管理后台
                         </Link>
                       )}
-                      <button className={styles.dropdownItem} onClick={() => { logout(); setUserMenuOpen(false); }}>
+                      <button className={styles.dropdownItem} onClick={() => { logout(); setUserMenuOpen(false); navigate('/login', { replace: true }); }}>
                         <i className="bi bi-box-arrow-right" /> 退出登录
                       </button>
                     </div>

@@ -1,5 +1,5 @@
-// src/store/orderStore.ts
 import { create } from 'zustand';
+
 import { orderApi } from '../api/order';
 import type { Order } from '../types/order';
 
@@ -8,7 +8,7 @@ interface OrderState {
   total: number;
   isLoading: boolean;
   fetchOrders: (skip?: number, limit?: number) => Promise<void>;
-  cancelOrder: (orderId: number) => Promise<void>;
+  cancelOrder: (orderId: number, reason: string) => Promise<void>;
   payOrder: (orderId: number) => Promise<void>;
   deleteOrder: (orderId: number) => Promise<void>;
   clearOrders: () => void;
@@ -25,43 +25,41 @@ export const useOrderStore = create<OrderState>((set, get) => ({
       const data = await orderApi.list(skip, limit);
       set({ orders: data.items, total: data.total });
     } catch (error) {
-      console.error('获取订单列表失败:', error);
+      console.error('Failed to fetch orders:', error);
     } finally {
       set({ isLoading: false });
     }
   },
 
-  cancelOrder: async (orderId: number) => {
+  cancelOrder: async (orderId, reason) => {
     try {
-      await orderApi.cancel(orderId);
-      // 刷新订单列表（可选：直接更新本地状态）
+      await orderApi.cancel(orderId, reason);
       await get().fetchOrders();
     } catch (error) {
-      console.error('取消订单失败:', error);
+      console.error('Failed to cancel order:', error);
       throw error;
     }
   },
 
-  payOrder: async (orderId: number) => {
+  payOrder: async (orderId) => {
     try {
       await orderApi.pay(orderId);
       await get().fetchOrders();
     } catch (error) {
-      console.error('支付订单失败:', error);
+      console.error('Failed to pay order:', error);
       throw error;
     }
   },
 
-  deleteOrder: async (orderId: number) => {
+  deleteOrder: async (orderId) => {
     try {
       await orderApi.delete(orderId);
-      // 从本地列表移除，避免重新请求
-      set(state => ({
-        orders: state.orders.filter(o => o.id !== orderId),
-        total: state.total - 1,
+      set((state) => ({
+        orders: state.orders.filter((order) => order.id !== orderId),
+        total: Math.max(state.total - 1, 0),
       }));
     } catch (error) {
-      console.error('删除订单失败:', error);
+      console.error('Failed to delete order:', error);
       throw error;
     }
   },

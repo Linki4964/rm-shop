@@ -1,44 +1,48 @@
 # app/core/database.py
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm.decl_api import DeclarativeMeta  # 导入类型
-from app.core.config import settings
-from typing import AsyncGenerator, Any
+from typing import Any, AsyncGenerator
 
-# 创建异步引擎
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import declarative_base
+from sqlalchemy.orm.decl_api import DeclarativeMeta
+
+from app.core.config import settings
+from app.core.schema_sync import sync_missing_tables_and_columns
+
+
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=settings.DB_ECHO,  # 开发环境打印 SQL 语句
-    pool_pre_ping=True,  # 防止连接失效
+    echo=settings.DB_ECHO,
+    pool_pre_ping=True,
 )
 
-# ORM 模型基类 —— 显式指定类型
 Base: DeclarativeMeta = declarative_base()
 
-# 创建异步会话工厂
 AsyncSessionLocal = async_sessionmaker(
     engine,
     class_=AsyncSession,
-    expire_on_commit=False
+    expire_on_commit=False,
 )
 
-# 依赖注入：获取数据库会话
+
 async def get_db() -> AsyncGenerator[AsyncSession, Any]:
     async with AsyncSessionLocal() as session:
         yield session
 
-# 创建数据库表
+
 async def init_db():
-    """初始化数据库，创建所有表"""
-    # 重要：导入所有模型以注册到 Base.metadata
-    import app.models  # noqa: F401 — 触发 __init__.py 中的所有模型导入
+    """初始化数据库结构。
+
+    除了创建缺失表之外，也会为已存在的表补齐缺失字段。
+    """
+    import app.models  # noqa: F401
 
     async with engine.begin() as conn:
-        print("将要创建的表:", list(Base.metadata.tables.keys()))
-        await conn.run_sync(Base.metadata.create_all)
-        print("✅ 数据库表创建完成")
+        print("将要同步的数据表:", list(Base.metadata.tables.keys()))
+        await conn.run_sync(sync_missing_tables_and_columns, Base.metadata)
+        print("数据库结构同步完成")
+
 
 async def close_db():
-    """关闭数据库连接"""
+    """关闭数据库连接。"""
     await engine.dispose()
-    print("✅ 数据库连接已关闭")
+    print("数据库连接已关闭")

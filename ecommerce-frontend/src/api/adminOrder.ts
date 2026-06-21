@@ -19,4 +19,9 @@ export const adminOrderApi = {
     const response = await apiClient.patch(`/admin/orders/${orderId}/status`, { status });
     return response.data;
   },
+
+  reviewAfterSale: async (orderId: number, status: 'approved' | 'rejected'): Promise<AdminOrder> => {
+    const response = await apiClient.patch(`/admin/orders/${orderId}/after-sale`, { status });
+    return response.data;
+  },
 };

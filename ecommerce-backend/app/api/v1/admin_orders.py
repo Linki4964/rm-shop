@@ -4,7 +4,12 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.database import get_db
 from app.crud.order import order_crud
-from app.schemas.order import OrderOut, OrderListResponse, OrderStatusUpdate
+from app.schemas.order import (
+    AfterSaleReviewRequest,
+    OrderListResponse,
+    OrderOut,
+    OrderStatusUpdate,
+)
 from app.api.deps import get_current_superuser
 from app.models.user import User
 from app.models.order import OrderStatus
@@ -57,4 +62,27 @@ async def update_order_status(
             detail=f"Invalid status. Must be one of: {[s.value for s in OrderStatus]}"
         )
     order = await order_crud.update_status(db, order=order, new_status=new_status)
+    return order
+
+
+@router.patch("/{order_id}/after-sale", response_model=OrderOut)
+async def review_after_sale(
+    order_id: int,
+    review_data: AfterSaleReviewRequest,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_superuser)
+):
+    order = await order_crud.get_with_items(db, id=order_id)
+    if not order:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Order not found")
+
+    try:
+        order = await order_crud.review_after_sale(
+            db,
+            order=order,
+            review_status=review_data.status,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=str(exc))
+
     return order

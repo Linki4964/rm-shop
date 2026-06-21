@@ -11,6 +11,19 @@
   backdrop-filter: blur(18px);
 }
 
+.actionGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+  min-width: 320px;
+}
+
+.actionGroup select {
+  width: auto;
+  min-width: 120px;
+}
+
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -81,11 +94,20 @@
 }
 
 .modalFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
   padding: 1rem 1.5rem;
   border-top: 1px solid var(--glass-border);
   border-radius: 0 0 24px 24px;
   background: rgba(248, 251, 255, 0.72);
-  text-align: right;
+}
+
+.reviewActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
 }
 
 .closeFooterBtn {

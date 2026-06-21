@@ -1,7 +1,7 @@
 # app/models/coupon.py
 from datetime import datetime
-from sqlalchemy import String, Integer, DECIMAL, DateTime, Boolean, func
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy import String, Integer, DECIMAL, DateTime, Boolean, ForeignKey, func
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.database import Base
 
 
@@ -18,3 +18,23 @@ class Coupon(Base):
     used_count: Mapped[int] = mapped_column(Integer, nullable=False, default=0)
     expires_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+
+    user_coupons: Mapped[list["UserCoupon"]] = relationship(
+        "UserCoupon",
+        back_populates="coupon",
+        cascade="all, delete-orphan",
+    )
+
+
+class UserCoupon(Base):
+    __tablename__ = "user_coupons"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False, index=True)
+    coupon_id: Mapped[int] = mapped_column(Integer, ForeignKey("coupons.id", ondelete="CASCADE"), nullable=False, index=True)
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="claimed")
+    claimed_at: Mapped[datetime] = mapped_column(DateTime, server_default=func.now())
+    used_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+
+    coupon: Mapped["Coupon"] = relationship("Coupon", back_populates="user_coupons")
+    user: Mapped["User"] = relationship("User")

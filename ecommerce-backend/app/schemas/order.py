@@ -1,8 +1,9 @@
-# app/schemas/order.py
-from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
-from app.schemas.product import ProductOut  # 复用商品简要信息
+
+from pydantic import BaseModel, Field
+
+from app.schemas.product import ProductOut
 
 
 class UserBrief(BaseModel):
@@ -11,22 +12,21 @@ class UserBrief(BaseModel):
     email: str
 
     class Config:
-        from_attributes = True    
+        from_attributes = True
 
 
-# ========== 订单项 ==========
 class OrderItemOut(BaseModel):
     id: int
     product_id: Optional[int] = None
     product_name: Optional[str] = None
     quantity: int
     price: float
-    product: Optional[ProductOut] = None  # 如果预加载了就填充，否则为 None
+    product: Optional[ProductOut] = None
 
     class Config:
         from_attributes = True
 
-# ========== 订单 ==========
+
 class OrderOut(BaseModel):
     id: int
     order_number: str
@@ -35,6 +35,9 @@ class OrderOut(BaseModel):
     coupon_code: Optional[str] = None
     status: str
     shipping_address: str
+    cancel_reason: Optional[str] = None
+    after_sale_status: Optional[str] = None
+    after_sale_reason: Optional[str] = None
     created_at: datetime
     updated_at: datetime
     items: list[OrderItemOut] = []
@@ -43,14 +46,28 @@ class OrderOut(BaseModel):
     class Config:
         from_attributes = True
 
+
 class OrderListResponse(BaseModel):
     items: list[OrderOut]
     total: int
 
+
 class OrderCreate(BaseModel):
-    shipping_address: str = Field(..., min_length=5, max_length=500, description="收货地址")
-    coupon_code: Optional[str] = Field(None, max_length=50, description="优惠券代码")
+    shipping_address: str = Field(..., min_length=5, max_length=500)
+    coupon_code: Optional[str] = Field(None, max_length=50)
+
 
 class OrderStatusUpdate(BaseModel):
-    status: str = Field(..., description="新状态: pending/paid/shipped/completed/cancelled")
+    status: str = Field(..., description="pending/paid/shipped/completed/cancelled")
 
+
+class OrderCancelRequest(BaseModel):
+    reason: str = Field(..., min_length=2, max_length=255)
+
+
+class AfterSaleRequest(BaseModel):
+    reason: str = Field(..., min_length=2, max_length=255)
+
+
+class AfterSaleReviewRequest(BaseModel):
+    status: str = Field(..., description="approved/rejected")

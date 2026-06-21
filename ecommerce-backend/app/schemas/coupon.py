@@ -1,7 +1,7 @@
-# app/schemas/coupon.py
-from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional
+
+from pydantic import BaseModel, Field
 
 
 class CouponCreate(BaseModel):
@@ -56,13 +56,25 @@ class CouponValidateResponse(BaseModel):
 
 
 class CouponAvailableItem(BaseModel):
-    """可用优惠券列表项（含预计算的折扣）"""
+    coupon_id: int
     code: str
     discount_type: str
     discount_value: float
     min_order_amount: float
     discount_amount: float
     final_amount: float
-    applicable: bool          # 是否满足最低消费
-    reason: str = ""          # 不满足时的原因
+    applicable: bool
+    reason: str = ""
     expires_at: str | None = None
+    is_claimed: bool = False
+
+
+class UserCouponOut(BaseModel):
+    id: int
+    status: str
+    claimed_at: datetime
+    used_at: Optional[datetime] = None
+    coupon: CouponOut
+
+    class Config:
+        from_attributes = True

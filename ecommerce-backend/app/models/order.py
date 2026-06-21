@@ -25,6 +25,9 @@ class Order(Base):
     coupon_code: Mapped[str | None] = mapped_column(String(50), nullable=True)
     status: Mapped[OrderStatus] = mapped_column(Enum(OrderStatus), default=OrderStatus.PENDING, nullable=False)
     shipping_address: Mapped[str] = mapped_column(String(500), nullable=False)
+    cancel_reason: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    after_sale_status: Mapped[str | None] = mapped_column(String(30), nullable=True)
+    after_sale_reason: Mapped[str | None] = mapped_column(String(255), nullable=True)
     created_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now())
     updated_at: Mapped[DateTime] = mapped_column(DateTime, server_default=func.now(), onupdate=func.now())
 

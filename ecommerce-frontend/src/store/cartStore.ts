@@ -1,7 +1,7 @@
 // src/store/cartStore.ts
 import { create } from 'zustand';
 import { cartApi } from '../api/cart';
-import type { CartResponse, CartItem, AddToCartData } from '../types/cart';
+import type { CartItem, AddToCartData } from '../types/cart';
 
 interface CartState {
   items: CartItem[];
@@ -39,7 +39,7 @@ export const useCartStore = create<CartState>((set, get) => ({
 
   addToCart: async (data) => {
     try {
-      const newItem = await cartApi.addItem(data);
+      await cartApi.addItem(data);
       // 添加成功后重新获取整个购物车以保持同步
       await get().fetchCart();
     } catch (error) {

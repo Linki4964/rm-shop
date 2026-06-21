@@ -1,7 +1,7 @@
 // src/components/ProductFormModal/ProductFormModal.tsx
 import { useEffect, useState } from 'react';
 import { productAdminApi } from '../../api/productAdmin';
-import type  { Product, ProductCreate, ProductUpdate, ProductFeature } from '../../types/product';
+import type  { Product, ProductCreate, ProductUpdate } from '../../types/product';
 
 const FEATURE_ICONS = [
   'bi-cpu', 'bi-motherboard', 'bi-camera', 'bi-camera-video',

@@ -82,7 +82,19 @@ const CheckoutPage = () => {
   useEffect(() => {
     if (totalAmount > 0) {
       setCouponLoad(true);
-      couponApi.getAvailable(totalAmount).then(setCoupons).catch(() => setCoupons([])).finally(() => setCouponLoad(false));
+      couponApi.getAvailable(totalAmount, true).then((data) => {
+        setCoupons(data);
+        setSelectedCoupon((prev) => {
+          if (prev) {
+            const matched = data.find((item) => item.code === prev.code);
+            if (matched?.applicable) return matched;
+          }
+          const best = [...data]
+            .filter((item) => item.applicable)
+            .sort((a, b) => b.discount_amount - a.discount_amount)[0];
+          return best || null;
+        });
+      }).catch(() => setCoupons([])).finally(() => setCouponLoad(false));
     }
   }, [totalAmount]);
 

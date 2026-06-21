@@ -1,43 +1,76 @@
-# app/api/v1/coupons.py
+from typing import List, Optional
+
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.api.deps import get_current_superuser, get_current_user
 from app.core.database import get_db
 from app.crud.coupon import coupon_crud
-from app.schemas.coupon import (
-    CouponCreate, CouponUpdate, CouponOut,
-    CouponValidateRequest, CouponValidateResponse,
-    CouponAvailableItem,
-)
-from app.api.deps import get_current_user, get_current_superuser
 from app.models.user import User
-from typing import List
+from app.schemas.coupon import (
+    CouponAvailableItem,
+    CouponCreate,
+    CouponOut,
+    CouponUpdate,
+    CouponValidateRequest,
+    CouponValidateResponse,
+    UserCouponOut,
+)
 
 router = APIRouter(tags=["coupons"])
 
-# ====== 公开接口：验证优惠券 ======
+
 @router.post("/validate", response_model=CouponValidateResponse)
 async def validate_coupon(
     req: CouponValidateRequest,
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    result = await coupon_crud.validate(
-        db, code=req.code.upper(), order_amount=req.order_amount
+    _, result = await coupon_crud.validate_user_coupon(
+        db,
+        user_id=current_user.id,
+        code=req.code.upper(),
+        order_amount=req.order_amount,
     )
     return result
 
 
-# ====== 公开接口：获取可用优惠券列表 ======
 @router.get("/available", response_model=list[CouponAvailableItem])
 async def list_available_coupons(
-    order_amount: float = Query(0, ge=0, description="当前订单金额"),
+    order_amount: float = Query(0, ge=0),
+    claimed_only: bool = Query(False),
     db: AsyncSession = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    return await coupon_crud.get_available(db, order_amount=order_amount)
+    return await coupon_crud.get_available(
+        db,
+        user_id=current_user.id,
+        order_amount=order_amount,
+        claimed_only=claimed_only,
+    )
 
 
-# ====== 管理员接口 ======
+@router.post("/claim/{coupon_id}", response_model=UserCouponOut, status_code=status.HTTP_201_CREATED)
+async def claim_coupon(
+    coupon_id: int,
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    try:
+        return await coupon_crud.claim_coupon(db, user_id=current_user.id, coupon_id=coupon_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
+@router.get("/mine", response_model=list[UserCouponOut])
+async def list_my_coupons(
+    status_filter: Optional[str] = Query(None, alias="status"),
+    db: AsyncSession = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return await coupon_crud.get_user_coupons(db, user_id=current_user.id, status=status_filter)
+
+
 admin_router = APIRouter(tags=["admin-coupons"])
 
 
@@ -48,8 +81,7 @@ async def list_coupons(
     skip: int = Query(0, ge=0),
     limit: int = Query(50, ge=1, le=200),
 ):
-    coupons, _ = await coupon_crud.get_multi(db, skip=skip, limit=limit)
-    return coupons
+    return await coupon_crud.get_multi(db, skip=skip, limit=limit)
 
 
 @admin_router.post("/", response_model=CouponOut, status_code=status.HTTP_201_CREATED)

@@ -1,23 +1,21 @@
-# app/crud/product.py
 from typing import Optional, Tuple
+
+from sqlalchemy import func, or_, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, and_, or_
-from sqlalchemy.sql import Select
+
 from app.crud.base import CRUDBase
+from app.models.order import OrderItem
 from app.models.product import Product
-from app.schemas.product import ProductCreate, ProductUpdate, ProductSearchParams
+from app.models.review import Review
+from app.schemas.product import ProductCreate, ProductSearchParams, ProductUpdate
 
 
 class CRUDProduct(CRUDBase[Product]):
     async def get_by_name(self, db: AsyncSession, *, name: str) -> Optional[Product]:
-        """根据名称获取商品"""
-        result = await db.execute(
-            select(Product).where(Product.name == name)
-        )
+        result = await db.execute(select(Product).where(Product.name == name))
         return result.scalar_one_or_none()
 
     async def create(self, db: AsyncSession, *, obj_in: ProductCreate) -> Product:
-        """创建商品"""
         db_obj = Product(
             name=obj_in.name,
             description=obj_in.description,
@@ -26,106 +24,115 @@ class CRUDProduct(CRUDBase[Product]):
             image_url=obj_in.image_url,
             category=obj_in.category,
             is_active=obj_in.is_active,
+            features=obj_in.features,
         )
         db.add(db_obj)
         await db.commit()
         await db.refresh(db_obj)
         return db_obj
-    
+
     async def get_multi_with_filter(
         self,
         db: AsyncSession,
         *,
         page: int = 1,
         size: int = 20,
-        search_params: Optional[ProductSearchParams] = None
+        search_params: Optional[ProductSearchParams] = None,
     ) -> Tuple[list[Product], int]:
-        """
-        分页获取商品列表（支持搜索和筛选）
-        
-        返回：(商品列表, 总数量)
-        """
-        # 构建基础查询
-        query = select(Product)
-        
-        # 应用筛选条件
+        sales_subq = (
+            select(
+                OrderItem.product_id.label("product_id"),
+                func.coalesce(func.sum(OrderItem.quantity), 0).label("sales_count"),
+            )
+            .group_by(OrderItem.product_id)
+            .subquery()
+        )
+        review_subq = (
+            select(
+                Review.product_id.label("product_id"),
+                func.coalesce(func.avg(Review.rating), 0).label("avg_rating"),
+                func.count(Review.id).label("review_count"),
+            )
+            .group_by(Review.product_id)
+            .subquery()
+        )
+
+        query = (
+            select(
+                Product,
+                func.coalesce(sales_subq.c.sales_count, 0).label("sales_count"),
+                func.coalesce(review_subq.c.avg_rating, 0).label("avg_rating"),
+                func.coalesce(review_subq.c.review_count, 0).label("review_count"),
+            )
+            .outerjoin(sales_subq, sales_subq.c.product_id == Product.id)
+            .outerjoin(review_subq, review_subq.c.product_id == Product.id)
+        )
+
         if search_params:
-            # 关键词搜索（名称或描述）
             if search_params.keyword:
                 keyword_pattern = f"%{search_params.keyword}%"
                 query = query.where(
                     or_(
                         Product.name.like(keyword_pattern),
-                        Product.description.like(keyword_pattern)
+                        Product.description.like(keyword_pattern),
                     )
                 )
-            
-            # 分类筛选
             if search_params.category:
                 query = query.where(Product.category == search_params.category)
-            
-            # 价格范围
             if search_params.min_price is not None:
                 query = query.where(Product.price >= search_params.min_price)
             if search_params.max_price is not None:
                 query = query.where(Product.price <= search_params.max_price)
-            
-            # 上架状态
             if search_params.is_active is not None:
                 query = query.where(Product.is_active == search_params.is_active)
-            
-            # 排序
-            if search_params.sort_by:
-                sort_field = getattr(Product, search_params.sort_by, None)
-                if sort_field:
-                    if search_params.sort_order == "asc":
-                        query = query.order_by(sort_field.asc())
-                    else:
-                        query = query.order_by(sort_field.desc())
-        
-        # 计算总数
+            if search_params.in_stock:
+                query = query.where(Product.stock > 0)
+
+            sort_map = {
+                "price": Product.price,
+                "stock": Product.stock,
+                "created_at": Product.created_at,
+                "sales_count": func.coalesce(sales_subq.c.sales_count, 0),
+                "avg_rating": func.coalesce(review_subq.c.avg_rating, 0),
+            }
+            sort_field = sort_map.get(search_params.sort_by or "created_at", Product.created_at)
+            if search_params.sort_order == "asc":
+                query = query.order_by(sort_field.asc(), Product.created_at.desc())
+            else:
+                query = query.order_by(sort_field.desc(), Product.created_at.desc())
+        else:
+            query = query.order_by(Product.created_at.desc())
+
         count_query = select(func.count()).select_from(query.subquery())
-        total_result = await db.execute(count_query)
-        total = total_result.scalar() or 0
-        
-        # 分页
+        total = (await db.execute(count_query)).scalar() or 0
+
         offset = (page - 1) * size
-        query = query.offset(offset).limit(size)
-        
-        # 执行查询
-        result = await db.execute(query)
-        items = list(result.scalars().all())
-        
+        rows = (await db.execute(query.offset(offset).limit(size))).all()
+        items: list[Product] = []
+        for product, sales_count, avg_rating, review_count in rows:
+            product.sales_count = int(sales_count or 0)
+            product.avg_rating = round(float(avg_rating or 0), 1)
+            product.review_count = int(review_count or 0)
+            items.append(product)
         return items, total
-    
+
     async def get_categories(self, db: AsyncSession) -> list[str]:
-        """获取所有商品分类"""
         result = await db.execute(
-            select(Product.category)
-            .where(Product.category.isnot(None))
-            .distinct()
+            select(Product.category).where(Product.category.isnot(None)).distinct()
         )
         return [row for row in result.scalars().all() if row]
 
-    async def update(
-        self, 
-        db: AsyncSession, 
-        *, 
-        db_obj: Product, 
-        obj_in: ProductUpdate
-    ) -> Product:
-        """更新商品"""
+    async def update(self, db: AsyncSession, *, db_obj: Product, obj_in: ProductUpdate) -> Product:
         update_data = obj_in.model_dump(exclude_unset=True)
         return await super().update(db, db_obj=db_obj, obj_in=update_data)
-    
+
     async def get_active_products(
         self,
         db: AsyncSession,
         *,
         skip: int = 0,
-        limit: int = 100
+        limit: int = 100,
     ) -> list[Product]:
-        """获取上架商品列表（前台使用）"""
         result = await db.execute(
             select(Product)
             .where(Product.is_active == True)
@@ -135,19 +142,13 @@ class CRUDProduct(CRUDBase[Product]):
         )
         return list(result.scalars().all())
 
-
     async def check_stock(
-        self, 
-        db: AsyncSession, 
-        *, 
-        product_id: int, 
-        quantity: int
+        self,
+        db: AsyncSession,
+        *,
+        product_id: int,
+        quantity: int,
     ) -> Tuple[bool, Optional[Product]]:
-        """
-        检查商品库存是否足够
-        
-        返回：(是否足够, 商品对象)
-        """
         product = await self.get(db, id=product_id)
         if not product:
             return False, None
@@ -162,13 +163,8 @@ class CRUDProduct(CRUDBase[Product]):
         db: AsyncSession,
         *,
         product_id: int,
-        quantity: int
+        quantity: int,
     ) -> Optional[Product]:
-        """
-        减少商品库存（下单时使用）
-        
-        注意：调用前应先使用 check_stock 验证
-        """
         product = await self.get(db, id=product_id)
         if product:
             product.stock -= quantity
@@ -181,16 +177,14 @@ class CRUDProduct(CRUDBase[Product]):
         db: AsyncSession,
         *,
         product_id: int,
-        quantity: int
+        quantity: int,
     ) -> Optional[Product]:
-        """
-        增加商品库存（取消订单/退货时使用）
-        """
         product = await self.get(db, id=product_id)
         if product:
             product.stock += quantity
             await db.commit()
             await db.refresh(product)
         return product
-# 单例实例
+
+
 product = CRUDProduct(Product)

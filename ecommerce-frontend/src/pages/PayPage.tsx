@@ -98,7 +98,7 @@ const PayPage = () => {
     if (!ok) return;
     setCancelling(true);
     try {
-      await cancelOrder(orderId);
+      await cancelOrder(orderId, '支付页取消订单');
       sessionStorage.removeItem('pending_payment_order');
       toast.success('订单已取消');
       navigate('/orders', { replace: true });
