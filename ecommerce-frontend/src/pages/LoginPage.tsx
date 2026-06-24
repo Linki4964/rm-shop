@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { SyntheticEvent } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+
 import { useAuthStore } from '../store/authStore';
 import styles from './Auth.module.css';
 
@@ -50,39 +51,40 @@ const LoginPage = () => {
 
   return (
     <div className={styles.authPage}>
-      {/* 左侧品牌展示 */}
       <div className={styles.brandSide}>
+        <div className={styles.brandGlowOne} />
+        <div className={styles.brandGlowTwo} />
         <div className={styles.brandContent}>
+          <div className={styles.brandEyebrow}>PREMIUM MARKETPLACE</div>
           <div className={styles.brandLogo}>
             <span role="img" aria-label="logo">🛒</span>
           </div>
           <h1 className={styles.brandTitle}>EasyShop</h1>
-          <p className={styles.brandSubtitle}>
-            品质好物，一站购齐
-          </p>
+          <p className={styles.brandSubtitle}>把精选商品、顺滑支付和稳定履约整合到一个更轻盈的购物入口里。</p>
+
           <div className={styles.brandFeatures}>
             <div className={styles.brandFeature}>
-              <i className="bi bi-check-circle-fill" />
-              <span>海量商品，应有尽有</span>
+              <i className="bi bi-stars" />
+              <span>精选好物，减少低质量选择成本</span>
             </div>
             <div className={styles.brandFeature}>
               <i className="bi bi-shield-check" />
-              <span>安全支付，购物无忧</span>
+              <span>安全支付链路，订单状态清晰可追踪</span>
             </div>
             <div className={styles.brandFeature}>
               <i className="bi bi-truck" />
-              <span>极速配送，准时送达</span>
+              <span>从下单到签收，保持统一体验节奏</span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 右侧登录表单 */}
       <div className={styles.formSide}>
         <div className={styles.formCard}>
           <div className={styles.formHeader}>
+            <div className={styles.formEyebrow}>ACCOUNT ACCESS</div>
             <h2>欢迎回来</h2>
-            <p>登录你的 EasyShop 账号</p>
+            <p>登录你的 EasyShop 账号，继续浏览商品与订单。</p>
           </div>
 
           {location.state?.message && (
@@ -124,18 +126,14 @@ const LoginPage = () => {
               />
             </div>
 
-            <button
-              type="submit"
-              className={styles.submitBtn}
-              disabled={submitting}
-            >
+            <button type="submit" className={styles.submitBtn} disabled={submitting}>
               {submitting ? (
                 <>
                   <span className="spinner-border spinner-border-sm me-2" role="status" />
                   登录中...
                 </>
               ) : (
-                '登  录'
+                '登录'
               )}
             </button>
           </form>

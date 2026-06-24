@@ -13,6 +13,7 @@ import PayPage from '../pages/PayPage';
 import PaymentReturn from '../pages/PaymentReturn';
 import ProfilePage from '../pages/ProfilePage';
 import RegisterPage from '../pages/RegisterPage';
+import NotFoundPage from '../pages/NotFoundPage';
 import Dashboard from '../pages/admin/Dashboard';
 import Products from '../pages/admin/Products';
 import Users from '../pages/admin/Users';
@@ -65,6 +66,7 @@ export const AppRouter = () => {
         </Route>
 
         <Route path="/payment-return" element={<PaymentReturn />} />
+        <Route path="/404" element={<NotFoundPage />} />
 
         <Route element={<StorefrontRoute />}>
           <Route element={<PublicLayout />}>
@@ -98,7 +100,7 @@ export const AppRouter = () => {
           </Route>
         </Route>
 
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

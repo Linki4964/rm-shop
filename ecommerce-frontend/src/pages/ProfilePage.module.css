@@ -1,0 +1,303 @@
+.page {
+  display: grid;
+  grid-template-columns: 320px minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.sidebar,
+.contentCard,
+.profileCard {
+  min-width: 0;
+}
+
+.profileCard,
+.contentCard {
+  border: 1px solid var(--glass-border);
+  border-radius: 32px;
+  background: var(--glass-bg);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+}
+
+.profileCard {
+  padding: 1.5rem;
+}
+
+.avatar {
+  width: 82px;
+  height: 82px;
+  margin-bottom: 1rem;
+  border-radius: 28px;
+  background: linear-gradient(145deg, rgba(37, 99, 235, 0.14), rgba(59, 130, 246, 0.22));
+  color: var(--primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.profileCard h2 {
+  margin: 0;
+  color: var(--on-surface);
+  font-size: 1.45rem;
+  font-weight: 800;
+}
+
+.profileCard p {
+  margin: 0.4rem 0 0;
+  color: var(--secondary);
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin: 1.4rem 0;
+}
+
+.summaryItem {
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 22px;
+  background: rgba(255, 255, 255, 0.66);
+}
+
+.summaryItem strong {
+  display: block;
+  color: var(--on-surface);
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.summaryItem span {
+  color: var(--secondary);
+  font-size: 0.88rem;
+}
+
+.tabList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.tabButton {
+  width: 100%;
+  min-height: 54px;
+  padding: 0.9rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.62);
+  color: var(--on-surface-variant);
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-align: left;
+  transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.tabButton:hover {
+  transform: translateY(-1px);
+  background: rgba(219, 234, 254, 0.56);
+  color: var(--primary);
+}
+
+.tabButtonActive {
+  border-color: rgba(37, 99, 235, 0.18);
+  background: linear-gradient(135deg, rgba(219, 234, 254, 0.86), rgba(255, 255, 255, 0.88));
+  color: var(--primary);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+}
+
+.contentCard {
+  padding: 1.5rem;
+}
+
+.sectionBlock {
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0 0 1.25rem;
+  color: var(--on-surface);
+  font-size: 1.55rem;
+  font-weight: 800;
+}
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  color: var(--on-surface);
+  font-size: 0.92rem;
+  font-weight: 700;
+}
+
+.fieldWide {
+  grid-column: 1 / -1;
+}
+
+.control {
+  min-height: 50px;
+  border-radius: 18px !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  background: rgba(255, 255, 255, 0.86) !important;
+}
+
+.primaryButton,
+.pillButton {
+  border-radius: 999px !important;
+  font-weight: 700 !important;
+}
+
+.primaryButton {
+  padding-inline: 1.2rem !important;
+}
+
+.addressActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.checkboxRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  color: var(--on-surface);
+  font-weight: 600;
+}
+
+.addressGrid,
+.favoriteGrid,
+.couponGrid {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+
+.addressGrid,
+.couponGrid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.favoriteGrid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.addressCard,
+.favoriteCard,
+.couponCard {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.68);
+  padding: 1rem;
+}
+
+.addressHeader,
+.couponTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.addressCard p,
+.couponTop p,
+.couponHint {
+  margin: 0.35rem 0 0;
+  color: var(--secondary);
+}
+
+.addressBadge,
+.couponBadgeActive,
+.couponBadgeUsed {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 0 0.8rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.addressBadge,
+.couponBadgeActive {
+  background: rgba(22, 163, 74, 0.12);
+  color: #166534;
+}
+
+.couponBadgeUsed {
+  background: rgba(148, 163, 184, 0.18);
+  color: #475569;
+}
+
+.addressCard .pillButton {
+  margin-top: 1rem;
+}
+
+.favoriteCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.favoriteCard img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  object-fit: cover;
+}
+
+.favoriteCard strong {
+  color: var(--on-surface);
+}
+
+.favoriteCard span,
+.couponValue {
+  color: #dc2626;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.couponCard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+@media (max-width: 991px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .contentCard,
+  .profileCard {
+    padding: 1rem;
+    border-radius: 24px;
+  }
+
+  .formGrid,
+  .addressGrid,
+  .couponGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .addressActions {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

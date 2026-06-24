@@ -84,9 +84,6 @@ const Header = () => {
             <button className={styles.iconBtn} onClick={toggleTheme} title={theme === 'light' ? '切换暗色模式' : '切换亮色模式'}>
               <i className={`bi ${theme === 'light' ? 'bi-moon' : 'bi-sun'}`} style={{ fontSize: '1.1rem' }} />
             </button>
-            <Link to="/coupon-center" className={styles.iconBtn}>
-              <i className="bi bi-ticket-perforated" style={{ fontSize: '1.1rem' }} />
-            </Link>
             <Link to="/favorites" className={styles.iconBtn}>
               <i className="bi bi-heart" style={{ fontSize: '1.1rem' }} />
             </Link>

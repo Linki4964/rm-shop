@@ -1,11 +1,14 @@
 .authPage {
+  position: relative;
   min-height: 100vh;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(420px, 0.8fr);
+  grid-template-columns: minmax(0, 1.08fr) minmax(420px, 0.92fr);
   background:
-    radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.12), transparent 34%),
-    radial-gradient(circle at 90% 82%, rgba(0, 74, 198, 0.08), transparent 38%),
+    radial-gradient(circle at 12% 18%, rgba(37, 99, 235, 0.14), transparent 32%),
+    radial-gradient(circle at 88% 76%, rgba(0, 74, 198, 0.09), transparent 34%),
+    linear-gradient(180deg, rgba(244, 247, 255, 0.92), rgba(238, 242, 255, 0.86)),
     var(--surface);
+  overflow: hidden;
 }
 
 .brandSide {
@@ -13,7 +16,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 4rem;
+  padding: 3rem;
   overflow: hidden;
 }
 
@@ -21,65 +24,122 @@
   content: "";
   position: absolute;
   inset: 2rem;
-  border: 1px solid var(--glass-border);
+  border: 1px solid rgba(214, 224, 255, 0.72);
   border-radius: 48px;
-  background: var(--glass-bg);
-  box-shadow: var(--shadow-card);
+  background:
+    radial-gradient(circle at 18% 16%, rgba(255, 255, 255, 0.92), transparent 24%),
+    radial-gradient(circle at 32% 28%, rgba(147, 197, 253, 0.22), transparent 34%),
+    radial-gradient(circle at 76% 78%, rgba(96, 165, 250, 0.2), transparent 28%),
+    linear-gradient(135deg, rgba(214, 230, 255, 0.98), rgba(234, 242, 255, 0.94) 38%, rgba(201, 223, 255, 0.96));
+  box-shadow:
+    0 30px 60px rgba(37, 99, 235, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
   backdrop-filter: blur(42px);
   -webkit-backdrop-filter: blur(42px);
+}
+
+.brandGlowOne,
+.brandGlowTwo {
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(18px);
+  opacity: 0.9;
+}
+
+.brandGlowOne {
+  top: 10%;
+  left: 8%;
+  width: 220px;
+  height: 220px;
+  background: rgba(37, 99, 235, 0.22);
+}
+
+.brandGlowTwo {
+  right: 10%;
+  bottom: 16%;
+  width: 280px;
+  height: 280px;
+  background: rgba(96, 165, 250, 0.24);
 }
 
 .brandContent {
   position: relative;
   z-index: 1;
-  max-width: 460px;
+  max-width: 500px;
   color: var(--on-surface);
 }
 
+.brandEyebrow,
+.formEyebrow {
+  margin-bottom: 1rem;
+  color: var(--primary);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
 .brandLogo {
-  width: 84px;
-  height: 84px;
-  margin-bottom: 1.5rem;
-  border-radius: 28px;
-  background: var(--primary-fixed);
+  width: 92px;
+  height: 92px;
+  margin-bottom: 1.6rem;
+  border-radius: 30px;
+  background:
+    linear-gradient(145deg, rgba(219, 230, 255, 0.96), rgba(197, 215, 255, 0.9));
   color: var(--primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2.4rem;
+  font-size: 2.65rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    0 20px 36px rgba(37, 99, 235, 0.16);
 }
 
 .brandTitle {
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.9rem;
   font-family: "Manrope", "Noto Sans SC", sans-serif;
-  font-size: 3rem;
+  font-size: clamp(3rem, 6vw, 4.4rem);
   font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.96;
 }
 
 .brandSubtitle {
+  max-width: 420px;
   color: var(--secondary);
-  line-height: 1.75;
+  font-size: 1.05rem;
+  line-height: 1.8;
 }
 
 .brandFeatures {
   display: grid;
   gap: 1rem;
-  margin-top: 2.5rem;
+  margin-top: 2.6rem;
 }
 
 .brandFeature {
   display: flex;
   align-items: center;
   gap: 0.8rem;
+  min-height: 58px;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(214, 224, 255, 0.7);
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.68);
   color: var(--on-surface);
   font-weight: 700;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .brandFeature i {
   color: var(--primary);
+  font-size: 1.05rem;
 }
 
 .formSide {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -88,12 +148,15 @@
 
 .formCard {
   width: 100%;
-  max-width: 430px;
-  padding: 2.2rem;
-  border: 1px solid var(--glass-border);
-  border-radius: 32px;
-  background: rgba(255, 255, 255, 0.74);
-  box-shadow: var(--shadow-card);
+  max-width: 460px;
+  padding: 2.4rem;
+  border: 1px solid rgba(214, 224, 255, 0.78);
+  border-radius: 34px;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.88), rgba(247, 249, 255, 0.82));
+  box-shadow:
+    0 30px 56px rgba(37, 99, 235, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(40px);
   -webkit-backdrop-filter: blur(40px);
 }
@@ -103,11 +166,12 @@
 }
 
 .formHeader h2 {
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.45rem;
   color: var(--on-surface);
   font-family: "Manrope", "Noto Sans SC", sans-serif;
-  font-size: 2rem;
+  font-size: 2.15rem;
   font-weight: 800;
+  letter-spacing: -0.03em;
 }
 
 .formHeader p,
@@ -126,47 +190,64 @@
   left: 1rem;
   transform: translateY(-50%);
   color: var(--secondary);
+  transition: color 0.2s ease;
 }
 
 .inputGroup input {
   width: 100%;
-  min-height: 52px;
-  padding: 0 1rem 0 2.8rem;
+  min-height: 56px;
+  padding: 0 1rem 0 3rem;
   border: 1px solid rgba(195, 198, 215, 0.45);
-  border-radius: 18px;
+  border-radius: 20px;
   outline: none;
-  background: rgba(242, 243, 255, 0.74);
+  background: rgba(242, 246, 255, 0.88);
   color: var(--on-surface);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, transform 0.2s ease;
+}
+
+.inputGroup:hover input {
+  transform: translateY(-1px);
 }
 
 .inputGroup input:focus {
-  border-color: var(--primary-container);
-  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
-  background: rgba(255, 255, 255, 0.86);
+  border-color: rgba(37, 99, 235, 0.44);
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
+  background: rgba(255, 255, 255, 0.94);
+}
+
+.inputGroup:focus-within .inputIcon {
+  color: var(--primary);
 }
 
 .submitBtn {
   width: 100%;
-  min-height: 54px;
-  margin-top: 0.5rem;
+  min-height: 56px;
+  margin-top: 0.55rem;
   border: 0;
   border-radius: 999px;
-  background: linear-gradient(180deg, #2563eb, #004ac6);
+  background: linear-gradient(180deg, #2f6fff, #0b4ed0);
   color: var(--on-primary);
   font-weight: 800;
-  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.22);
+  letter-spacing: 0.02em;
+  box-shadow: 0 18px 36px rgba(37, 99, 235, 0.24);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 24px 42px rgba(37, 99, 235, 0.28);
 }
 
 .submitBtn:disabled {
-  opacity: 0.55;
+  opacity: 0.6;
 }
 
 .alertBox {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.55rem;
   margin-bottom: 1rem;
-  padding: 0.85rem 1rem;
+  padding: 0.9rem 1rem;
   border-radius: 18px;
   font-weight: 700;
 }
@@ -182,13 +263,33 @@
 }
 
 .formFooter {
-  margin-top: 1.4rem;
+  margin-top: 1.45rem;
   text-align: center;
+  font-size: 0.98rem;
 }
 
 .formFooter a {
   color: var(--primary);
   font-weight: 800;
+  text-decoration: none;
+}
+
+.formFooter a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 1100px) {
+  .authPage {
+    grid-template-columns: minmax(0, 1fr) minmax(380px, 0.92fr);
+  }
+
+  .brandSide {
+    padding: 2rem;
+  }
+
+  .formSide {
+    padding: 2rem;
+  }
 }
 
 @media (max-width: 900px) {
@@ -198,5 +299,24 @@
 
   .brandSide {
     display: none;
+  }
+
+  .formSide {
+    min-height: 100vh;
+  }
+}
+
+@media (max-width: 520px) {
+  .formSide {
+    padding: 1.25rem;
+  }
+
+  .formCard {
+    padding: 1.5rem;
+    border-radius: 28px;
+  }
+
+  .formHeader h2 {
+    font-size: 1.8rem;
   }
 }
